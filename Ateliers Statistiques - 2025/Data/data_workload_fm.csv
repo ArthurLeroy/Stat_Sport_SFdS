@@ -1,0 +1,269 @@
+Date,Distance,Durée,Perception,Commentaires,Training load,Jour
+2022-09-02T07:30:00Z,1200,30,8,Swim & Run,240,vendredi
+2022-09-03T08:00:00Z,3000,60,5,Aéro,300,samedi
+2022-09-05T08:30:00Z,2000,40,3,Flush,120,lundi
+2022-09-06T08:00:00Z,3000,60,6,Aéro P/P,360,mardi
+2022-09-07T11:30:00Z,1500,30,2,Nage en mer,60,mercredi
+2022-09-08T07:30:00Z,2000,45,7,Swim & Run,315,jeudi
+2022-09-09T08:00:00Z,3000,60,5,Aéro P/P et sprint jambes,300,vendredi
+2022-09-12T08:00:00Z,3000,55,3,Aéro (petit bain),165,lundi
+2022-09-13T07:45:00Z,2000,40,2,Nage en mer palmes,80,mardi
+2022-09-14T08:00:00Z,4000,80,4,Aéro P/P - Jbs,320,mercredi
+2022-09-15T08:45:00Z,2000,45,2,Flush hypo,90,jeudi
+2022-09-16T08:00:00Z,3500,75,5,Overkick / aéro,375,vendredi
+2022-09-17T08:00:00Z,3000,60,4,Aéro P/P,240,samedi
+2022-09-19T08:00:00Z,4200,90,5,Aéro Pull,450,lundi
+2022-09-20T08:10:00Z,3400,90,8,Jambes / minimax / lactique,720,mardi
+2022-09-23T08:00:00Z,1500,40,2,Début aéro,80,vendredi
+2022-09-26T07:30:00Z,5000,115,3,Aéro basse + hypoxie,345,lundi
+2022-09-28T07:30:00Z,4000,90,4,Test Olbrecht,360,mercredi
+2022-09-30T08:30:00Z,1000,75,5,Start,375,vendredi
+2022-09-29T10:30:00Z,1000,75,4,Sprint,300,jeudi
+2022-10-03T08:00:00Z,3500,75,3,Aéro,225,lundi
+2022-10-04T07:35:00Z,3500,100,8,Lactique,800,mardi
+2022-10-05T08:00:00Z,4500,90,6,Aéro capacité,540,mercredi
+2022-10-07T07:30:00Z,3200,80,7,ANC,560,vendredi
+2022-10-10T08:00:00Z,4000,85,3,Aéro basse & Jambes (25),255,lundi
+2022-10-11T07:30:00Z,3500,95,7,ANC,665,mardi
+2022-10-13T08:00:00Z,4500,90,3,Aéro basse et jambes,270,jeudi
+2022-10-14T08:05:00Z,3500,80,9,ANC,720,vendredi
+2022-10-15T08:40:00Z,4000,80,3,Aéro,240,samedi
+2022-10-17T07:50:00Z,4000,90,3,Aéro + Jambes,270,lundi
+2022-10-18T08:00:00Z,3500,80,3,Skills and sprints,240,mardi
+2022-10-19T08:10:00Z,3500,60,2,Aéro basse Skills & Skulls,120,mercredi
+2022-10-20T11:00:00Z,2000,45,3,Flush et activation jambes,135,jeudi
+2022-10-21T09:00:00Z,2500,60,5,Échauffement + Course + recup,300,vendredi
+2022-10-22T08:30:00Z,3000,90,7,Échauffement + courses + récup,630,samedi
+2022-10-23T08:10:00Z,2500,60,5,Échauffement + course + récup,300,dimanche
+2022-10-27T07:30:00Z,4300,105,5,AEC2,525,jeudi
+2022-10-28T07:30:00Z,3000,60,5,Aéro basse,300,vendredi
+2022-10-29T08:30:00Z,2700,60,6,ANC,360,samedi
+2022-10-31T10:00:00Z,3600,75,4,Aéro + touch vitesse jambes,300,lundi
+2022-11-02T08:30:00Z,3100,60,4,Skill sprint et recup,240,mercredi
+2022-11-03T10:45:00Z,800,20,2,Prépa compet,40,jeudi
+2022-11-04T10:30:00Z,1500,60,6,Échauffement + course + récup,360,vendredi
+2022-11-07T08:30:00Z,3000,65,5,Aéro et jambes,325,lundi
+2022-11-08T08:05:00Z,3800,85,5,AEC1 + technique pap,425,mardi
+2022-11-08T08:05:00Z,2800,60,4,Aéro + technique,240,mardi
+2022-11-14T08:00:00Z,4500,90,6,Aéro + (4n et crawl),540,lundi
+2022-11-15T08:05:00Z,4500,95,8,AEC2,760,mardi
+2022-11-16T08:30:00Z,3500,80,5,Test Olbrecht,400,mercredi
+2022-11-23T08:15:00Z,3600,75,5,Aéro + technique,375,mercredi
+2022-11-25T07:55:00Z,3000,80,8,Endurance de vitesse AEC2,640,vendredi
+2022-11-26T08:30:00Z,2500,60,5,🦍,300,samedi
+2022-11-28T08:25:00Z,4000,115,4,Test Olbrecht,460,lundi
+2022-11-30T07:55:00Z,3200,60,3,Aéro technique,180,mercredi
+2022-11-29T08:45:00Z,2200,60,6,🦍,360,mardi
+2022-12-03T11:00:00Z,2100,45,4,Aéro + jambes,180,samedi
+2022-12-04T10:30:00Z,1500,40,2,Flush + 2 sprints,80,dimanche
+2022-12-05T08:30:00Z,2000,60,4,Aéro + DPC + 3 sprint en combi,240,lundi
+2022-12-07T09:45:00Z,2000,40,2,Flush / aéro et prises de relais,80,mercredi
+2022-12-08T10:00:00Z,1200,30,2,Technique,60,jeudi
+2022-12-09T09:30:00Z,1000,25,2,Aéro flush + starts,50,vendredi
+2022-12-11T10:45:00Z,1000,45,4,Stinger,180,dimanche
+2022-12-13T11:25:00Z,2000,75,7,Course x2,525,mardi
+2022-12-15T11:40:00Z,600,15,2,Placement crawl,30,jeudi
+2022-12-16T11:30:00Z,2100,70,7,Courses x2,490,vendredi
+2022-12-17T11:00:00Z,1200,45,3,Course,135,samedi
+2023-01-04T10:05:00Z,4000,80,5,AEC 3,400,mercredi
+2023-01-05T08:05:00Z,4000,70,4,Aéro basse + jambes,280,jeudi
+2023-01-06T07:40:00Z,3500,90,4,Test Olbrecht,360,vendredi
+2023-01-07T08:35:00Z,3200,70,3,AEC1,210,samedi
+2023-01-09T11:00:00Z,3500,75,4,AEC1,300,lundi
+2023-01-10T11:05:00Z,3000,75,6,DPC / ANC,450,mardi
+2023-01-16T09:20:00Z,1000,20,4,Légère aéro,80,lundi
+2023-01-17T11:00:00Z,2700,60,5,Aéro + DPC,300,mardi
+2023-01-19T09:20:00Z,1000,15,2,Flush + technique,30,jeudi
+2023-01-21T11:20:00Z,1000,15,1,Flush,15,samedi
+2023-01-23T08:35:00Z,2500,60,5,Aéro mix + educ + vitesse,300,lundi
+2023-01-24T08:35:00Z,2500,55,5,Aéro + DPC,275,mardi
+2023-01-26T09:15:00Z,1000,15,2,Flush + hypo educ,30,jeudi
+2023-01-30T09:15:00Z,1000,20,2,Reprise semaine,40,lundi
+2023-02-02T07:40:00Z,2800,70,6,DPC,420,jeudi
+2023-02-06T08:15:00Z,2600,55,4,Aéro,220,lundi
+2023-02-07T08:50:00Z,2400,50,6,Aéro +,300,mardi
+2023-02-08T12:00:00Z,1500,25,2,Flush,50,mercredi
+2023-02-09T08:30:00Z,3000,50,4,Aéro,200,jeudi
+2023-02-10T11:50:00Z,1000,20,1,Flush,20,vendredi
+2023-02-11T09:15:00Z,3000,60,5,Aéro,300,samedi
+2023-02-13T09:05:00Z,1200,20,3,Wake up swim,60,lundi
+2023-02-14T08:50:00Z,2800,70,6,DPC,420,mardi
+2023-02-15T11:35:00Z,3000,55,4,Aéro,220,mercredi
+2023-02-16T09:00:00Z,1400,25,3,Skull & Drills Fly,75,jeudi
+2023-02-17T09:10:00Z,2600,50,3,Aero,150,vendredi
+2023-02-20T07:55:00Z,2700,55,5,Small hybrid,275,lundi
+2023-02-23T18:00:00Z,1200,30,4,Prépa compet,120,jeudi
+2023-02-24T10:00:00Z,1500,45,5,Compet,225,vendredi
+2023-02-26T09:45:00Z,1500,45,4,Competition,180,dimanche
+2023-03-01T09:45:00Z,2400,45,5,Aero,225,mercredi
+2023-03-02T10:30:00Z,1200,25,3,Flush + drills,75,jeudi
+2023-03-23T10:30:00Z,1000,20,2,Flush,40,jeudi
+2023-03-25T11:15:00Z,1000,20,3,Flush & technique,60,samedi
+2023-03-27T11:10:00Z,1000,20,3,Aero + kick,60,lundi
+2023-03-28T07:38:00Z,2600,50,7,Aero +,350,mardi
+2023-03-29T10:15:00Z,2800,75,8,Speed endurance,600,mercredi
+2023-03-30T11:00:00Z,1000,20,2,Flush & Hypo,40,jeudi
+2023-04-01T08:10:00Z,2800,75,6,Aero + sprint ondul,450,samedi
+2023-04-03T10:30:00Z,1000,20,3,"Flush, skull & skills",60,lundi
+2023-04-04T07:40:00Z,3000,50,6,Aéro,300,mardi
+2023-04-05T09:45:00Z,2500,60,6,Kick,360,mercredi
+2023-04-06T10:10:00Z,1500,30,3,Technique élastique,90,jeudi
+2023-04-08T08:20:00Z,3000,80,7,Aero,560,samedi
+2023-04-10T10:10:00Z,1500,30,5,Aéro / educ / appui,150,lundi
+2023-04-11T07:40:00Z,3200,75,5,Aéro + technique,375,mardi
+2023-04-12T08:10:00Z,3000,70,7,Kick power,490,mercredi
+2023-04-18T08:30:00Z,2600,55,6,Aéro,330,mardi
+2023-04-19T07:30:00Z,1000,120,3,Shooting,360,mercredi
+2023-04-20T10:00:00Z,2000,40,4,Aéro,160,jeudi
+2023-04-21T11:30:00Z,1000,30,3,Flush + technique,90,vendredi
+2023-04-22T10:00:00Z,2000,45,7,Compet,315,samedi
+2023-04-23T10:45:00Z,1500,45,6,Compet,270,dimanche
+2023-04-25T11:25:00Z,2000,40,3,Flush aero,120,mardi
+2023-04-26T08:30:00Z,2600,60,6,Aero + power quick,360,mercredi
+2023-04-27T08:35:00Z,3000,70,8,Hybrid,560,jeudi
+2023-04-28T09:05:00Z,2500,50,6,Aéro P/P,300,vendredi
+2023-05-01T11:10:00Z,1000,25,4,Flush et technique,100,lundi
+2023-05-02T08:00:00Z,3000,50,6,Aero,300,mardi
+2023-05-03T09:00:00Z,2200,65,7,Power kick,455,mercredi
+2023-05-04T08:45:00Z,2500,45,6,Aéro,270,jeudi
+2023-05-05T07:00:00Z,1000,120,2,Shooting,240,vendredi
+2023-05-06T08:35:00Z,3000,65,6,Aéro + appui,390,samedi
+2023-05-08T10:35:00Z,1000,25,3,Flush et appui,75,lundi
+2023-05-09T07:30:00Z,2800,60,4,Aéro,240,mardi
+2023-05-12T11:45:00Z,1000,30,4,Prépa course,120,vendredi
+2023-05-13T08:45:00Z,1000,30,7,Compet,210,samedi
+2023-05-14T08:30:00Z,1500,35,7,Compet,245,dimanche
+2023-05-17T09:45:00Z,1000,30,7,Compet,210,mercredi
+2023-05-20T09:00:00Z,2500,50,4,Aéro,200,samedi
+2023-05-23T09:30:00Z,1000,120,3,Shooting,360,mardi
+2023-05-24T08:00:00Z,4000,90,5,Aéro basse,450,mercredi
+2023-05-25T08:00:00Z,4000,85,6,Aéro basse + léger DPC,510,jeudi
+2023-05-29T10:05:00Z,1700,40,5,Aéro,200,lundi
+2023-05-30T08:15:00Z,1700,30,4,Aero,120,mardi
+2023-06-02T11:05:00Z,1800,50,7,Small USRP,350,vendredi
+2023-06-03T11:45:00Z,500,15,2,Flush hypo,30,samedi
+2023-06-05T08:45:00Z,1300,30,4,Aéro + body feel,120,lundi
+2023-06-06T11:50:00Z,1000,25,3,Flush et technique,75,mardi
+2023-06-07T10:50:00Z,1600,30,4,Aero,120,mercredi
+2023-06-10T10:35:00Z,1200,30,4,Prépa compet,120,samedi
+2023-06-11T10:10:00Z,1700,40,5,Compet,200,dimanche
+2023-06-13T11:00:00Z,1000,20,2,Recup,40,mardi
+2023-06-12T11:00:00Z,1000,20,3,Recup,60,lundi
+2023-06-13T11:00:00Z,1500,35,8,Course,280,mardi
+2023-06-14T11:00:00Z,1200,30,3,Aero + educ,90,mercredi
+2023-06-15T10:00:00Z,2000,45,7,Compet,315,jeudi
+2023-06-20T08:30:00Z,3000,55,6,Aéro,330,mardi
+2023-06-21T10:50:00Z,900,20,3,Flush + technique,60,mercredi
+2023-06-22T08:55:00Z,2200,50,8,Small USRP,400,jeudi
+2023-06-24T11:30:00Z,1200,20,3,Flush et technique,60,samedi
+2023-06-26T09:10:00Z,1400,25,4,Flush et technique,100,lundi
+2023-06-27T09:00:00Z,3400,65,6,Aéro et DPC,390,mardi
+2023-06-28T09:40:00Z,2800,60,7,Aero + power kick,420,mercredi
+2023-06-29T09:55:00Z,800,20,3,Technique,60,jeudi
+2023-07-01T09:05:00Z,3100,60,5,Aéro,300,samedi
+2023-07-04T08:30:00Z,4000,90,6,Aéro,540,mardi
+2023-07-05T08:30:00Z,2000,50,6,Power kick,300,mercredi
+2023-07-06T09:10:00Z,2700,50,5,Aero,250,jeudi
+2023-07-10T11:00:00Z,1600,45,3,Flush,135,lundi
+2023-07-12T10:45:00Z,2000,50,6,DPC body feel,300,mercredi
+2023-07-14T10:25:00Z,1200,30,3,Flush,90,vendredi
+2023-07-15T10:40:00Z,500,15,2,Flush et starts,30,samedi
+2023-07-18T10:50:00Z,1500,30,2,Flush,60,mardi
+2023-07-19T10:35:00Z,1400,30,4,Aéro,120,mercredi
+2023-07-26T11:30:00Z,1500,40,6,Stinger,240,mercredi
+2023-07-28T10:55:00Z,1700,40,8,Compet,320,vendredi
+2024-01-08T07:59:59Z,2500,45,3,Flush voyage + technique power tower,135,lundi
+2024-01-09T07:41:00Z,2300,60,5,DPC + skull,300,mardi
+2024-01-11T08:15:00Z,2500,40,5,Aero,200,jeudi
+2024-01-15T08:25:00Z,2800,55,6,Aero pap sponge + PP,330,lundi
+2024-01-16T08:30:00Z,2500,60,4,Aéro + power tower,240,mardi
+2024-01-17T10:00:00Z,2000,75,6,Surf,450,mercredi
+2024-01-18T08:40:00Z,3500,80,5,DPC,400,jeudi
+2024-01-19T11:15:00Z,400,5,1,Flush,5,vendredi
+2024-01-22T09:35:00Z,3000,60,4,Aéro basse,240,lundi
+2024-01-23T08:45:00Z,3000,45,3,Aéro basse,135,mardi
+2024-01-25T06:25:00Z,2200,50,4,Aéro pap,200,jeudi
+2024-01-26T11:00:00Z,1200,20,1,Flush,20,vendredi
+2024-01-27T10:00:00Z,1000,15,2,Flush,30,samedi
+2024-01-29T05:55:00Z,3000,60,6,Aéro (mood pourri),360,lundi
+2024-01-30T08:45:00Z,3000,50,3,Aero,150,mardi
+2024-01-31T09:45:00Z,1000,20,2,Flush,40,mercredi
+2024-02-01T08:40:00Z,4000,80,7,DPC + aéro,560,jeudi
+2024-02-03T07:45:00Z,1000,15,2,Flush,30,samedi
+2024-02-05T08:15:00Z,4000,90,6,Aéro long,540,lundi
+2024-02-06T08:10:00Z,4000,70,6,Flush + aero,420,mardi
+2024-02-07T09:45:00Z,1200,30,2,Aero flush,60,mercredi
+2024-02-13T09:00:00Z,1500,30,2,Flush voyage,60,mardi
+2024-02-14T10:00:00Z,800,20,2,Aero,40,mercredi
+2024-02-18T08:30:00Z,3000,60,6,Aero,360,dimanche
+2024-02-20T09:00:00Z,2000,45,6,Aéro + scull,270,mardi
+2024-02-23T08:20:00Z,1500,60,7,Sprint parachute,420,vendredi
+2024-02-24T10:30:00Z,1500,45,6,Touch vitesse pap parachute,270,samedi
+2024-02-26T10:15:00Z,1000,30,3,Aéro + intro sprint,90,lundi
+2024-02-27T08:10:00Z,2300,50,6,Aéro pap + p/p,300,mardi
+2024-02-28T11:15:00Z,1000,15,3,Flush et sprint jambes,45,mercredi
+2024-02-29T08:15:00Z,2500,60,7,DPC,420,jeudi
+2024-03-02T10:50:00Z,2000,50,6,Sprint parachute,300,samedi
+2024-03-04T10:20:00Z,1000,20,3,Flush + educ,60,lundi
+2024-03-06T10:25:00Z,1000,20,4,Flush et sprint jambes,80,mercredi
+2024-03-07T08:30:00Z,2600,60,7,DPC pap,420,jeudi
+2024-03-09T10:30:00Z,2000,60,6,Sprint pap parachute,360,samedi
+2024-03-11T10:20:00Z,1000,20,3,Flush,60,lundi
+2024-03-12T08:35:00Z,1200,40,3,Prépa stinger,120,mardi
+2024-03-14T09:10:00Z,1200,30,3,Aéro,90,jeudi
+2024-03-17T08:55:00Z,1000,25,3,Prépa compet,75,dimanche
+2024-03-19T11:15:00Z,1000,30,7,Course série,210,mardi
+2024-03-19T11:30:00Z,1200,25,4,Aero,100,mardi
+2024-03-20T11:00:00Z,1000,30,10,Course 100m,300,mercredi
+2024-03-21T09:20:00Z,1200,25,4,Aéro,100,jeudi
+2024-04-15T12:00:00Z,1000,20,3,Flush and hypo,60,lundi
+2024-04-16T09:00:00Z,2500,60,8,100 pace,480,mardi
+2024-04-18T08:55:00Z,2500,55,7,DPC,385,jeudi
+2024-04-19T10:25:00Z,4000,75,6,Aéro pap et P/P,450,vendredi
+2024-04-23T08:55:00Z,3200,55,6,Aero,330,mardi
+2024-04-24T12:00:00Z,1000,20,4,Flush,80,mercredi
+2024-04-25T09:00:00Z,2200,45,6,Small DPC and kick,270,jeudi
+2024-04-29T10:35:00Z,2000,45,5,Flush voyage,225,lundi
+2024-04-30T09:05:00Z,1700,50,6,Touch vitesse,300,mardi
+2024-05-01T11:01:00Z,1500,60,4,Prépa,240,mercredi
+2024-05-02T11:44:00Z,2200,45,5,DPC + Aéro,225,jeudi
+2024-05-14T09:10:00Z,2000,50,7,100 pace,350,mardi
+2024-05-16T09:05:00Z,3000,55,7,DPC + aéro,385,jeudi
+2024-05-18T10:25:00Z,3500,80,7,Aéro + kick,560,samedi
+2024-05-20T09:00:00Z,1500,30,3,Flush aero,90,lundi
+2024-05-21T09:00:00Z,3000,60,6,Aero,360,mardi
+2024-05-23T08:45:00Z,3000,60,6,DPC et jambes,360,jeudi
+2024-05-25T11:00:00Z,2800,50,5,Aéro,250,samedi
+2024-05-26T10:20:00Z,1200,20,2,Flush,40,dimanche
+2024-05-28T11:30:00Z,800,20,4,Prepa,80,mardi
+2024-05-29T10:10:00Z,800,20,8,Course,160,mercredi
+2024-05-30T09:15:00Z,1500,30,9,Course,270,jeudi
+2024-05-31T10:10:00Z,2500,50,5,Aero,250,vendredi
+2024-06-04T11:15:00Z,1200,50,7,Endurance vitesse combi,350,mardi
+2024-06-05T09:40:00Z,2000,35,6,Aéro +,210,mercredi
+2024-06-06T10:25:00Z,1800,50,5,Aero technique hypo,250,jeudi
+2024-06-07T11:08:00Z,600,30,3,Power tower drills,90,vendredi
+2024-06-08T11:30:00Z,1200,30,2,Flush,60,samedi
+2024-06-10T10:30:00Z,1400,35,3,Aero drills,105,lundi
+2024-06-11T10:20:00Z,1000,30,7,Stinger,210,mardi
+2024-06-14T11:25:00Z,800,20,3,Flush et activation,60,vendredi
+2024-06-15T10:30:00Z,500,15,4,Prepa,60,samedi
+2024-06-16T10:45:00Z,600,20,8,Course,160,dimanche
+2024-06-18T11:00:00Z,1000,30,10,Course,300,mardi
+2024-06-20T10:00:00Z,1000,20,7,Course,140,jeudi
+2024-06-25T10:00:00Z,1500,40,5,Intro power tower,200,mardi
+2024-06-26T09:30:00Z,3500,70,6,Aero,420,mercredi
+2024-06-27T09:05:00Z,2500,55,7,DPC,385,jeudi
+2024-07-01T09:05:00Z,3000,60,7,Aéro,420,lundi
+2024-07-02T09:10:00Z,3000,60,7,Aero +,420,mardi
+2024-07-03T09:15:00Z,4000,65,6,Aero 4n,390,mercredi
+2024-07-04T09:10:00Z,1200,40,4,DPC et power tower,160,jeudi
+2024-07-06T09:30:00Z,1000,30,6,Power tower lourd,180,samedi
+2024-07-08T09:10:00Z,2000,50,6,Prepa,300,lundi
+2024-07-09T10:15:00Z,2000,40,5,Aero,200,mardi
+2024-07-10T09:50:00Z,2800,65,6,DPC,390,mercredi
+2024-07-15T11:50:00Z,2000,40,3,Flush,120,lundi
+2024-07-16T11:45:00Z,1700,45,5,Prépa,225,mardi
+2024-07-17T11:45:00Z,400,15,2,Flush,30,mercredi
+2024-07-18T11:00:00Z,1600,35,3,Aéro,105,jeudi
+2024-07-21T11:25:00Z,1200,25,3,Aero,75,dimanche

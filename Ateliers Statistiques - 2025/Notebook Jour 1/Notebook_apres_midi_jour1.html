@@ -1,0 +1,2293 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Sébastien Déjean">
+<meta name="dcterms.date" content="2025-10-14">
+
+<title>Atelier Statistique &amp; Sport</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="atelier_stat_sport_sd_files/libs/clipboard/clipboard.min.js"></script>
+<script src="atelier_stat_sport_sd_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="atelier_stat_sport_sd_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="atelier_stat_sport_sd_files/libs/quarto-html/popper.min.js"></script>
+<script src="atelier_stat_sport_sd_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="atelier_stat_sport_sd_files/libs/quarto-html/anchor.min.js"></script>
+<link href="atelier_stat_sport_sd_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="atelier_stat_sport_sd_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="atelier_stat_sport_sd_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="atelier_stat_sport_sd_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="atelier_stat_sport_sd_files/libs/bootstrap/bootstrap-2db555eff11ba2905e859520ac147466.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#chargement-des-packages" id="toc-chargement-des-packages" class="nav-link active" data-scroll-target="#chargement-des-packages">Chargement des packages</a></li>
+  <li><a href="#présentation-des-jeux-de-données" id="toc-présentation-des-jeux-de-données" class="nav-link" data-scroll-target="#présentation-des-jeux-de-données">Présentation des jeux de données</a>
+  <ul class="collapse">
+  <li><a href="#decathlon" id="toc-decathlon" class="nav-link" data-scroll-target="#decathlon">decathlon</a></li>
+  <li><a href="#records_athle" id="toc-records_athle" class="nav-link" data-scroll-target="#records_athle">records_athle</a></li>
+  <li><a href="#gps_rugby" id="toc-gps_rugby" class="nav-link" data-scroll-target="#gps_rugby">GPS_rugby</a></li>
+  </ul></li>
+  <li><a href="#analyses-préliminaires" id="toc-analyses-préliminaires" class="nav-link" data-scroll-target="#analyses-préliminaires">Analyses préliminaires</a>
+  <ul class="collapse">
+  <li><a href="#analyses-univariées" id="toc-analyses-univariées" class="nav-link" data-scroll-target="#analyses-univariées">Analyses univariées</a>
+  <ul class="collapse">
+  <li><a href="#decathlon-1" id="toc-decathlon-1" class="nav-link" data-scroll-target="#decathlon-1"><code>decathlon</code></a></li>
+  <li><a href="#records_athle-1" id="toc-records_athle-1" class="nav-link" data-scroll-target="#records_athle-1"><code>records_athle</code></a></li>
+  <li><a href="#gps_rugby-1" id="toc-gps_rugby-1" class="nav-link" data-scroll-target="#gps_rugby-1"><code>GPS_rugby</code></a></li>
+  </ul></li>
+  <li><a href="#analyses-bivariées" id="toc-analyses-bivariées" class="nav-link" data-scroll-target="#analyses-bivariées">Analyses bivariées</a>
+  <ul class="collapse">
+  <li><a href="#decathlon-2" id="toc-decathlon-2" class="nav-link" data-scroll-target="#decathlon-2"><code>decathlon</code></a></li>
+  <li><a href="#records_athle-2" id="toc-records_athle-2" class="nav-link" data-scroll-target="#records_athle-2"><code>records_athle</code></a></li>
+  <li><a href="#gps_rugby-2" id="toc-gps_rugby-2" class="nav-link" data-scroll-target="#gps_rugby-2"><code>GPS_rugby</code></a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#analyse-en-composantes-principales" id="toc-analyse-en-composantes-principales" class="nav-link" data-scroll-target="#analyse-en-composantes-principales">Analyse en composantes principales</a>
+  <ul class="collapse">
+  <li><a href="#decathlon-3" id="toc-decathlon-3" class="nav-link" data-scroll-target="#decathlon-3"><code>decathlon</code></a></li>
+  <li><a href="#records_athle-3" id="toc-records_athle-3" class="nav-link" data-scroll-target="#records_athle-3"><code>records_athle</code></a></li>
+  <li><a href="#gps_rugby-3" id="toc-gps_rugby-3" class="nav-link" data-scroll-target="#gps_rugby-3"><code>GPS_rugby</code></a></li>
+  </ul></li>
+  <li><a href="#classification-non-supervisée" id="toc-classification-non-supervisée" class="nav-link" data-scroll-target="#classification-non-supervisée">Classification non supervisée</a>
+  <ul class="collapse">
+  <li><a href="#decathlon-4" id="toc-decathlon-4" class="nav-link" data-scroll-target="#decathlon-4"><code>decathlon</code></a></li>
+  <li><a href="#records_athle-4" id="toc-records_athle-4" class="nav-link" data-scroll-target="#records_athle-4"><code>records_athle</code></a></li>
+  <li><a href="#gps_rugby-4" id="toc-gps_rugby-4" class="nav-link" data-scroll-target="#gps_rugby-4"><code>GPS_rugby</code></a></li>
+  </ul></li>
+  <li><a href="#validation-des-groupes" id="toc-validation-des-groupes" class="nav-link" data-scroll-target="#validation-des-groupes">Validation des groupes</a>
+  <ul class="collapse">
+  <li><a href="#decathlon-5" id="toc-decathlon-5" class="nav-link" data-scroll-target="#decathlon-5"><code>decathlon</code></a>
+  <ul class="collapse">
+  <li><a href="#description-statistique-des-groupes" id="toc-description-statistique-des-groupes" class="nav-link" data-scroll-target="#description-statistique-des-groupes">Description statistique des groupes</a></li>
+  </ul></li>
+  <li><a href="#records_athle-5" id="toc-records_athle-5" class="nav-link" data-scroll-target="#records_athle-5"><code>records_athle</code></a></li>
+  </ul></li>
+  <li><a href="#maillage-de-voronoï" id="toc-maillage-de-voronoï" class="nav-link" data-scroll-target="#maillage-de-voronoï">Maillage de Voronoï</a>
+  <ul class="collapse">
+  <li><a href="#positionnement-des-joueurs-sur-le-terrain" id="toc-positionnement-des-joueurs-sur-le-terrain" class="nav-link" data-scroll-target="#positionnement-des-joueurs-sur-le-terrain">Positionnement des joueurs sur le terrain</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Atelier Statistique &amp; Sport</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Sébastien Déjean </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 14, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Durant cette session, nous allons mettre en oeuvre l’analyse en composantes principales, la classification ascendante hiérarchique et la validation des groupes de classification sur 3 jeux de données. Une illustration de la mise en oeuvre du maillage de Voronoï est proposée en fin de session.</p>
+<section id="chargement-des-packages" class="level1">
+<h1>Chargement des packages</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FactoMineR)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pheatmap)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(viridis)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrugby)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggvoronoi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="présentation-des-jeux-de-données" class="level1">
+<h1>Présentation des jeux de données</h1>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objectif
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Importer les données et voir à quoi elles ressemblent.</p>
+</div>
+</div>
+<section id="decathlon" class="level2">
+<h2 class="anchored" data-anchor-id="decathlon">decathlon</h2>
+<p>Les données <code>decathlon</code> sont disponibles dans le package <code>FactoMineR</code>. Elles contiennent les performances de décathloniens lors de 2 compétitions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"decathlon"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">help</span>(<span class="st">"decathlon"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Nous nous focalisons sur les résultats des 10 épreuves en supprimant les 3 dernières colonnes du jeu de données pour travailler avec l’objet <code>decathlon_10events</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>decathlon_10events <span class="ot">&lt;-</span> decathlon <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>Rank, <span class="sc">-</span>Points, <span class="sc">-</span>Competition)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="records_athle" class="level2">
+<h2 class="anchored" data-anchor-id="records_athle">records_athle</h2>
+<p>Les données <code>records_athle</code> contiennent les records nationaux (en date du 19 août 2025, d’après différentes sources) de 30 pays pour 9 épreuves d’athlétisme (course seulement) du 100m au marathon.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>records_athle <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"athle_records_2025.csv"</span>,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">row.names =</span> <span class="dv">1</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">sep =</span> <span class="st">";"</span>, <span class="at">dec =</span> <span class="st">","</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(records_athle)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 30  9</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(records_athle)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           X100m X200m X400m  X800m X1500m X5000m X10000m SemiMarathon Marathon
+Australie   9.93 20.02 44.38 103.79 209.41 775.76 1629.57         3597     7582
+Belgique   10.02 20.13 44.15 102.43 210.99 769.71 1612.30         3591     7416
+Bresil      9.96 19.89 44.29 101.77 213.25 766.59 1648.12         3573     7491
+RoyaumeUni  9.83 19.73 43.44 101.73 207.79 780.41 1606.46         3547     7511
+Canada      9.84 19.62 44.44 101.20 211.71 767.20 1594.14         3600     7536
+Chine       9.83 19.88 45.14 106.32 216.49 805.14 1688.00         3753     7695</code></pre>
+</div>
+</div>
+</section>
+<section id="gps_rugby" class="level2">
+<h2 class="anchored" data-anchor-id="gps_rugby">GPS_rugby</h2>
+<p>Les données <code>GPS_rugby</code> contiennent la position (x,y), acquise à la fréquence de 10Hz, des 15 joueurs d’une équipe de rugby pendant 8.9 secondes d’un match. On dispose ainsi de 89 positions pour chaque joueur. Elles sont structurées selon un format <code>long</code> dans un data.frame à 1335 lignes et 4 colonnes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>GPS_rugby <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">"data_GPS_rugby.csv"</span>, <span class="at">sep=</span><span class="st">","</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(GPS_rugby)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1335    4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(GPS_rugby)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  frame_id player        x         y
+1     4102      1 67.06116 14.048823
+2     4102      8 77.28953  8.746621
+3     4102     11 43.51405  1.929076
+4     4102      4 77.31917  9.108978
+5     4102      2 76.94569 11.190284
+6     4102     13 66.13212 40.570278</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(GPS_rugby)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    frame_id        player         x               y         
+ Min.   :4102   Min.   : 1   Min.   :37.78   Min.   : 1.929  
+ 1st Qu.:4124   1st Qu.: 4   1st Qu.:67.44   1st Qu.:16.026  
+ Median :4146   Median : 8   Median :75.60   Median :26.204  
+ Mean   :4146   Mean   : 8   Mean   :71.78   Mean   :26.034  
+ 3rd Qu.:4168   3rd Qu.:12   3rd Qu.:78.47   3rd Qu.:33.460  
+ Max.   :4190   Max.   :15   Max.   :94.73   Max.   :57.300  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>GPS_rugby<span class="sc">$</span>frame_id <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(GPS_rugby<span class="sc">$</span>frame_id)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>GPS_rugby<span class="sc">$</span>player <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(GPS_rugby<span class="sc">$</span>player)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(GPS_rugby)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    frame_id        player          x               y         
+ 4102   :  15   1      : 89   Min.   :37.78   Min.   : 1.929  
+ 4103   :  15   2      : 89   1st Qu.:67.44   1st Qu.:16.026  
+ 4104   :  15   3      : 89   Median :75.60   Median :26.204  
+ 4105   :  15   4      : 89   Mean   :71.78   Mean   :26.034  
+ 4106   :  15   5      : 89   3rd Qu.:78.47   3rd Qu.:33.460  
+ 4107   :  15   6      : 89   Max.   :94.73   Max.   :57.300  
+ (Other):1245   (Other):801                                   </code></pre>
+</div>
+</div>
+<p>Pour réaliser certaines analyses, nous aurons besoin de modifier la structure du jeu de données en la rendant <code>wider</code> : plus large dans le sens où, chaque temps de mesure sera disposé sur une colonne différente. Nous disposerons ainsi d’un jeu de données à 15 lignes (1 par joueur) et 90 colonnes (la première contenant le numéro du joueur et les 89 suivantes, sa position en <code>x</code> ou en <code>y</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>GPS_rugby_wide <span class="ot">&lt;-</span> GPS_rugby <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(frame_id, player, x) <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> frame_id, <span class="at">values_from =</span> x)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(GPS_rugby_wide)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 15 90</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="analyses-préliminaires" class="level1">
+<h1>Analyses préliminaires</h1>
+<section id="analyses-univariées" class="level2">
+<h2 class="anchored" data-anchor-id="analyses-univariées">Analyses univariées</h2>
+<p>Cette partie revient sur certains points déjà évoqués lors de la première session de l’atelier. Elle permet de se familiariser avec les jeux de données avant d’envisager la mise en oeuvre de méthodes multivariées.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objectif
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Produire quelques sorties numériques et graphiques pour se familiariser avec les jeux de données.</p>
+</div>
+</div>
+<section id="decathlon-1" class="level3">
+<h3 class="anchored" data-anchor-id="decathlon-1"><code>decathlon</code></h3>
+<p>Premier aperçu des données à travers des indicateurs statistiques par colonne et des boxplots en parallèle (après modification de la structure en format <code>long</code> pour utiliser <code>ggplot2</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(decathlon_10events)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      100m         Long.jump       Shot.put       High.jump          400m      
+ Min.   :10.44   Min.   :6.61   Min.   :12.68   Min.   :1.850   Min.   :46.81  
+ 1st Qu.:10.85   1st Qu.:7.03   1st Qu.:13.88   1st Qu.:1.920   1st Qu.:48.93  
+ Median :10.98   Median :7.30   Median :14.57   Median :1.950   Median :49.40  
+ Mean   :11.00   Mean   :7.26   Mean   :14.48   Mean   :1.977   Mean   :49.62  
+ 3rd Qu.:11.14   3rd Qu.:7.48   3rd Qu.:14.97   3rd Qu.:2.040   3rd Qu.:50.30  
+ Max.   :11.64   Max.   :7.96   Max.   :16.36   Max.   :2.150   Max.   :53.20  
+  110m.hurdle        Discus        Pole.vault       Javeline    
+ Min.   :13.97   Min.   :37.92   Min.   :4.200   Min.   :50.31  
+ 1st Qu.:14.21   1st Qu.:41.90   1st Qu.:4.500   1st Qu.:55.27  
+ Median :14.48   Median :44.41   Median :4.800   Median :58.36  
+ Mean   :14.61   Mean   :44.33   Mean   :4.762   Mean   :58.32  
+ 3rd Qu.:14.98   3rd Qu.:46.07   3rd Qu.:4.920   3rd Qu.:60.89  
+ Max.   :15.67   Max.   :51.65   Max.   :5.400   Max.   :70.52  
+     1500m      
+ Min.   :262.1  
+ 1st Qu.:271.0  
+ Median :278.1  
+ Mean   :279.0  
+ 3rd Qu.:285.1  
+ Max.   :317.0  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>decathlon_10events <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"Event"</span>, <span class="at">values_to =</span> <span class="st">"Perf"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Event, <span class="at">y =</span> Perf)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Logiquement, le graphique n’est pas très informatif ; les mesures étant dans des unités et des ordres de grandeur différents.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Questions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Solutions</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>Convertir les durées en vitesse pour faciliter l’interprétation des résultats : “<em>the higher, the better</em>”</p>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>decathlon_10events_speed <span class="ot">&lt;-</span> decathlon_10events</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>decathlon_10events_speed<span class="sc">$</span><span class="st">'100m'</span> <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">/</span> decathlon_10events_speed<span class="sc">$</span><span class="st">'100m'</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>decathlon_10events_speed<span class="sc">$</span><span class="st">'110m.hurdle'</span> <span class="ot">&lt;-</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="dv">110</span> <span class="sc">/</span> decathlon_10events_speed<span class="sc">$</span><span class="st">'110m.hurdle'</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>decathlon_10events_speed<span class="sc">$</span><span class="st">'400m'</span> <span class="ot">&lt;-</span> <span class="dv">400</span> <span class="sc">/</span> decathlon_10events_speed<span class="sc">$</span><span class="st">'400m'</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>decathlon_10events_speed<span class="sc">$</span><span class="st">'1500m'</span> <span class="ot">&lt;-</span> <span class="dv">1500</span> <span class="sc">/</span> decathlon_10events_speed<span class="sc">$</span><span class="st">'1500m'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>On obtient ainsi les sorties suivantes, un peu plus conformes à l’intuition quant à leur interprétation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(decathlon_10events_speed)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      100m         Long.jump       Shot.put       High.jump          400m      
+ Min.   :8.591   Min.   :6.61   Min.   :12.68   Min.   :1.850   Min.   :7.519  
+ 1st Qu.:8.977   1st Qu.:7.03   1st Qu.:13.88   1st Qu.:1.920   1st Qu.:7.952  
+ Median :9.107   Median :7.30   Median :14.57   Median :1.950   Median :8.097  
+ Mean   :9.098   Mean   :7.26   Mean   :14.48   Mean   :1.977   Mean   :8.066  
+ 3rd Qu.:9.217   3rd Qu.:7.48   3rd Qu.:14.97   3rd Qu.:2.040   3rd Qu.:8.175  
+ Max.   :9.579   Max.   :7.96   Max.   :16.36   Max.   :2.150   Max.   :8.545  
+  110m.hurdle        Discus        Pole.vault       Javeline    
+ Min.   :7.020   Min.   :37.92   Min.   :4.200   Min.   :50.31  
+ 1st Qu.:7.343   1st Qu.:41.90   1st Qu.:4.500   1st Qu.:55.27  
+ Median :7.597   Median :44.41   Median :4.800   Median :58.36  
+ Mean   :7.539   Mean   :44.33   Mean   :4.762   Mean   :58.32  
+ 3rd Qu.:7.741   3rd Qu.:46.07   3rd Qu.:4.920   3rd Qu.:60.89  
+ Max.   :7.874   Max.   :51.65   Max.   :5.400   Max.   :70.52  
+     1500m      
+ Min.   :4.732  
+ 1st Qu.:5.261  
+ Median :5.395  
+ Mean   :5.385  
+ 3rd Qu.:5.535  
+ Max.   :5.723  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>decathlon_10events_speed <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"Event"</span>, <span class="at">values_to =</span> <span class="st">"Perf"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Event, <span class="at">y =</span> Perf)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>C’est mieux mais pas top… Il faudra envisager une transformation des données (scaling ou log par exemple) pour poursuivre les analyses.</p>
+</section>
+<section id="records_athle-1" class="level3">
+<h3 class="anchored" data-anchor-id="records_athle-1"><code>records_athle</code></h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(records_athle)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     X100m            X200m           X400m           X800m      
+ Min.   : 9.580   Min.   :19.19   Min.   :43.03   Min.   :100.9  
+ 1st Qu.: 9.845   1st Qu.:19.88   1st Qu.:44.34   1st Qu.:102.4  
+ Median :10.005   Median :20.02   Median :44.72   Median :103.7  
+ Mean   :10.002   Mean   :20.09   Mean   :44.70   Mean   :103.7  
+ 3rd Qu.:10.095   3rd Qu.:20.35   3rd Qu.:45.19   3rd Qu.:104.9  
+ Max.   :10.610   Max.   :21.30   Max.   :46.00   Max.   :108.5  
+     X1500m          X5000m         X10000m      SemiMarathon     Marathon   
+ Min.   :206.3   Min.   :757.4   Min.   :1578   Min.   :3450   Min.   :7235  
+ 1st Qu.:209.7   1st Qu.:770.0   1st Qu.:1614   1st Qu.:3566   1st Qu.:7500  
+ Median :211.7   Median :782.6   Median :1639   Median :3588   Median :7588  
+ Mean   :212.4   Mean   :787.4   Mean   :1649   Mean   :3657   Mean   :7697  
+ 3rd Qu.:215.1   3rd Qu.:799.0   3rd Qu.:1673   3rd Qu.:3705   3rd Qu.:7735  
+ Max.   :223.5   Max.   :869.7   Max.   :1815   Max.   :4150   Max.   :8701  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>records_athle <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"Event"</span>, <span class="at">values_to =</span> <span class="st">"Perf"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Event, <span class="at">y =</span> Perf)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Là non plus, le graphique n’est pas très informatif.</p>
+<p>Pour améliorer un peu les choses, commençons par ordonner les épreuves par longueur croissante (et pas selon l’ordre alpha-numérique)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>records_athle <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"Event"</span>, <span class="at">values_to =</span> <span class="st">"Perf"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(Event, Perf), <span class="at">y =</span> Perf)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>C’est plus cohérent bien sûr, mais une transformation des données sera nécessaire aussi pour ces données.</p>
+</section>
+<section id="gps_rugby-1" class="level3">
+<h3 class="anchored" data-anchor-id="gps_rugby-1"><code>GPS_rugby</code></h3>
+<ul>
+<li>Données <code>longer</code></li>
+</ul>
+<p>En plus de quelques indicateurs statistiques sur chaque colonne, nous pouvons obtenir une première visualisation des trajectoires des joueurs comme cela a été vu lors de la première session.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(GPS_rugby)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    frame_id        player          x               y         
+ 4102   :  15   1      : 89   Min.   :37.78   Min.   : 1.929  
+ 4103   :  15   2      : 89   1st Qu.:67.44   1st Qu.:16.026  
+ 4104   :  15   3      : 89   Median :75.60   Median :26.204  
+ 4105   :  15   4      : 89   Mean   :71.78   Mean   :26.034  
+ 4106   :  15   5      : 89   3rd Qu.:78.47   3rd Qu.:33.460  
+ 4107   :  15   6      : 89   Max.   :94.73   Max.   :57.300  
+ (Other):1245   (Other):801                                   </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>GPS_rugby <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">colour =</span> player)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>Données <code>wider</code></li>
+</ul>
+<p>Un aperçu des données en structure <code>wider</code> est accessible directement grâce à la nature <code>tibble</code> de l’objet <code>GPS_rugby_wide</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>GPS_rugby_wide</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 15 × 90
+   player `4102` `4103` `4104` `4105` `4106` `4107` `4108` `4109` `4110` `4111`
+   &lt;fct&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+ 1 1        67.1   67.1   67.0   67.1   67.1   67.1   67.1   67.1   67.2   67.4
+ 2 8        77.3   77.3   77.3   77.3   77.3   77.3   77.3   77.4   77.4   77.4
+ 3 11       43.5   43.6   43.6   43.7   43.7   43.7   43.8   43.8   43.8   43.9
+ 4 4        77.3   77.3   77.2   77.1   77.0   76.9   76.8   76.8   76.8   76.7
+ 5 2        76.9   77.0   76.9   76.9   77.0   77.0   77.1   77.1   77.1   77.1
+ 6 13       66.1   66.1   66.1   66.1   66.1   66.1   66.1   66.1   66.1   66.2
+ 7 12       68.3   68.3   68.3   68.3   68.3   68.3   68.4   68.4   68.5   68.5
+ 8 9        72.9   72.9   73.0   73.0   73.0   72.9   72.8   72.8   72.8   72.8
+ 9 6        66.2   66.2   66.2   66.3   66.3   66.3   66.3   66.3   66.4   66.5
+10 15       37.8   37.8   37.8   37.8   37.8   37.9   37.8   37.8   37.8   37.8
+11 14       41.9   41.7   41.6   41.4   41.3   41.2   41.1   40.9   40.8   40.7
+12 7        66.8   66.8   66.8   66.9   66.9   66.9   66.9   67.0   67.1   67.2
+13 3        78.1   78.1   78.1   78.0   78.0   78.0   78.0   77.9   77.9   77.9
+14 5        76.6   76.6   76.6   76.7   76.7   76.6   76.6   76.6   76.5   76.5
+15 10       67.1   67.1   67.2   67.2   67.2   67.3   67.3   67.4   67.6   67.8
+# ℹ 79 more variables: `4112` &lt;dbl&gt;, `4113` &lt;dbl&gt;, `4114` &lt;dbl&gt;, `4115` &lt;dbl&gt;,
+#   `4116` &lt;dbl&gt;, `4117` &lt;dbl&gt;, `4118` &lt;dbl&gt;, `4119` &lt;dbl&gt;, `4120` &lt;dbl&gt;,
+#   `4121` &lt;dbl&gt;, `4122` &lt;dbl&gt;, `4123` &lt;dbl&gt;, `4124` &lt;dbl&gt;, `4125` &lt;dbl&gt;,
+#   `4126` &lt;dbl&gt;, `4127` &lt;dbl&gt;, `4128` &lt;dbl&gt;, `4129` &lt;dbl&gt;, `4130` &lt;dbl&gt;,
+#   `4131` &lt;dbl&gt;, `4132` &lt;dbl&gt;, `4133` &lt;dbl&gt;, `4134` &lt;dbl&gt;, `4135` &lt;dbl&gt;,
+#   `4136` &lt;dbl&gt;, `4137` &lt;dbl&gt;, `4138` &lt;dbl&gt;, `4139` &lt;dbl&gt;, `4140` &lt;dbl&gt;,
+#   `4141` &lt;dbl&gt;, `4142` &lt;dbl&gt;, `4143` &lt;dbl&gt;, `4144` &lt;dbl&gt;, `4145` &lt;dbl&gt;, …</code></pre>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<ol type="1">
+<li><p>Représenter les boxplots en parallèle de la position en x selon le temps (<code>frame_id</code>).</p></li>
+<li><p>Même chose pour les positions en y.</p></li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-14-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># avec les données long et ggplot2</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>GPS_rugby <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> frame_id, <span class="at">y =</span> x)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>()</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>GPS_rugby <span class="sc">%&gt;%</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> frame_id, <span class="at">y =</span> y)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="analyses-bivariées" class="level2">
+<h2 class="anchored" data-anchor-id="analyses-bivariées">Analyses bivariées</h2>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objectif
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Commencer à appréhender les liens entre les variables en les considérant 2 à 2.</p>
+</div>
+</div>
+<section id="decathlon-2" class="level3">
+<h3 class="anchored" data-anchor-id="decathlon-2"><code>decathlon</code></h3>
+<ul>
+<li>Nuages de points</li>
+</ul>
+<p>Un premier aperçu des relations bivariées est accessible par une représentation des nuages de points croisant les variables deux à deux.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpairs</span>(decathlon_10events)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>Matrice de corrélation</li>
+</ul>
+<p>Les corrélations de Pearson déjà visibles dans le graphique précédent peuvent être représentées par une image de la matrice de corrélation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>matcor_pearson_decathlon <span class="ot">&lt;-</span> <span class="fu">cor</span>(decathlon_10events, <span class="at">method =</span> <span class="st">"pearson"</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(matcor_pearson_decathlon)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Questions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Conseil</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<p>Comment obtenir la représentation graphique ci-dessous ?</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<p>Consulter l’aide de la fonction <code>corrplot</code>.</p>
+</div>
+<div id="tabset-3-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(matcor_pearson_decathlon, <span class="at">method =</span> <span class="st">"color"</span>, <span class="at">type =</span> <span class="st">"lower"</span>,</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">COL2</span>(<span class="st">'RdYlBu'</span>, <span class="dv">100</span>), <span class="at">addCoef.col =</span> <span class="st">"grey"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>Certaines corrélations négatives peuvent surprendre a priori (comme par exemple entre 100m et saut en longueur car on s’attend à ce qu’un athlète qui court vite saute loin), mais les calculs précédents ont été effectuées sur les valeurs en durées pour les épreuves de vitesse.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">Questions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">Conseil</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-3" role="tab" aria-controls="tabset-4-3" aria-selected="false" href="">Solutions</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<ol type="1">
+<li>Comment reproduire le graphique précédent en utilisant cette fois-ci les données où les durées ont été transformées en vitesse.</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
+<li>Afficher un graphique similaire pour le coefficient de Spearman.</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<p>Consulter l’aide des fonctions <code>cor</code> et <code>corrplot</code>.</p>
+</div>
+<div id="tabset-4-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>matcor_pearson_decathlon_speed <span class="ot">&lt;-</span> <span class="fu">cor</span>(decathlon_10events_speed,</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">method =</span> <span class="st">"pearson"</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(matcor_pearson_decathlon_speed, <span class="at">method =</span> <span class="st">"color"</span>, <span class="at">type =</span> <span class="st">"lower"</span>,</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">COL2</span>(<span class="st">'RdYlBu'</span>, <span class="dv">100</span>), <span class="at">addCoef.col =</span> <span class="st">"grey"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>matcor_spearman_decathlon <span class="ot">&lt;-</span> <span class="fu">cor</span>(decathlon_10events_speed, <span class="at">method =</span> <span class="st">"spearman"</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(matcor_spearman_decathlon, <span class="at">method =</span> <span class="st">"color"</span>, <span class="at">type =</span> <span class="st">"lower"</span>,</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">COL2</span>(<span class="st">'RdYlBu'</span>, <span class="dv">100</span>), <span class="at">addCoef.col =</span> <span class="st">"grey"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="records_athle-2" class="level3">
+<h3 class="anchored" data-anchor-id="records_athle-2"><code>records_athle</code></h3>
+<p>Comme précédemment, nous explorons les relations bivariées par des nuages de points et des représentations des coefficients de corrélation.</p>
+<ul>
+<li>Nuages de points</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpairs</span>(records_athle)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href="">Conseil</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" role="tab" aria-controls="tabset-5-3" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<p>Représenter le même graphique en se focalisant sur les épreuves sur piste, c’est à dire, en supprimant semi-marathon et marathon</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<p>Utiliser la fonction <code>dplyr::select</code>.</p>
+</div>
+<div id="tabset-5-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>records_athle <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>SemiMarathon, <span class="sc">-</span>Marathon) <span class="sc">%&gt;%</span> <span class="fu">ggpairs</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<ul>
+<li>Matrice de corrélation de Pearson</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>matcor_pearson_records_athle <span class="ot">&lt;-</span> <span class="fu">cor</span>(records_athle, <span class="at">method =</span> <span class="st">"pearson"</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(matcor_pearson_records_athle, <span class="at">method =</span> <span class="st">"ellipse"</span>, <span class="at">type =</span> <span class="st">"lower"</span>,</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">COL2</span>(<span class="st">'RdYlBu'</span>, <span class="dv">100</span>), <span class="at">addCoef.col =</span> <span class="st">"grey"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="gps_rugby-2" class="level3">
+<h3 class="anchored" data-anchor-id="gps_rugby-2"><code>GPS_rugby</code></h3>
+<p>La représentation des nuages de points croisant les 89 variables du jeu de données au format <code>wide</code> ne serait pas très lisible.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<p>Représenter les nuages de points qur les 10 premiers temps de mesure seulement</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>GPS_rugby_wide <span class="sc">%&gt;%</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggpairs</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>En revanche, une image de la matrice de corrélation reste tout à fait lisible et interprétable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>matcor_pearson_GPS_rugby <span class="ot">&lt;-</span> <span class="fu">cor</span>(<span class="fu">select</span>(GPS_rugby_wide, <span class="sc">-</span>player), <span class="at">method =</span> <span class="st">"pearson"</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(matcor_pearson_GPS_rugby, <span class="at">method =</span> <span class="st">"shade"</span>, <span class="at">type =</span> <span class="st">"lower"</span>,</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">COL2</span>(<span class="st">'RdYlBu'</span>, <span class="dv">100</span>), <span class="at">tl.cex =</span> <span class="fl">0.25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false" href="">Conseil</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-3" role="tab" aria-controls="tabset-7-3" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<p>Modifier le nuancier pour faire apparaître davantage de disparités dans les couleurs.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
+<p>Consulter l’aide de la fonction <code>corrplot</code> et en particulier le paramètre <code>col</code>.</p>
+</div>
+<div id="tabset-7-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(matcor_pearson_GPS_rugby, <span class="at">method =</span> <span class="st">"shade"</span>, <span class="at">type =</span> <span class="st">"lower"</span>,</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">col =</span> <span class="fu">COL2</span>(<span class="st">'RdYlBu'</span>, <span class="dv">100</span>), <span class="at">is.corr =</span> <span class="cn">FALSE</span>, <span class="at">tl.cex =</span> <span class="fl">0.25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>Quelle que soit la représentation, le caractère auto-corrélé des données est évident. Chaque variable est plus étroitement corrélée aux variables qui la précèdent ou qui la suivent dans l’échelle du temps qu’à celles plus éloignées. D’où le risque à manipuler ce type de données comme des données multivariées “classiques”. La session 3 de l’atelier abordera les méthodes spécifiques à ce type de données.</p>
+</section>
+</section>
+</section>
+<section id="analyse-en-composantes-principales" class="level1">
+<h1>Analyse en composantes principales</h1>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objectif
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Réaliser des analyses en composantes principales et produire des sorties graphiques.</p>
+</div>
+</div>
+<section id="decathlon-3" class="level2">
+<h2 class="anchored" data-anchor-id="decathlon-3"><code>decathlon</code></h2>
+<p>Commençons par une ACP sur les données pour lesquelles les durées pour les épreuves de course ont été transformées en vitesse.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>res_PCA_decathlon <span class="ot">&lt;-</span> <span class="fu">PCA</span>(decathlon_10events_speed)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: ggrepel: 3 unlabeled data points (too many overlaps). Consider
+increasing max.overlaps</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-33-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false" href="">Conseil</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-3" role="tab" aria-controls="tabset-8-3" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
+<p>Réaliser la même analyse sur les données où les valeurs pour les épreuves de vitesse n’ont pas été converties en vitesse. On sait que ce n’est pas bien, mais c’est juste pour voir.</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: ggrepel: 1 unlabeled data points (too many overlaps). Consider
+increasing max.overlaps</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-34-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
+<p>Il suffit de changer le jeu de données passé en paramètre.</p>
+</div>
+<div id="tabset-8-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>res_PCA_decathlon <span class="ot">&lt;-</span> <span class="fu">PCA</span>(decathlon_10events)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="records_athle-3" class="level2">
+<h2 class="anchored" data-anchor-id="records_athle-3"><code>records_athle</code></h2>
+<p>Nous réalisons l’ACP sur les données <code>records_athle</code>. Juste pour illustrer certaines options (et faciliter la réponse à la question suivante), les représentations graphiques sont obtenues par une commande spécifique et pas automatiquement par la fonction <code>PCA</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>res_PCA_records_athle <span class="ot">&lt;-</span> <span class="fu">PCA</span>(records_athle, <span class="at">graph =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(res_PCA_records_athle, <span class="at">choix =</span> <span class="st">"ind"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: ggrepel: 11 unlabeled data points (too many overlaps). Consider
+increasing max.overlaps</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(res_PCA_records_athle, <span class="at">choix =</span> <span class="st">"var"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-36-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-9-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-1" role="tab" aria-controls="tabset-9-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-2" role="tab" aria-controls="tabset-9-2" aria-selected="false" href="">Conseil</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-3" role="tab" aria-controls="tabset-9-3" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-9-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-9-1-tab">
+<p>Représenter les individus puis les variables sur le plan des composantes principales 2 et 3.</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: ggrepel: 11 unlabeled data points (too many overlaps). Consider
+increasing max.overlaps</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-37-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-9-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-2-tab">
+<p>Voir l’aide de la fonction <code>plot.PCA</code></p>
+</div>
+<div id="tabset-9-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(res_PCA_records_athle, <span class="at">choix =</span> <span class="st">"ind"</span>, <span class="at">axes =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>))</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(res_PCA_records_athle, <span class="at">choix =</span> <span class="st">"var"</span>, <span class="at">axes =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>L’analyse des données exprimées en durées peut se révéler contre-intuitive. On aurait, par exemple, envie de voir la Jamaïque dans la direction pointée par les épreuves de 100m et 200m.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-10-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-1" role="tab" aria-controls="tabset-10-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-2" role="tab" aria-controls="tabset-10-2" aria-selected="false" href="">Conseil</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-3" role="tab" aria-controls="tabset-10-3" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-10-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-10-1-tab">
+<p>Proposer une transformation des données pour rendre les graphiques interprétables en ce sens.</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: ggrepel: 11 unlabeled data points (too many overlaps). Consider
+increasing max.overlaps</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-39-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-10-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-2-tab">
+<ul>
+<li><p>Option 1 : Simplement prendre l’opposé des valeurs numériques</p></li>
+<li><p>Option 2 : Convertir les durées en vitesse</p></li>
+</ul>
+</div>
+<div id="tabset-10-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-3-tab">
+<ul>
+<li>Option 1</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># En prenant l'opposé des valeurs</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>res_PCA_records_athle_neg <span class="ot">&lt;-</span> <span class="fu">PCA</span>(<span class="sc">-</span>records_athle)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>Option 2</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># En convertissant les durées en vitesse</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>records_athle_speed <span class="ot">&lt;-</span> records_athle</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>records_athle_speed<span class="sc">$</span>X100m <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">/</span> records_athle<span class="sc">$</span>X100m</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>records_athle_speed<span class="sc">$</span>X200m <span class="ot">&lt;-</span> <span class="dv">200</span> <span class="sc">/</span> records_athle<span class="sc">$</span>X200m</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>records_athle_speed<span class="sc">$</span>X400m <span class="ot">&lt;-</span> <span class="dv">400</span> <span class="sc">/</span> records_athle<span class="sc">$</span>X400m</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>records_athle_speed<span class="sc">$</span>X800m <span class="ot">&lt;-</span> <span class="dv">800</span> <span class="sc">/</span> records_athle<span class="sc">$</span>X800m</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>records_athle_speed<span class="sc">$</span>X1500m <span class="ot">&lt;-</span> <span class="dv">1500</span> <span class="sc">/</span> records_athle<span class="sc">$</span>X1500m</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>records_athle_speed<span class="sc">$</span>X5000m <span class="ot">&lt;-</span> <span class="dv">5000</span> <span class="sc">/</span> records_athle<span class="sc">$</span>X5000m</span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>records_athle_speed<span class="sc">$</span>X10000m <span class="ot">&lt;-</span> <span class="dv">10000</span> <span class="sc">/</span> records_athle<span class="sc">$</span>X10000m</span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>records_athle_speed<span class="sc">$</span>SemiMarathon <span class="ot">&lt;-</span> <span class="dv">21100</span> <span class="sc">/</span> records_athle<span class="sc">$</span>SemiMarathon</span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>records_athle_speed<span class="sc">$</span>Marathon <span class="ot">&lt;-</span> <span class="dv">42195</span> <span class="sc">/</span> records_athle<span class="sc">$</span>Marathon</span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a>res_PCA_records_athle_speed <span class="ot">&lt;-</span> <span class="fu">PCA</span>(records_athle_speed)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: ggrepel: 8 unlabeled data points (too many overlaps). Consider
+increasing max.overlaps</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-41-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="gps_rugby-3" class="level2">
+<h2 class="anchored" data-anchor-id="gps_rugby-3"><code>GPS_rugby</code></h2>
+<p>L’ACP sur les données GPS n’est clairement pas recommandée. Elle va simplement mettre en évidence le phénomène d’auto-corrélation dans les données déjà identifié précédemment. La session 3 abordera l’ACP fonctionnelle adaptée à ce type de données.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>res_PCA_GPS <span class="ot">&lt;-</span> <span class="fu">PCA</span>(<span class="fu">select</span>(GPS_rugby_wide, <span class="sc">-</span>player), <span class="at">graph =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(res_PCA_GPS, <span class="at">choix =</span> <span class="st">"ind"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(res_PCA_GPS, <span class="at">choix =</span> <span class="st">"var"</span>, <span class="at">cex =</span> <span class="fl">0.25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-42-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(res_PCA_GPS, <span class="at">choix =</span> <span class="st">"var"</span>, <span class="at">axes =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), <span class="at">cex =</span> <span class="fl">0.25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-42-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-11-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-1" role="tab" aria-controls="tabset-11-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-2" role="tab" aria-controls="tabset-11-2" aria-selected="false" href="">Conseil</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-3" role="tab" aria-controls="tabset-11-3" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-11-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-11-1-tab">
+<p>Reproduire les mêmes graphiques pour une ACP non réduite.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-43-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-43-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-11-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-2-tab">
+<p>Consulter l’aide de la fonction <code>PCA</code>.</p>
+</div>
+<div id="tabset-11-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>res_PCA_GPS_unscaled <span class="ot">&lt;-</span> <span class="fu">PCA</span>(<span class="fu">select</span>(GPS_rugby_wide, <span class="sc">-</span>player),</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">scale.unit =</span> <span class="cn">FALSE</span>, <span class="at">graph =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(res_PCA_GPS_unscaled, <span class="at">choix =</span> <span class="st">"var"</span>, <span class="at">cex =</span> <span class="fl">0.25</span>)</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(res_PCA_GPS_unscaled, <span class="at">choix =</span> <span class="st">"var"</span>, <span class="at">axes =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), <span class="at">cex =</span> <span class="fl">0.25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>Cela ne change rien au fond du problème ; c’est juste pour manipuler la fonction <code>PCA</code> et faire des “jolis” dessins.</p>
+</section>
+</section>
+<section id="classification-non-supervisée" class="level1">
+<h1>Classification non supervisée</h1>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objectif
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Mettre en oeuvre une méthode de classification non supervisée (la classification ascendante hiérarchique) et proposer différentes sorties graphiques pour interpréter les résultats.</p>
+</div>
+</div>
+<section id="decathlon-4" class="level2">
+<h2 class="anchored" data-anchor-id="decathlon-4"><code>decathlon</code></h2>
+<p>Nous nous concentrons sur les données <code>decathlon_10events_speed</code> où les durées ont été converties en vitesses.</p>
+<p>Nous réalisons dans un premier temps la classification des individus.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>dist_decathlon_athletes <span class="ot">&lt;-</span> <span class="fu">dist</span>(decathlon_10events_speed)</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>hclust_decathlon_athletes <span class="ot">&lt;-</span> <span class="fu">hclust</span>(dist_decathlon_athletes, <span class="at">method =</span> <span class="st">"ward.D"</span>)</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hclust_decathlon_athletes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-45-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-12-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-1" role="tab" aria-controls="tabset-12-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-12-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-2" role="tab" aria-controls="tabset-12-2" aria-selected="false" href="">Conseil</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-12-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-3" role="tab" aria-controls="tabset-12-3" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-12-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-12-1-tab">
+<p>Réaliser la classification des épreuves.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-46-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-12-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-12-2-tab">
+<p>La fonction <code>t</code> permet de transposer une matrice.</p>
+</div>
+<div id="tabset-12-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-12-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>dist_decathlon_epreuves <span class="ot">&lt;-</span> <span class="fu">dist</span>(<span class="fu">t</span>(decathlon_10events_speed))</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>hclust_decathlon_epreuves <span class="ot">&lt;-</span> <span class="fu">hclust</span>(dist_decathlon_epreuves, <span class="at">method =</span> <span class="st">"ward.D"</span>)</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hclust_decathlon_epreuves)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>Pour représenter simultanément les 2 classifications autour d’une image de la matrice des données réordonnée en fonction des classifications, nous utilisons la fonction <code>pheatmap</code> du package du même nom.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pheatmap</span>(decathlon_10events_speed, <span class="at">clustering_method =</span> <span class="st">"ward.D"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-48-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>L’interprétation n’est pas très informative. La figure ne met pas beaucoup plus en évidence que le fait que les lancers de disque et de javelot donnent des valeurs plus élevées que les autres épreuves !</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-13-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-1" role="tab" aria-controls="tabset-13-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-13-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-2" role="tab" aria-controls="tabset-13-2" aria-selected="false" href="">Conseil</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-13-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-3" role="tab" aria-controls="tabset-13-3" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-13-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-13-1-tab">
+<p>Réaliser une figure similaire pour représenter la classification simultanée des athlètes et des épreuves sur des données réduites.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-49-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-13-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-13-2-tab">
+<p>Utiliser la fonction <code>scale</code> pour transformer les données d’entrée.</p>
+</div>
+<div id="tabset-13-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-13-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pheatmap</span>(<span class="fu">scale</span>(decathlon_10events_speed),</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">clustering_method =</span> <span class="st">"ward.D"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>Ce qui est un peu plus intéressant.</p>
+</section>
+<section id="records_athle-4" class="level2">
+<h2 class="anchored" data-anchor-id="records_athle-4"><code>records_athle</code></h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-14-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-14-1" role="tab" aria-controls="tabset-14-1" aria-selected="true" href="">Questions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-14-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-14-2" role="tab" aria-controls="tabset-14-2" aria-selected="false" href="">Conseil</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-14-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-14-3" role="tab" aria-controls="tabset-14-3" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-14-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-14-1-tab">
+<ol type="1">
+<li><p>Réaliser la classification des pays puis celle des épreuves.</p></li>
+<li><p>Représenter les 2 dendrogrammes obtenus ainsi que la heatmap correspondante.</p></li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-51-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-52-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-53-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-14-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-14-2-tab">
+<p>Reprendre ce qui a été fait précédemment sur les données <code>decathlon</code></p>
+</div>
+<div id="tabset-14-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-14-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>dist_records_athle_pays <span class="ot">&lt;-</span> <span class="fu">dist</span>(records_athle)</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>hclust_records_athle_pays <span class="ot">&lt;-</span> <span class="fu">hclust</span>(dist_records_athle_pays, <span class="at">method =</span> <span class="st">"ward.D"</span>)</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hclust_records_athle_pays)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>dist_records_athle_epreuves <span class="ot">&lt;-</span> <span class="fu">dist</span>(<span class="fu">t</span>(records_athle))</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>hclust_records_athle_epreuves <span class="ot">&lt;-</span> <span class="fu">hclust</span>(dist_records_athle_epreuves,</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">method =</span> <span class="st">"ward.D"</span>)</span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hclust_records_athle_epreuves)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pheatmap</span>(records_athle, <span class="at">clustering_method =</span> <span class="st">"ward.D"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>Les graphiques précédents ne sont pas très instructifs… nous enfonçons clairement une porte ouverte car les regroupements s’appuient sur la longueur de l’épreuve et pas sur les performances de chaque pays.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-15-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-15-1" role="tab" aria-controls="tabset-15-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-15-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-15-2" role="tab" aria-controls="tabset-15-2" aria-selected="false" href="">Conseil</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-15-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-15-3" role="tab" aria-controls="tabset-15-3" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-15-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-15-1-tab">
+<p>Proposer une analyse et une représentation graphique plus pertinente comme celle-ci.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-57-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-15-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-15-2-tab">
+<p>Un centrage-réduction des données devrait suffire à rendre les choses un peu plus intéressantes.</p>
+</div>
+<div id="tabset-15-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-15-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pheatmap</span>(<span class="fu">scale</span>(records_athle_speed), <span class="at">clustering_method =</span> <span class="st">"ward.D"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="gps_rugby-4" class="level2">
+<h2 class="anchored" data-anchor-id="gps_rugby-4"><code>GPS_rugby</code></h2>
+<p>Pour les données GPS, avec les limites déjà évoquées face à ce type de données, la classification n’est pas beaucoup plus informative que la simple visualisation des données.</p>
+<p>La commande ci-dessous exclut la variable <code>player</code> qui contient le numéro du joueur.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pheatmap</span>(<span class="fu">select</span>(GPS_rugby_wide, <span class="sc">-</span>player), <span class="at">clustering_method =</span> <span class="st">"ward.D"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-59-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>De plus, réaliser la classification des temps n’a pas vraiment de sens dans ce contexte d’où la question ci-dessous qui va nous permettre d’explorer les options de la fonction <code>pheatmap</code>.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-16-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-16-1" role="tab" aria-controls="tabset-16-1" aria-selected="true" href="">Questions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-16-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-16-2" role="tab" aria-controls="tabset-16-2" aria-selected="false" href="">Conseils</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-16-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-16-3" role="tab" aria-controls="tabset-16-3" aria-selected="false" href="">Solutions</a></li></ul>
+<div class="tab-content">
+<div id="tabset-16-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-16-1-tab">
+<ol type="1">
+<li>Reproduire la heatmap mais sans réaliser la classification des colonnes du jeu de données.</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-60-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
+<li>Proposer la même représentation graphique sur les données de position en y.</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-61-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-16-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-16-2-tab">
+<ol type="1">
+<li><p>Consulter l’aide de la fonction <code>pheatmap</code> et regarder particulièrement le paramètre <code>cluster_cols</code>.</p></li>
+<li><p>Revenir à l’origine et créer un autre jeu de données <code>GPS_rugby_wide_y</code></p></li>
+</ol>
+</div>
+<div id="tabset-16-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-16-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pheatmap</span>(<span class="fu">select</span>(GPS_rugby_wide, <span class="sc">-</span>player), <span class="at">cluster_cols =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">clustering_method =</span> <span class="st">"ward.D"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>GPS_rugby_wide_y <span class="ot">&lt;-</span> GPS_rugby <span class="sc">%&gt;%</span></span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(frame_id, player, y) <span class="sc">%&gt;%</span></span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> frame_id, <span class="at">values_from =</span> y)</span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a><span class="fu">pheatmap</span>(<span class="fu">select</span>(GPS_rugby_wide_y, <span class="sc">-</span>player), <span class="at">clustering_method =</span> <span class="st">"ward.D"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="validation-des-groupes" class="level1">
+<h1>Validation des groupes</h1>
+<p>La partie précédente nous a permis de construire des groupes homogènes selon certains critères. Il s’agit maintenant de les caractériser c’est à dire d’identifier les caractéristiques qui distinguent les groupes les uns des autres.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objectif
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Caractériser les groupes issus d’une méthode de classification.</p>
+</div>
+</div>
+<section id="decathlon-5" class="level2">
+<h2 class="anchored" data-anchor-id="decathlon-5"><code>decathlon</code></h2>
+<p>Commençons par couper le dendrogramme représentant la classification des athlètes (5 groupes semble un choix raisonnable) avec la fonction <code>cutree</code>. Les groupes peuvent être repérés sur le dendrogramme avec la fonction <code>rect.hclust</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>cut_decathlon_athletes_5groupes <span class="ot">&lt;-</span> <span class="fu">cutree</span>(hclust_decathlon_athletes,</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">k =</span> <span class="dv">5</span>)</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hclust_decathlon_athletes)</span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rect.hclust</span>(hclust_decathlon_athletes, <span class="at">k =</span> <span class="dv">5</span>, <span class="at">border =</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-64-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Ajoutons la colonne <code>groupe</code> au jeu de données, elle nous sera utile pour voir les groupes sur une ACP.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>decathlon_10events_5groupes <span class="ot">&lt;-</span></span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind.data.frame</span>(decathlon_10events_speed,</span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">groupe =</span> <span class="fu">as.factor</span>(cut_decathlon_athletes_5groupes))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-17-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-17-1" role="tab" aria-controls="tabset-17-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-17-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-17-2" role="tab" aria-controls="tabset-17-2" aria-selected="false" href="">Conseil</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-17-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-17-3" role="tab" aria-controls="tabset-17-3" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-17-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-17-1-tab">
+<p>Réaliser à nouveau l’ACP sur les données <code>decathlon</code> avec les durées converties en vitesses et en utilisant la variable <code>groupe</code>.</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: ggrepel: 3 unlabeled data points (too many overlaps). Consider
+increasing max.overlaps</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-66-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-17-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-17-2-tab">
+<p>Déclarer la variable <code>groupe</code> comme variable qualitative supplémentaire et l’utiliser comme <code>habillage</code> des individus.</p>
+</div>
+<div id="tabset-17-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-17-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>res_PCA_decathlon_groupe <span class="ot">&lt;-</span> <span class="fu">PCA</span>(decathlon_10events_5groupes,</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>                                <span class="at">quali.sup =</span> <span class="dv">11</span>, <span class="at">graph =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(res_PCA_decathlon_groupe, <span class="at">choix =</span> <span class="st">"ind"</span>, <span class="at">habillage =</span> <span class="dv">11</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<section id="description-statistique-des-groupes" class="level3">
+<h3 class="anchored" data-anchor-id="description-statistique-des-groupes">Description statistique des groupes</h3>
+<p>Une description statitique des groupes peut être obtenue par la fonction <code>catdes</code> du package <code>FactoMineR</code>. Elle fournit des sorties numériques…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>res_catdes_decathlon_athletes_5groupes <span class="ot">&lt;-</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">catdes</span>(decathlon_10events_5groupes, <span class="at">num.var =</span> <span class="dv">11</span>)</span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>res_catdes_decathlon_athletes_5groupes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Link between the cluster variable and the quantitative variables
+================================================================
+               Eta2      P-value
+Discus    0.8214011 5.395967e-13
+Javeline  0.7728038 3.878923e-11
+Shot.put  0.3866160 1.202397e-03
+Long.jump 0.2303195 4.624210e-02
+
+Description of each cluster by quantitative variables
+=====================================================
+$`1`
+          v.test Mean in category Overall mean sd in category Overall sd
+Javeline 3.33197         62.46455     58.31659       1.740054   4.767593
+              p.value
+Javeline 0.0008623353
+
+$`2`
+              v.test Mean in category Overall mean sd in category Overall sd
+Discus      3.781236           49.678    44.325610      1.2832833  3.3363972
+Shot.put    2.138821           15.216    14.477073      0.5960067  0.8143118
+Pole.vault -2.218397            4.504     4.762439      0.2434420  0.2745887
+                p.value
+Discus     0.0001560518
+Shot.put   0.0324501517
+Pole.vault 0.0265277818
+
+$`3`
+            v.test Mean in category Overall mean sd in category Overall sd
+Javeline -3.539161         54.16917     58.31659       2.331128   4.767593
+             p.value
+Javeline 0.000401401
+
+$`4`
+             v.test Mean in category Overall mean sd in category Overall sd
+High.jump -2.160131         1.927273     1.976829     0.05706311 0.08785906
+Shot.put  -2.910646        13.858182    14.477073     0.67380626 0.81431175
+Discus    -4.403777        40.489091    44.325610     1.15163484 3.33639725
+               p.value
+High.jump 3.076251e-02
+Shot.put  3.606821e-03
+Discus    1.063824e-05
+
+$`5`
+            v.test Mean in category Overall mean sd in category Overall sd
+Javeline  3.544355        70.115000    58.316585      0.4050000  4.7675931
+Long.jump 2.933026         7.900000     7.260000      0.0600000  0.3125193
+Shot.put  2.317999        15.795000    14.477073      0.5650000  0.8143118
+Discus    2.184745        49.415000    44.325610      0.6950000  3.3363972
+100m      1.998801         9.397567     9.097597      0.1809771  0.2149419
+               p.value
+Javeline  0.0003935756
+Long.jump 0.0033567612
+Shot.put  0.0204493631
+Discus    0.0289075728
+100m      0.0456298567</code></pre>
+</div>
+</div>
+<p>…et des sorties graphiques</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(res_catdes_decathlon_athletes_5groupes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-69-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-18-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-18-1" role="tab" aria-controls="tabset-18-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-18-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-18-2" role="tab" aria-controls="tabset-18-2" aria-selected="false" href="">Conseil</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-18-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-18-3" role="tab" aria-controls="tabset-18-3" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-18-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-18-1-tab">
+<p>Représenter des diagrammes en bâtons à la place de la carte précédemment obtenue.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-70-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-70-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-18-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-18-2-tab">
+<p>Modifier une option de la fonction <code>plot.catdes</code>.</p>
+</div>
+<div id="tabset-18-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-18-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(res_catdes_decathlon_athletes_5groupes, <span class="at">barplot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>De façon plus classique, on peut aussi représenter pour une variable donnée des nuages de points parallèles en fonction du groupe.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> decathlon_10events_5groupes,</span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> groupe, <span class="at">y =</span> Javeline, <span class="at">colour =</span> groupe)) <span class="sc">+</span></span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-72-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-19-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-19-1" role="tab" aria-controls="tabset-19-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-19-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-19-2" role="tab" aria-controls="tabset-19-2" aria-selected="false" href="">Solution</a></li></ul>
+<div class="tab-content">
+<div id="tabset-19-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-19-1-tab">
+<p>Produire des graphiques similaires pour d’autres variables, certaines étant identifiées par <code>catdes</code> et d’autres non.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-73-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-73-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-73-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-73-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-73-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-19-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-19-2-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-74-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-74-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-74-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-74-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-74-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="records_athle-5" class="level2">
+<h2 class="anchored" data-anchor-id="records_athle-5"><code>records_athle</code></h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-20-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-20-1" role="tab" aria-controls="tabset-20-1" aria-selected="true" href="">Questions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-20-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-20-2" role="tab" aria-controls="tabset-20-2" aria-selected="false" href="">Solutions</a></li></ul>
+<div class="tab-content">
+<div id="tabset-20-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-20-1-tab">
+<ol type="1">
+<li>Couper le dendrogramme des pays en 3 groupes et ajouter une variable <code>groupe</code> au jeu de données dans lequel les performances sont exprimées en vitesses.</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-75-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
+<li>Réaliser une ACP et utiliser la variable <code>groupe</code> pour caractériser les pays.</li>
+</ol>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: ggrepel: 8 unlabeled data points (too many overlaps). Consider
+increasing max.overlaps</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-76-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ol start="3" type="1">
+<li>Utiliser la fonction <code>catdes</code> pour caractériser les 3 groupes de pays.</li>
+</ol>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Link between the cluster variable and the quantitative variables
+================================================================
+                  Eta2      P-value
+Marathon     0.7928306 5.893821e-10
+SemiMarathon 0.7825962 1.130071e-09
+X5000m       0.6948802 1.097364e-07
+X1500m       0.5403606 2.770976e-05
+X10000m      0.5283203 3.928597e-05
+X400m        0.4348681 4.508399e-04
+X800m        0.4230459 5.962202e-04
+X100m        0.2910752 9.618392e-03
+X200m        0.2901589 9.787578e-03
+
+Description of each cluster by quantitative variables
+=====================================================
+$`1`
+               v.test Mean in category Overall mean sd in category Overall sd
+X5000m       3.695781         6.466328     6.355379     0.06448642  0.1848715
+Marathon     3.564114         5.617370     5.491322     0.06937400  0.2177887
+X400m        3.543905         9.034094     8.950298     0.11288702  0.1456118
+X800m        3.488957         7.793784     7.716758     0.08722515  0.1359551
+SemiMarathon 3.453514         5.918364     5.780837     0.05453300  0.2452324
+X10000m      3.320706         6.164774     6.070397     0.07294015  0.1750188
+X1500m       3.303208         7.133222     7.063424     0.07886959  0.1301229
+X200m        2.768266        10.051007     9.958641     0.11700964  0.2054736
+X100m        2.664871        10.087301    10.001926     0.11345355  0.1972911
+                  p.value
+X5000m       0.0002192115
+Marathon     0.0003650867
+X400m        0.0003942468
+X800m        0.0004849089
+SemiMarathon 0.0005533338
+X10000m      0.0008979014
+X1500m       0.0009558554
+X200m        0.0056355441
+X100m        0.0077017788
+
+$`2`
+         v.test Mean in category Overall mean sd in category Overall sd
+X800m -2.182111         7.625402     7.716758     0.12386422  0.1359551
+X200m -2.536679         9.798136     9.958641     0.19191352  0.2054736
+X400m -2.608819         8.833319     8.950298     0.07377614  0.1456118
+X100m -2.675867         9.839357    10.001926     0.19960377  0.1972911
+          p.value
+X800m 0.029101353
+X200m 0.011190964
+X400m 0.009085534
+X100m 0.007453617
+
+$`3`
+                v.test Mean in category Overall mean sd in category Overall sd
+X800m        -2.049858         7.601039     7.716758      0.1164905  0.1359551
+X10000m      -3.478995         5.817570     6.070397      0.2076116  0.1750188
+X1500m       -3.563999         6.870859     7.063424      0.1047001  0.1301229
+X5000m       -4.079717         6.042205     6.355379      0.1640687  0.1848715
+Marathon     -4.579194         5.077218     5.491322      0.1141168  0.2177887
+SemiMarathon -4.586111         5.313846     5.780837      0.1415177  0.2452324
+                  p.value
+X800m        4.037833e-02
+X10000m      5.032972e-04
+X1500m       3.652470e-04
+X5000m       4.509054e-05
+Marathon     4.667718e-06
+SemiMarathon 4.515790e-06</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-77-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-77-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ol start="4" type="1">
+<li>Représenter quelques nuages croisant des variables d’intérêt en fonction des groupes</li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-78-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-78-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-78-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-78-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-20-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-20-2-tab">
+<ol type="1">
+<li>Couper le dendrogramme des pays en 3 groupes et ajouter une variable <code>groupe</code> au jeu de données dans lequel les performances sont exprimées en vitesses.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>hclust_records_athle_pays_speed <span class="ot">&lt;-</span> <span class="fu">hclust</span>(<span class="fu">dist</span>(records_athle_speed),</span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">method =</span> <span class="st">"ward.D"</span>)</span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a>cut_records_athle_pays_speed_3groupes <span class="ot">&lt;-</span> <span class="fu">cutree</span>(hclust_records_athle_pays_speed,</span>
+<span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">k =</span> <span class="dv">3</span>)</span>
+<span id="cb85-5"><a href="#cb85-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(hclust_records_athle_pays_speed)</span>
+<span id="cb85-6"><a href="#cb85-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rect.hclust</span>(hclust_records_athle_pays_speed, <span class="at">k =</span> <span class="dv">3</span>, <span class="at">border =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">1</span>)</span>
+<span id="cb85-7"><a href="#cb85-7" aria-hidden="true" tabindex="-1"></a>records_athle_speed_3groupes <span class="ot">&lt;-</span></span>
+<span id="cb85-8"><a href="#cb85-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind.data.frame</span>(records_athle_speed,</span>
+<span id="cb85-9"><a href="#cb85-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">groupe =</span> <span class="fu">as.factor</span>(cut_records_athle_pays_speed_3groupes))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li>Réaliser une ACP et utiliser la variable <code>groupe</code> pour caractériser les pays.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>res_PCA_records_athle_speed_groupe <span class="ot">&lt;-</span> <span class="fu">PCA</span>(records_athle_speed_3groupes,</span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>                                <span class="at">quali.sup =</span> <span class="dv">10</span>, <span class="at">graph =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(res_PCA_records_athle_speed_groupe, <span class="at">choix =</span> <span class="st">"ind"</span>, <span class="at">habillage =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="3" type="1">
+<li>Utiliser la fonction <code>catdes</code> pour caractériser les 3 groupes de pays.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>res_catdes_records_athle_3groupes <span class="ot">&lt;-</span></span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">catdes</span>(records_athle_speed_3groupes, <span class="at">num.var =</span> <span class="dv">10</span>)</span>
+<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a>res_catdes_records_athle_3groupes</span>
+<span id="cb87-4"><a href="#cb87-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(res_catdes_records_athle_3groupes, <span class="at">barplot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="4" type="1">
+<li>Représenter quelques nuages croisant des variables d’intérêt en fonction des groupes</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> records_athle_speed_3groupes,</span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> groupe, <span class="at">y =</span> X100m, <span class="at">colour =</span> groupe)) <span class="sc">+</span></span>
+<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.2</span>)</span>
+<span id="cb88-4"><a href="#cb88-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-5"><a href="#cb88-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> records_athle_speed_3groupes,</span>
+<span id="cb88-6"><a href="#cb88-6" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> groupe, <span class="at">y =</span> X400m, <span class="at">colour =</span> groupe)) <span class="sc">+</span></span>
+<span id="cb88-7"><a href="#cb88-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.2</span>)</span>
+<span id="cb88-8"><a href="#cb88-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-9"><a href="#cb88-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> records_athle_speed_3groupes,</span>
+<span id="cb88-10"><a href="#cb88-10" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> groupe, <span class="at">y =</span> Marathon, <span class="at">colour =</span> groupe)) <span class="sc">+</span></span>
+<span id="cb88-11"><a href="#cb88-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.2</span>)</span>
+<span id="cb88-12"><a href="#cb88-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-13"><a href="#cb88-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> records_athle_speed_3groupes,</span>
+<span id="cb88-14"><a href="#cb88-14" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> groupe, <span class="at">y =</span> X5000m, <span class="at">colour =</span> groupe)) <span class="sc">+</span></span>
+<span id="cb88-15"><a href="#cb88-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="maillage-de-voronoï" class="level1">
+<h1>Maillage de Voronoï</h1>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objectif
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Illustrer la mise en oeuvre d’un maillage de Voronoï.</p>
+</div>
+</div>
+<p>Les commandes proposées ici sont une simple illustration du maillage de Voronoï sur les données <code>GPS_rugby</code>. Une utilisation plus efficace nécessiterait le recours à d’autres outils.</p>
+<section id="positionnement-des-joueurs-sur-le-terrain" class="level2">
+<h2 class="anchored" data-anchor-id="positionnement-des-joueurs-sur-le-terrain">Positionnement des joueurs sur le terrain</h2>
+<p>Des packages R existent pour visualiser un terrain de rugby. Nous l’illustrons ici en nous concentrant sur un seul temps (<code>frame_id == 4102</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>GPS_rugby <span class="sc">%&gt;%</span> <span class="fu">filter</span>(frame_id <span class="sc">==</span> <span class="dv">4102</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rugby_pitch</span>() <span class="sc">+</span></span>
+<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb89-5"><a href="#cb89-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">label =</span> player))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in ggplot2::annotate(geom = "segment", x = c(spec$origin_x,
+spec$origin_x + : Ignoring unknown parameters: `fill`</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in ggplot2::annotate(geom = "segment", x = c(spec$length -
+spec$origin_x, : Ignoring unknown parameters: `fill`</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-83-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Ces packages ne sont pas forcément compatibles avec le tracé d’un maillage de Voronoï que nous pouvons obtenir sans visualiser le terrain.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>GPS_rugby <span class="sc">%&gt;%</span></span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(frame_id <span class="sc">==</span> <span class="dv">4102</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb92-4"><a href="#cb92-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> player)) <span class="sc">+</span></span>
+<span id="cb92-5"><a href="#cb92-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stat_voronoi</span>(<span class="at">geom =</span> <span class="st">"path"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: `fortify(&lt;SpatialPolygonsDataFrame&gt;)` was deprecated in ggplot2 3.4.4.
+ℹ Please migrate to sf.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="atelier_stat_sport_sd_files/figure-html/unnamed-chunk-84-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
