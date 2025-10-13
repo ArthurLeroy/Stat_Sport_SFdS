@@ -1,6 +1,6 @@
 install.packages("tidyverse")
 install.packages("devtools")
-devtools::install_github("ArthurLeroy/REDI")
+devtools::install_github("grenouil/REDI")
 devtools::install_github("ArthurLeroy/MagmaClustR")
 devtools::install_github("javiereliomedina/ggrugby")
 install.packages("fdapace")
