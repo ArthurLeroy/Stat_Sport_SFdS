@@ -9,7 +9,7 @@
 <meta name="author" content="Arthur Leroy">
 <meta name="dcterms.date" content="2025-10-15">
 
-<title>Atelier Statistique &amp; Sport - Modélisation, prédiction et clustering de données fonctionnelles issues de problématiques sportives</title>
+<title>Modélisation, prédiction et clustering de données fonctionnelles issues de problématiques sportives</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -104,53 +104,45 @@ window.Quarto = {
 
 <body>
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-full toc-left">
 <div id="quarto-sidebar-toc-left" class="sidebar toc-left">
   <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#traitement-basique-de-données-fonctionnelles-discrètes-lexemple-de-la-charge-dentrainement-cumulée" id="toc-traitement-basique-de-données-fonctionnelles-discrètes-lexemple-de-la-charge-dentrainement-cumulée" class="nav-link active" data-scroll-target="#traitement-basique-de-données-fonctionnelles-discrètes-lexemple-de-la-charge-dentrainement-cumulée">Traitement basique de données fonctionnelles discrètes : l’exemple de la charge d’entrainement cumulée</a>
+  <li><a href="#i-traitement-basique-de-données-fonctionnelles-discrètes-lexemple-de-la-charge-dentrainement-cumulée" id="toc-i-traitement-basique-de-données-fonctionnelles-discrètes-lexemple-de-la-charge-dentrainement-cumulée" class="nav-link active" data-scroll-target="#i-traitement-basique-de-données-fonctionnelles-discrètes-lexemple-de-la-charge-dentrainement-cumulée">I) Traitement basique de données fonctionnelles discrètes : l’exemple de la charge d’entrainement cumulée</a>
   <ul class="collapse">
-  <li><a href="#importation-de-package-et-des-données" id="toc-importation-de-package-et-des-données" class="nav-link" data-scroll-target="#importation-de-package-et-des-données">Importation de package et des données</a></li>
+  <li><a href="#importation-des-package-et-données" id="toc-importation-des-package-et-données" class="nav-link" data-scroll-target="#importation-des-package-et-données">Importation des package et données</a></li>
   <li><a href="#mise-en-pratique" id="toc-mise-en-pratique" class="nav-link" data-scroll-target="#mise-en-pratique">Mise en pratique</a></li>
   </ul></li>
-  <li><a href="#analyse-de-données-fonctionnelles-b-splines-fpca-et-clustering-de-courbes" id="toc-analyse-de-données-fonctionnelles-b-splines-fpca-et-clustering-de-courbes" class="nav-link" data-scroll-target="#analyse-de-données-fonctionnelles-b-splines-fpca-et-clustering-de-courbes">Analyse de données fonctionnelles : B-splines, FPCA et clustering de courbes</a>
+  <li><a href="#ii-analyse-de-données-fonctionnelles-b-splines-fpca-et-clustering-de-courbes" id="toc-ii-analyse-de-données-fonctionnelles-b-splines-fpca-et-clustering-de-courbes" class="nav-link" data-scroll-target="#ii-analyse-de-données-fonctionnelles-b-splines-fpca-et-clustering-de-courbes">II) Analyse de données fonctionnelles : B-splines, FPCA et clustering de courbes</a>
   <ul class="collapse">
-  <li><a href="#importation-des-données" id="toc-importation-des-données" class="nav-link" data-scroll-target="#importation-des-données">Importation des données</a></li>
+  <li><a href="#importation-des-package-et-données-1" id="toc-importation-des-package-et-données-1" class="nav-link" data-scroll-target="#importation-des-package-et-données-1">Importation des package et données</a></li>
   <li><a href="#mise-en-pratique-1" id="toc-mise-en-pratique-1" class="nav-link" data-scroll-target="#mise-en-pratique-1">Mise en pratique</a></li>
   </ul></li>
-  <li><a href="#formule-de-bayes-et-modélisation-probabiliste" id="toc-formule-de-bayes-et-modélisation-probabiliste" class="nav-link" data-scroll-target="#formule-de-bayes-et-modélisation-probabiliste">Formule de Bayes et modélisation probabiliste</a></li>
-  <li><a href="#apprentissage-par-processus-gaussiens" id="toc-apprentissage-par-processus-gaussiens" class="nav-link" data-scroll-target="#apprentissage-par-processus-gaussiens">Apprentissage par processus gaussiens :</a>
+  <li><a href="#iii-formule-de-bayes-et-modélisation-probabiliste" id="toc-iii-formule-de-bayes-et-modélisation-probabiliste" class="nav-link" data-scroll-target="#iii-formule-de-bayes-et-modélisation-probabiliste">III) Formule de Bayes et modélisation probabiliste</a></li>
+  <li><a href="#iv-apprentissage-par-processus-gaussiens" id="toc-iv-apprentissage-par-processus-gaussiens" class="nav-link" data-scroll-target="#iv-apprentissage-par-processus-gaussiens">IV) Apprentissage par processus gaussiens :</a>
   <ul class="collapse">
-  <li><a href="#importation-des-données-1" id="toc-importation-des-données-1" class="nav-link" data-scroll-target="#importation-des-données-1">Importation des données</a></li>
+  <li><a href="#importation-des-package-et-données-2" id="toc-importation-des-package-et-données-2" class="nav-link" data-scroll-target="#importation-des-package-et-données-2">Importation des package et données</a></li>
   <li><a href="#mise-en-pratique-2" id="toc-mise-en-pratique-2" class="nav-link" data-scroll-target="#mise-en-pratique-2">Mise en pratique</a></li>
   </ul></li>
-  <li><a href="#apprentissage-par-processus-gaussiens-multi-tâches" id="toc-apprentissage-par-processus-gaussiens-multi-tâches" class="nav-link" data-scroll-target="#apprentissage-par-processus-gaussiens-multi-tâches">Apprentissage par processus gaussiens multi-tâches :</a>
-  <ul class="collapse">
-  <li><a href="#importation-des-données-2" id="toc-importation-des-données-2" class="nav-link" data-scroll-target="#importation-des-données-2">Importation des données</a></li>
-  <li><a href="#mise-en-pratique-3" id="toc-mise-en-pratique-3" class="nav-link" data-scroll-target="#mise-en-pratique-3">Mise en pratique</a></li>
-  </ul></li>
-  <li><a href="#modélisation-clustering-et-prédiction-simultanés" id="toc-modélisation-clustering-et-prédiction-simultanés" class="nav-link" data-scroll-target="#modélisation-clustering-et-prédiction-simultanés">Modélisation, clustering et prédiction simultanés :</a>
-  <ul class="collapse">
-  <li><a href="#importation-des-données-3" id="toc-importation-des-données-3" class="nav-link" data-scroll-target="#importation-des-données-3">Importation des données</a></li>
-  <li><a href="#mise-en-pratique-4" id="toc-mise-en-pratique-4" class="nav-link" data-scroll-target="#mise-en-pratique-4">Mise en pratique</a></li>
-  </ul></li>
+  <li><a href="#v-apprentissage-par-processus-gaussiens-multi-tâches" id="toc-v-apprentissage-par-processus-gaussiens-multi-tâches" class="nav-link" data-scroll-target="#v-apprentissage-par-processus-gaussiens-multi-tâches">V) Apprentissage par processus gaussiens multi-tâches :</a></li>
+  <li><a href="#vi-modélisation-clustering-et-prédiction-simultanés" id="toc-vi-modélisation-clustering-et-prédiction-simultanés" class="nav-link" data-scroll-target="#vi-modélisation-clustering-et-prédiction-simultanés">VI) Modélisation, clustering et prédiction simultanés :</a></li>
   </ul>
 </nav>
 </div>
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
 </div>
-<main class="content" id="quarto-document-content">
+<main class="content column-page-right" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Atelier Statistique &amp; Sport - Modélisation, prédiction et clustering de données fonctionnelles issues de problématiques sportives</h1>
+<h1 class="title">Modélisation, prédiction et clustering de données fonctionnelles issues de problématiques sportives</h1>
 </div>
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-page-right">
 
     <div>
     <div class="quarto-title-meta-heading">Author</div>
@@ -178,13 +170,13 @@ window.Quarto = {
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="traitement-basique-de-données-fonctionnelles-discrètes-lexemple-de-la-charge-dentrainement-cumulée" class="level1">
-<h1>Traitement basique de données fonctionnelles discrètes : l’exemple de la charge d’entrainement cumulée</h1>
-<section id="importation-de-package-et-des-données" class="level2">
-<h2 class="anchored" data-anchor-id="importation-de-package-et-des-données">Importation de package et des données</h2>
+<section id="i-traitement-basique-de-données-fonctionnelles-discrètes-lexemple-de-la-charge-dentrainement-cumulée" class="level1">
+<h1>I) Traitement basique de données fonctionnelles discrètes : l’exemple de la charge d’entrainement cumulée</h1>
+<section id="importation-des-package-et-données" class="level2">
+<h2 class="anchored" data-anchor-id="importation-des-package-et-données">Importation des package et données</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(REDI)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># read_csv(data/)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data_workload <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/data_workload_fm.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mise-en-pratique" class="level2">
@@ -207,15 +199,17 @@ Objectif
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <ol type="1">
-<li><p>Convertisser le jeu de données dans le format attendu par les fonctions du package REDI.</p></li>
-<li><p>Calculer la valeur du REDI pour la dernière date du jeu de données.</p></li>
-<li><p>Appliquer la fonction loop_redi() pour calculer le REDI pour toutes les dates du jeu de données.</p></li>
-<li><p>Afficher les résultats sous forme de séries temporelles des valeurs du REDI.</p></li>
-<li><p>Utiliser la fonction wrapprer redi() pour calculer le REDI avec différents coefficients de décroissance et afficher les résultats.</p></li>
+<li><p>Convertir le jeu de données dans le format attendu (un tibble/dataframe avec une colonne <code>Input</code> pour la date, et <code>Output</code> pour la charge d’entrainement) par les fonctions du package REDI.</p></li>
+<li><p>Calculer la valeur de charge d’entrainement cumulée à la dernière date présente dans le jeu de données.</p></li>
+<li><p>Appliquer la fonction loop_redi() pour calculer le REDI successivement à toutes les dates du jeu de données.</p></li>
+<li><p>Afficher les résultats dans un graphique sous forme d’une séries temporelle des valeurs succéssives du REDI.</p></li>
+<li><p>Utiliser la fonction wrapprer redi() pour calculer le REDI pour différentes coefficients de décroissance <span class="math inline">\(\lambda\)</span> et afficher les résultats.</p></li>
+<li><p>Analyser les résultats obtenus et discuter de l’impact du choix du coefficient <span class="math inline">\(\lambda\)</span>, et proposer un critère de choix de ce coefficient dans un contexte sportif.</p></li>
+<li><p>(Bonus) Introduire des données manquantes dans le jeu de données en retirant aléatoirement 10%, 25% puis 50% des observations. Recalculer les valeurs correspondantes du REDI et afficher les trois courbes sur un même graphique. Discuter de sa robustesse aux données manquantes.</p></li>
 </ol>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<p>Vous pouvez utiliser les fonctions :</p>
+<p>Vous pouvez utiliser les fonctions suivantes :</p>
 <ol type="1">
 <li><code>format_data()</code><br>
 </li>
@@ -225,49 +219,84 @@ Objectif
 </li>
 <li><code>plot_redi()</code><br>
 </li>
-<li><code>redi()</code></li>
+<li><code>redi()</code><br>
+</li>
+<li>/</li>
+<li><code>sample_frac()</code></li>
 </ol>
-<p>Assurez-vous de bien comprendre les arguments de chaque fonction en consultant la documentation si nécessaire : <a href="https://grenouil.github.io/REDI/">https://grenouil.github.io/REDI/</a></p>
+<p>Assurez-vous de bien comprendre les arguments de chaque fonction en consultant la documentation si nécessaire : <a href="https://grenouil.github.io/REDI/" class="uri">https://grenouil.github.io/REDI/</a></p>
 </div>
 <div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Convert the dataset to the correct format</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>db <span class="ot">&lt;-</span> <span class="fu">format_data</span>(</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> raw_db,</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">input =</span> <span class="st">'Var3'</span>,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">output =</span> <span class="st">'Var2'</span>,</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">'day'</span>,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">format =</span> <span class="st">'%Y%m%d'</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="do">## Compute REDI for the last date in the dataset</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">compute_redi</span>(db, <span class="at">coef =</span> <span class="fl">0.05</span>)</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Apply loop_redi() to compute REDI for all dates in the dataset </span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>db_redi <span class="ot">&lt;-</span> <span class="fu">loop_redi</span>(<span class="at">data =</span> db, <span class="at">coef =</span> <span class="fl">0.05</span>)</span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">##1##  Convert the dataset to the correct format</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>db_workload <span class="ot">&lt;-</span> <span class="fu">format_data</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> data_workload,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">input =</span> <span class="st">'Date'</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">output =</span> <span class="st">'Training load'</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="do">##2## Compute REDI for the last date in the dataset</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">compute_redi</span>(db_workload)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="do">##3## Apply loop_redi() to compute REDI for all dates in the dataset </span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>db_loop <span class="ot">&lt;-</span> <span class="fu">loop_redi</span>(<span class="at">data =</span> db_workload)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>db_loop</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>db_redi</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Display results as time series of REDI values</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_redi</span>(<span class="at">redi =</span> db_redi,</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>          <span class="at">x_axis =</span> <span class="st">'Date'</span>,</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>          <span class="at">y_axis =</span> <span class="st">'Workload'</span>,</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>          <span class="at">plot_data =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="do">## Apply redi() on db and provide a vector of coefficients.</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>db_full_redi <span class="ot">&lt;-</span> <span class="fu">redi</span>(<span class="at">data =</span> db, <span class="at">coef =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>), <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="do">##4## Display results as a time series of REDI values</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_redi</span>(<span class="at">redi =</span> db_loop,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>          <span class="at">x_axis =</span> <span class="st">'Date'</span>,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">y_axis =</span> <span class="st">'Workload'</span>,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>          <span class="at">plot_data =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="do">##5## Apply redi() on data using a vector of coefficients and display results</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>db_full_redi <span class="ot">&lt;-</span> <span class="fu">redi</span>(<span class="at">data =</span> db_workload, <span class="at">coef =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.5</span>), <span class="at">plot =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="do">##6## </span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Le choix de lambda peut typiquement venir d'une connaissance expert, en fonction du sport</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co"># étudié, la charge d'activité peut être plus ou moins persistante dans le temps (très</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co"># différent entre un sport d'endurance et un sport de sprint par exemple). Si aucune</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co"># connaissance experte n'est disponible, on peut imaginer choisir lambda en optimisant, à</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co"># partir de données réelles, un critère de performance prédictive (par exemple en</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co"># cross-validation), ou une fonction de coût/perte spécifique au contexte sportif.</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="do">##7## Create datasets with 10%, 25%, 50% of missing values </span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>db_10 <span class="ot">&lt;-</span> db_workload <span class="sc">%&gt;%</span> <span class="fu">sample_frac</span>(<span class="fl">0.9</span>)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>db_25 <span class="ot">&lt;-</span> db_workload <span class="sc">%&gt;%</span> <span class="fu">sample_frac</span>(<span class="fl">0.75</span>)</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>db_50 <span class="ot">&lt;-</span> db_workload <span class="sc">%&gt;%</span> <span class="fu">sample_frac</span>(<span class="fl">0.5</span>)</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>db_missing <span class="ot">&lt;-</span> <span class="fu">redi</span>(db_10, <span class="at">coef =</span> <span class="fl">0.1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Missing  =</span> <span class="st">'10'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">redi</span>(db_25, <span class="at">coef =</span> <span class="fl">0.1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">Missing  =</span> <span class="st">'25'</span>)</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">redi</span>(db_50, <span class="at">coef =</span> <span class="fl">0.1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">Missing  =</span> <span class="st">'50'</span>)</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot results coloured according to the missing data ratio</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(db_missing) <span class="sc">+</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> REDI, <span class="at">col =</span> Missing)) <span class="sc">+</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> db_workload, <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Output), </span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">'grey'</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
 </div>
 </section>
 </section>
-<section id="analyse-de-données-fonctionnelles-b-splines-fpca-et-clustering-de-courbes" class="level1">
-<h1>Analyse de données fonctionnelles : B-splines, FPCA et clustering de courbes</h1>
-<section id="importation-des-données" class="level2">
-<h2 class="anchored" data-anchor-id="importation-des-données">Importation des données</h2>
+<section id="ii-analyse-de-données-fonctionnelles-b-splines-fpca-et-clustering-de-courbes" class="level1">
+<h1>II) Analyse de données fonctionnelles : B-splines, FPCA et clustering de courbes</h1>
+<section id="importation-des-package-et-données-1" class="level2">
+<h2 class="anchored" data-anchor-id="importation-des-package-et-données-1">Importation des package et données</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read_csv(data/)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(splines2)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fdapace)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>data_swim <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(Data<span class="sc">/</span>data_100m_freestyle.csv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mise-en-pratique-1" class="level2">
@@ -290,15 +319,19 @@ Objectif
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <ol type="1">
-<li></li>
-<li></li>
+<li><p>Définir une base de splines de degré 3, sur un intervalle couvrant l’ensemble des données entre 10 et 20 ans, avec 4 knots équidistants. Afficher cette base de fonctions sur un graphique.</p></li>
+<li><p>Extraire les données de performance au cours du temps, spécifiques à un.e athlète, et ajuster un modèle de régression spline sur ses données. Afficher les données et le courbe ajustée.</p></li>
+<li><p>Répéter l’ajustement par spline pour toutes les athlètes du jeu de données, et afficher les courbes ajustées pour chaque athlète sur un même graphique.</p></li>
+<li><p>Définissez une grille de points plus large que l’intervalle des données pour extrapoler ses performances futures. Prédire les valeurs ajustées par spline sur cette grille pour une dizaine d’athlètes, et afficher les courbes correspondantes.</p></li>
+<li><p>Effectuer une analyse en composantes principales fonctionnelle (FPCA) sur le jeu de données à l’aide du package <code>fdapace</code>. Afficher la proportion de variance expliquée par chaque composante principale.</p></li>
+<li><p>Choisir le nombre de fonctions principales à retenir et afficher leur courbe correspondante, représentant les modes de variation principaux des données. Analyser ces modes de variation et discuter de leur interprétation dans un contexte sportif.</p></li>
+<li><p>(Bonus) Effectuer un clustering (via un algorithme des k-means par exemple) des athlètes basé sur les scores des premières composantes principales. Afficher les courbes moyennes ajustées par spline pour chaque cluster et discuter des différences entre les groupes.</p></li>
 </ol>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
 <p>Vous pouvez utiliser les fonctions :</p>
 <ol type="1">
-<li><code>format_data()</code><br>
-</li>
+<li><code>spline</code></li>
 <li><code>compute_redi()</code><br>
 </li>
 <li><code>loop_redi()</code><br>
@@ -309,14 +342,34 @@ Objectif
 </ol>
 </div>
 <div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
-
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">##1## Define a B-spline basis of degree 3 with 4 equidistant knots on the interval [10, 20]</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="fl">0.1</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>sp_basis <span class="ot">=</span> <span class="fu">bSpline</span>(x, <span class="at">degree =</span> <span class="dv">3</span>, <span class="at">knots =</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">16</span>, <span class="dv">18</span>), <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Easy (and ugly) version</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sp_basis)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="do">## Nice version, for cool kids using ggplot2</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>sp_basis_df <span class="ot">=</span> sp_basis <span class="sc">%&gt;%</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Input =</span> x) <span class="sc">%&gt;%</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>Input, <span class="at">names_to =</span> <span class="st">'Basis'</span>, <span class="at">values_to =</span> <span class="st">'Value'</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sp_basis_df) <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Value, <span class="at">col =</span> Basis)) <span class="sc">+</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">'none'</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">'Basis value'</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="do">##2## Extract data for a single athlete and fit a spline regression model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 </div>
 </div>
 </section>
 </section>
-<section id="formule-de-bayes-et-modélisation-probabiliste" class="level1">
-<h1>Formule de Bayes et modélisation probabiliste</h1>
+<section id="iii-formule-de-bayes-et-modélisation-probabiliste" class="level1">
+<h1>III) Formule de Bayes et modélisation probabiliste</h1>
 <p>Cette partie s’effectue sur feuille, sans code R.</p>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -335,9 +388,7 @@ Objectif
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Questions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Conseils</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false" href="">Solutions</a></li></ul>
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
-<ol type="1">
-<li>Imaginez qu’un.e athlète, à chaque séance d’entrainement, a 1 chance sur 1000 de se rompre le tendon d’Achille. Un nouveau test de prévention, lancé sur le marché, permet de détecter correctement 99% des ruptures du tendon d’Achille à l’avance si le test était <em>positif</em>. Le test en question permet même d’identifier correctement que 99% des séances ne provoqueront <strong>pas</strong> de blessure au tendon s’il est <em>négatif</em>.</li>
-</ol>
+<p>Imaginez qu’un.e athlète, à chaque séance d’entrainement, a 1 chance sur 1000 de se rompre le tendon d’Achille. Un nouveau test de prévention, lancé sur le marché, permet de détecter correctement 99% des ruptures du tendon d’Achille à l’avance si le test était <em>positif</em>. Le test en question permet même d’identifier correctement que 99% des séances ne provoqueront <strong>pas</strong> de blessure au tendon s’il est <em>négatif</em>.</p>
 <p>Si cet.te athlète obtient un résultat positif au test avant une séance, pensez vous que c’est complétement inconscient de prendre ce risque ?</p>
 <p>Quelle est la probabilité, connaissant ce résultat positif au test, qu’il/elle se rompe le tendon d’Achille lors de son entrainement ?</p>
 </div>
@@ -397,14 +448,14 @@ Toujours pas ?
 </ul>
 <p>Nous avons donc à notre disposition les termes de prior <span class="math inline">\(\mathbb{P}(B)\)</span> et de vraisemblance <span class="math inline">\(\mathbb{P}(T | B)\)</span>, il ne reste qu’à calculer le terme d’<strong>évidence</strong> <span class="math inline">\(\mathbb{P}(T)\)</span> pour pouvoir appliquer la formule de Bayes.</p>
 <p>Pour cela, nous allons utiliser la formule des probabilités totales : <span class="math display">\[\mathbb{P}(T) = \mathbb{P}(T \cap B) + \mathbb{P}(T \cap \bar{B} )\]</span></p>
-<p>Puis en utilisant la formule de l’intersection, nous obtenons : <span class="math inline">\(\begin{align}
+<p>Puis en utilisant la formule de l’intersection, nous obtenons : <span class="math display">\[\begin{align}
 \mathbb{P}(T)
 &amp;= \mathbb{P}(T | B)  \times \mathbb{P}(B) + \mathbb{P}(T | \bar{B})  \times \mathbb{P}(\bar{B}) \\
 &amp;= \mathbb{P}(T | B)  \times \mathbb{P}(B) + (1 - \mathbb{P}(\bar{T} | \bar{B}))  \times (1 - \mathbb{P}(B)) \\
 &amp;= 0.99 \times 0.001 + (1 - 0.99) \times (1 - 0.001) \\
 &amp;= 0.00099 + 0.00999 \\
 &amp;= 0.01098
-\end{align}\)</span></p>
+\end{align}\]</span></p>
 <p>Nous pouvons maintenant appliquer la formule de Bayes pour obtenir la probabilité conditionnelle recherchée :</p>
 <p><span class="math display">\[\mathbb{P}(B | T) = \frac{\mathbb{P}(T | B) \times \mathbb{P}(B)}{\mathbb{P}(T)} = \frac{0.99 \times 0.001}{0.01098} \approx 0.09016\]</span></p>
 <p>Donc, même avec un test positif, la probabilité que l’athlète se rompe le tendon d’Achille lors de son entrainement est d’environ 9.016%. Cela signifie qu’il y a environ 90.984% de chances de ne pas se blesser pas malgré le résultat positif du test.</p>
@@ -412,12 +463,13 @@ Toujours pas ?
 </div>
 </div>
 </section>
-<section id="apprentissage-par-processus-gaussiens" class="level1">
-<h1>Apprentissage par processus gaussiens :</h1>
-<section id="importation-des-données-1" class="level2">
-<h2 class="anchored" data-anchor-id="importation-des-données-1">Importation des données</h2>
+<section id="iv-apprentissage-par-processus-gaussiens" class="level1">
+<h1>IV) Apprentissage par processus gaussiens :</h1>
+<section id="importation-des-package-et-données-2" class="level2">
+<h2 class="anchored" data-anchor-id="importation-des-package-et-données-2">Importation des package et données</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read_csv(data/)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MagmaClustR)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>data_gps <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(Data<span class="sc">/</span>data_GPS_rugby_with_speed.csv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mise-en-pratique-2" class="level2">
@@ -432,7 +484,7 @@ Objectif
 </div>
 </div>
 <div class="callout-body-container callout-body">
-
+<p>Se familiariser avec l’apprentissage par processus gaussiens pour la modélisation et la prédiction de données fonctionnelles. Faire des prédictions probabilistes pour des courbes avec leur incertitude associée. La documentation du package MagmaClustR, permettant cela, est disponible ici : <a href="https://arthurleroy.github.io/MagmaClustR/" class="uri">https://arthurleroy.github.io/MagmaClustR/</a></p>
 </div>
 </div>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
@@ -440,8 +492,14 @@ Objectif
 <div class="tab-content">
 <div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
 <ol type="1">
-<li></li>
-<li></li>
+<li><p>Convertir le jeu de données ‘data_swim’ au format attendu par les fonctions du package MagmaClustR. La colonne représentant le temps doit être nommée ‘Input’ et la colonne représentant les performances ‘Output’, tandis que la colonne identifiant les individus doit être nommée ‘ID’.</p></li>
+<li><p>Filtrer les données d’un.e seul.e individu.e et retirer la colonne ‘Gender’ du jeu de données. Découper aléatoirement le jeu de données en un ensemble d’entrainement (80% des données) et un ensemble de test (20% des données).</p></li>
+<li><p>Entrainer un modèle de processus gaussien sur ces données en optimisant les hyper-paramètres du noyau de covariance par défaut. Afficher la valeur des hyper-paramètres optimaux obtenus.</p></li>
+<li><p>Définir une fine grille de points d’observations (Input) sur l’intervalle de définition des données (en veillant à ne pas dépasser une vecteur de taille &gt; 2000 maximum environ). Calculer les prédictions sur les données de test en obtenant la loi normale a posteriori, caractérisée par sa moyenne et incertitude associée (variance) en tout point de cette grille.</p></li>
+<li><p>Afficher les résultats sous forme d’un graphique avec les données d’entrainement, les données de test, la moyenne prédite et une bande de confiance à 95%. Ajouter au graphique les points de test, en rouge, pour visualiser et discuter les erreurs de prédiction.</p></li>
+<li><p>Répéter les étapes 2 à 5 pour un.e nouvel.le d’individu.e du jeu de données. Essayer de définir une moyenne a priori de votre choix (via l’argument <code>prior_mean</code>) et d’utiliser un autre kernel (par exemple linéaire via l’argument kern = ‘LIN’ ou périodique via kern = ‘PER’). Essayer également de sélectionner des points de test de la fin de l’intervalle d’observation pour voir comment le modèle se comporte en extrapolation. Discuter des résultats obtenus, et le rôle de l’incertitude des prédictions.</p></li>
+<li><p>(Bonus) Utiliser les fonctions <code>pred_gif()</code> et <code>plot_gif()</code> pour créer votre propre animation de la prédiction par processus gaussien et son adaptation aux nouvelles données collectées au fil du temps.</p></li>
+<li><p>(Bonus) Utiliser le jeu de données <code>data_GPS_rugby_with_speed</code> pour répéter les étapes précédentes sur des données en 2-dimensions. Vous pouvez ainsi modéliser et prédire la vitesse d’un joueur de rugby en fonction de sa position sur le terrain (coordonnées X et Y).</p></li>
 </ol>
 </div>
 <div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
@@ -457,25 +515,22 @@ Objectif
 </li>
 <li><code>redi()</code></li>
 </ol>
-<p>Assurez-vous de bien comprendre les arguments de chaque fonction en consultant la documentation si nécessaire : <a href="https://arthurleroy.github.io/MagmaClustR/">https://arthurleroy.github.io/MagmaClustR/</a></p>
+<p>Assurez-vous de bien comprendre les arguments de chaque fonction en consultant la documentation si nécessaire : <a href="https://arthurleroy.github.io/MagmaClustR/" class="uri">https://arthurleroy.github.io/MagmaClustR/</a></p>
 </div>
 <div id="tabset-4-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-3-tab">
-
-</div>
-</div>
-</div>
-</section>
-</section>
-<section id="apprentissage-par-processus-gaussiens-multi-tâches" class="level1">
-<h1>Apprentissage par processus gaussiens multi-tâches :</h1>
-<section id="importation-des-données-2" class="level2">
-<h2 class="anchored" data-anchor-id="importation-des-données-2">Importation des données</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read_csv(data/)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">##1## Convert the dataset to the correct format</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>db_swim <span class="ot">&lt;-</span> data_swim <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Input =</span> Age,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">Output =</span> Performance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
 </div>
 </section>
-<section id="mise-en-pratique-3" class="level2">
-<h2 class="anchored" data-anchor-id="mise-en-pratique-3">Mise en pratique</h2>
+</section>
+<section id="v-apprentissage-par-processus-gaussiens-multi-tâches" class="level1">
+<h1>V) Apprentissage par processus gaussiens multi-tâches :</h1>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -486,7 +541,7 @@ Objectif
 </div>
 </div>
 <div class="callout-body-container callout-body">
-
+<p>Découvrir le paradime multi-tâches pour l’apprentissage par processus gaussiens, pour la modéliser simultanément de multiples données fonctionnelles issues d’un même phénomène. L’implémentation repose toujours sur le package MagmaClustR dont la documentation est disponible ici : <a href="https://arthurleroy.github.io/MagmaClustR/" class="uri">https://arthurleroy.github.io/MagmaClustR/</a></p>
 </div>
 </div>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
@@ -494,8 +549,15 @@ Objectif
 <div class="tab-content">
 <div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
 <ol type="1">
-<li></li>
-<li></li>
+<li><p>Reprendre le format attendu par les fonctions du package MagmaClustR (ID, Input, Ouput), en conservant cette fois plusieurs individus pour l’entrainement. Choisir et extraire un individu de l’ensemble d’entrainement, et séparer ses données en 50% pour la prédiction et 50% pour le testing.</p></li>
+<li><p>Entrainer un modèle de processus gaussien multi-tâche via l’algorithme <em>Magma</em> sur ces données. Afficher le tableau des hyper-paramètres optimaux obtenus pour les individus, puis le graphique du processus moyen a posteriori via la fonction <code>plot_gp()</code>.</p></li>
+<li><p>Entrainer un nouveau modèle en optimisant des hyper-paramètres individu-spécifiques grâce à l’argument <code>common_hp_i = FALSE</code>. Afficher le nouveau tableau des hyper-paramètres optimaux des individus, ainsi que le graphique du processus moyen a posteriori.</p></li>
+<li><p>Définir une fine grille d’inputs, et calculer la loi a posteriori de l’individu de test en fournissant ses données partiellement observées à la fonction de prédiction. Afficher le tableau des prédictions (moyenne et variance) pour chaque point de la grille, puis relancer la fonction de prédiction en spécifiant l’argument <code>get_hyperpost = TRUE</code> pour obtenir également la loi hyper-posterior du processus moyen.</p></li>
+<li><p>Utiliser la fonction <code>plot_magma()</code> pour personaliser la visualisation des résultats. Commencer par afficher la prédiction minimale, puis via les arguments supplémentaires, ajouter au graphique les données d’entrainement, les données de prédiction, puis le processus moyen (obtenu à l’étape précédente dans l’élément <code>hyperpost</code>). Ajouter au graphique obtenu les points de test, en rouge, pour visualiser et discuter les erreurs de prédiction.</p></li>
+<li><p>Calculer une nouvelle prédiction en utilisant le modèle entrainé avec l’argument <code>common_hp_i = FALSE</code> et comparer les résultats obtenus dans le cas d’hyper-paramètres partagés et individu-spécifiques.</p></li>
+<li><p>(Bonus) En utilisant un des modèles préalablement entrainés, utiliser la fonction <code>hyperposterior</code> afin de pré-calculer (pour accélérer des prédictions répétées) la loi hyper-posteriori du processus moyen sur une grille de prédiction contenant l’ensemble des valeurs d’Input du jeu de données. Ensuite, définir une boucle sur l’ensemble des individus pour calculer chaque prédiction en utilisant seulement une portion des données à chaque fois (par exemple 50%). Les 50% restant sont utilisés comme données de test, pour calculer des métriques d’erreur de prédiction (RMSE, calibration de l’intervalle de crédibilité).</p></li>
+<li><p>(Bonus) Utiliser les fonctions <code>pred_gif()</code> et <code>plot_gif()</code> pour créer votre propre animation de la prédiction par processus gaussien multi-tâches au fil du temps. Comparer cette animation à celle précédemment obtenue pour un processus gaussien simple.</p></li>
+<li><p>(Bonus) Utiliser le jeu de données <code>data_GPS_rugby_with_speed</code> pour répéter les étapes précédentes sur des données en 2-dimensions. Vous pouvez ainsi modéliser et prédire la vitesse d’un joueur de rugby en fonction de sa position sur le terrain (coordonnées X et Y). Comparer à nouveau les résultats obtenus avec un processus gaussien simple et multi-tâches.</p></li>
 </ol>
 </div>
 <div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
@@ -511,7 +573,7 @@ Objectif
 </li>
 <li><code>redi()</code></li>
 </ol>
-<p>Assurez-vous de bien comprendre les arguments de chaque fonction en consultant la documentation si nécessaire : <a href="https://arthurleroy.github.io/MagmaClustR/">https://arthurleroy.github.io/MagmaClustR/</a></p>
+<p>Assurez-vous de bien comprendre les arguments de chaque fonction en consultant la documentation si nécessaire : <a href="https://arthurleroy.github.io/MagmaClustR/" class="uri">https://arthurleroy.github.io/MagmaClustR/</a></p>
 </div>
 <div id="tabset-5-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-3-tab">
 
@@ -519,17 +581,8 @@ Objectif
 </div>
 </div>
 </section>
-</section>
-<section id="modélisation-clustering-et-prédiction-simultanés" class="level1">
-<h1>Modélisation, clustering et prédiction simultanés :</h1>
-<section id="importation-des-données-3" class="level2">
-<h2 class="anchored" data-anchor-id="importation-des-données-3">Importation des données</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read_csv(data/)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="mise-en-pratique-4" class="level2">
-<h2 class="anchored" data-anchor-id="mise-en-pratique-4">Mise en pratique</h2>
+<section id="vi-modélisation-clustering-et-prédiction-simultanés" class="level1">
+<h1>VI) Modélisation, clustering et prédiction simultanés :</h1>
 <div class="callout callout-style-default callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -540,7 +593,7 @@ Objectif
 </div>
 </div>
 <div class="callout-body-container callout-body">
-
+<p>Etendre le cadre de l’apprentissage GPs multi-tâches pour introduire la prise en compte d’un clustering (via un modèle de mélange de GPs), en complément de la modélisation et de la prédiction de données fonctionnelles. Rappel de la documentation : <a href="https://arthurleroy.github.io/MagmaClustR/" class="uri">https://arthurleroy.github.io/MagmaClustR/</a></p>
 </div>
 </div>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
@@ -548,8 +601,13 @@ Objectif
 <div class="tab-content">
 <div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
 <ol type="1">
-<li></li>
-<li></li>
+<li><p>Conserver à nouveau le format attendu par les fonctions du package MagmaClustR (ID, Input, Ouput), et isoler un individu d’entrainement, partiellement observé (50% des données pour la prédiction, 50% pour le test).</p></li>
+<li><p>Entrainer un modèle de mélange de GPs multi-tâches via l’algorithme <em>MagmaClust</em> sur ces données, en spécifiant un nombre de clusters égal à <span class="math inline">\(5\)</span>. Afficher le tableau des probabilités d’appartenance à chaque cluster pour chaque individu, ainsi que le graphique de chaque processus moyen cluster-spécifique via la fonction <code>plot_gp()</code>.</p></li>
+<li><p>Calculer une prédiction ‘générique’ pour un nouvel individu jamais observé en laissant l’argument <code>data=NULL</code> dans la fonction de prédiction. A quoi correspond cette prédiction selon vous, et en quoi est-elle différente des processus moyens cluster-spécifiques ?</p></li>
+<li><p>Calculer maintenant la prédiction pour l’individu de test partiellement observées sur une grille d’inputs, en spécifiant les arguments <code>get_hyperpost = TRUE</code> pour obtenir la loi hyper-posteriori du processus moyen, ainsi que <code>get_full_cov = TRUE</code> pour la matrice de covariance prédictive complète (et pas seulement la variance ponctuelle). Afficher la probabilité d’appartenance à chaque cluster pour l’individu de test.</p></li>
+<li><p>Calculer le cluster d’appartenance le plus probable pour tous les individus d’entrainement à l’aide de la fonction <code>data_allocate_cluster()</code>, puis utiliser la fonction <code>plot_magmaclust()</code> pour personnaliser la visualisation des résultats. Ajouter les données d’entrainement coloriées par cluster d’appartenance (avec l’argument <code>col_clust = TRUE</code>), les données de prédiction, les processus moyens cluster-spécifiques (via l’argument <code>prior_mean</code>), puis représenter l’incertitude avec des échantillons plutôt qu’une bande de crédibilité (grâce à l’argument <code>samples = TRUE</code>). Ajouter au graphique les points de test, en rouge, pour visualiser et discuter les erreurs de prédiction.</p></li>
+<li><p>Visualiser les différentes prédictions cluster-spécifiques pour l’individu de test, en changeant la valeur de l’argument <code>cluster</code>. Comparer les résultats obtenus pour chaque cluster, et discuter de la pertinence de chaque prédiction en fonction de la probabilité d’appartenance associée. Comparer ces prédictions à la prédiction du mélange de GPs obtenue lorsque l’argument <code>cluster = 'all'</code>.</p></li>
+<li><p>(Bonus) Chercher sur internet la valeur actuelle du record de France du 100m nage libre masculin et féminin. Utiliser la fonction <code>sample_magmaclust()</code> pour générer 10 000 échantillons générés à partir de la prédiction d’un.e nageur.euse utilisant ses données de performance jusqu’à 16 ans. En calculant la proportion d’échantillons dont la trajectoire descend sous le temps record de France, déterminer la probabilité qu’il/elle batte ce record avant ses 20 ans ?</p></li>
 </ol>
 </div>
 <div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
@@ -565,14 +623,13 @@ Objectif
 </li>
 <li><code>redi()</code></li>
 </ol>
-<p>Assurez-vous de bien comprendre les arguments de chaque fonction en consultant la documentation si nécessaire : <a href="https://arthurleroy.github.io/MagmaClustR/">https://arthurleroy.github.io/MagmaClustR/</a></p>
+<p>Assurez-vous de bien comprendre les arguments de chaque fonction en consultant la documentation si nécessaire : <a href="https://arthurleroy.github.io/MagmaClustR/" class="uri">https://arthurleroy.github.io/MagmaClustR/</a></p>
 </div>
 <div id="tabset-6-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-3-tab">
 
 </div>
 </div>
 </div>
-</section>
 </section>
 
 </main>
