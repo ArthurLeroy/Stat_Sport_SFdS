@@ -222,37 +222,37 @@ Objectif
 <li><code>redi()</code><br>
 </li>
 <li>/</li>
-<li><code>sample_frac()</code></li>
+<li><code>slice_sample()</code></li>
 </ol>
 <p>Assurez-vous de bien comprendre les arguments de chaque fonction en consultant la documentation si nécessaire : <a href="https://grenouil.github.io/REDI/" class="uri">https://grenouil.github.io/REDI/</a></p>
 </div>
 <div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">##1##  Convert the dataset to the correct format</span></span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ##  Convert the dataset to the correct format</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>db_workload <span class="ot">&lt;-</span> <span class="fu">format_data</span>(</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> data_workload,</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">input =</span> <span class="st">'Date'</span>,</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">output =</span> <span class="st">'Training load'</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="do">##2## Compute REDI for the last date in the dataset</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 ## Compute REDI for the last date in the dataset</span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">compute_redi</span>(db_workload)</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="do">##3## Apply loop_redi() to compute REDI for all dates in the dataset </span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 ## Apply loop_redi() to compute REDI for all dates in the dataset </span></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>db_loop <span class="ot">&lt;-</span> <span class="fu">loop_redi</span>(<span class="at">data =</span> db_workload)</span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>db_loop</span>
 <span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="do">##4## Display results as a time series of REDI values</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 ## Display results as a time series of REDI values</span></span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_redi</span>(<span class="at">redi =</span> db_loop,</span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>          <span class="at">x_axis =</span> <span class="st">'Date'</span>,</span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">y_axis =</span> <span class="st">'Workload'</span>,</span>
 <span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>          <span class="at">plot_data =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="do">##5## Apply redi() on data using a vector of coefficients and display results</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 ## Apply redi() on data using a vector of coefficients and display results</span></span>
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>db_full_redi <span class="ot">&lt;-</span> <span class="fu">redi</span>(<span class="at">data =</span> db_workload, <span class="at">coef =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.5</span>), <span class="at">plot =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="do">##6## </span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="do">## 6 ## </span></span>
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Le choix de lambda peut typiquement venir d'une connaissance expert, en fonction du sport</span></span>
 <span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co"># étudié, la charge d'activité peut être plus ou moins persistante dans le temps (très</span></span>
 <span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co"># différent entre un sport d'endurance et un sport de sprint par exemple). Si aucune</span></span>
@@ -260,10 +260,10 @@ Objectif
 <span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co"># partir de données réelles, un critère de performance prédictive (par exemple en</span></span>
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co"># cross-validation), ou une fonction de coût/perte spécifique au contexte sportif.</span></span>
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="do">##7## Create datasets with 10%, 25%, 50% of missing values </span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>db_10 <span class="ot">&lt;-</span> db_workload <span class="sc">%&gt;%</span> <span class="fu">sample_frac</span>(<span class="fl">0.9</span>)</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>db_25 <span class="ot">&lt;-</span> db_workload <span class="sc">%&gt;%</span> <span class="fu">sample_frac</span>(<span class="fl">0.75</span>)</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>db_50 <span class="ot">&lt;-</span> db_workload <span class="sc">%&gt;%</span> <span class="fu">sample_frac</span>(<span class="fl">0.5</span>)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="do">## 7 ## Create datasets with 10%, 25%, 50% of missing values </span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>db_10 <span class="ot">&lt;-</span> db_workload <span class="sc">%&gt;%</span> <span class="fu">slice_sample</span>(<span class="at">prop =</span> <span class="fl">0.9</span>)</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>db_25 <span class="ot">&lt;-</span> db_workload <span class="sc">%&gt;%</span> <span class="fu">slice_sample</span>(<span class="at">prop =</span> <span class="fl">0.75</span>)</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>db_50 <span class="ot">&lt;-</span> db_workload <span class="sc">%&gt;%</span> <span class="fu">slice_sample</span>(<span class="at">prop =</span> <span class="fl">0.5</span>)</span>
 <span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>db_missing <span class="ot">&lt;-</span> <span class="fu">redi</span>(db_10, <span class="at">coef =</span> <span class="fl">0.1</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Missing  =</span> <span class="st">'10'</span>) <span class="sc">%&gt;%</span></span>
@@ -294,9 +294,9 @@ Objectif
 <section id="importation-des-package-et-données-1" class="level2">
 <h2 class="anchored" data-anchor-id="importation-des-package-et-données-1">Importation des package et données</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(splines2)</span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(splines)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fdapace)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>data_swim <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(Data<span class="sc">/</span>data_100m_freestyle.csv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>data_swim <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/db_100m_freestyle.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mise-en-pratique-1" class="level2">
@@ -322,46 +322,111 @@ Objectif
 <li><p>Définir une base de splines de degré 3, sur un intervalle couvrant l’ensemble des données entre 10 et 20 ans, avec 4 knots équidistants. Afficher cette base de fonctions sur un graphique.</p></li>
 <li><p>Extraire les données de performance au cours du temps, spécifiques à un.e athlète, et ajuster un modèle de régression spline sur ses données. Afficher les données et le courbe ajustée.</p></li>
 <li><p>Répéter l’ajustement par spline pour toutes les athlètes du jeu de données, et afficher les courbes ajustées pour chaque athlète sur un même graphique.</p></li>
-<li><p>Définissez une grille de points plus large que l’intervalle des données pour extrapoler ses performances futures. Prédire les valeurs ajustées par spline sur cette grille pour une dizaine d’athlètes, et afficher les courbes correspondantes.</p></li>
-<li><p>Effectuer une analyse en composantes principales fonctionnelle (FPCA) sur le jeu de données à l’aide du package <code>fdapace</code>. Afficher la proportion de variance expliquée par chaque composante principale.</p></li>
+</ol>
+<!-- 4.  Définissez une grille de points plus large que l'intervalle des données pour extrapoler ses performances futures. Prédire les valeurs ajustées par spline sur cette grille pour une dizaine d'athlètes, et afficher les courbes correspondantes. -->
+<ol start="4" type="1">
+<li><p>Commencer par extraire un sous jeu de données pour 100 individus pour diminuer le temps de calcul Effectuer une analyse en composantes principales fonctionnelle (FPCA) sur le jeu de données à l’aide du package <code>fdapace</code>. Afficher la proportion de variance expliquée par chaque composante principale.</p></li>
 <li><p>Choisir le nombre de fonctions principales à retenir et afficher leur courbe correspondante, représentant les modes de variation principaux des données. Analyser ces modes de variation et discuter de leur interprétation dans un contexte sportif.</p></li>
 <li><p>(Bonus) Effectuer un clustering (via un algorithme des k-means par exemple) des athlètes basé sur les scores des premières composantes principales. Afficher les courbes moyennes ajustées par spline pour chaque cluster et discuter des différences entre les groupes.</p></li>
 </ol>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<p>Vous pouvez utiliser les fonctions :</p>
 <ol type="1">
-<li><code>spline</code></li>
-<li><code>compute_redi()</code><br>
-</li>
-<li><code>loop_redi()</code><br>
-</li>
-<li><code>plot_redi()</code><br>
-</li>
-<li><code>redi()</code></li>
+<li><p>La fonction <code>bs()</code> du package <code>splines</code> permet de définir une base de splines. Vous pouvez utiliser la fonction <code>matplot()</code> de base R ou <code>ggplot2</code> pour afficher les différentes fonctions de la base.</p></li>
+<li><p>La syntaxe est proche d’une régression linéaire classique, mais en utilisant la fonction <code>bs()</code> pour définir la base de splines dans la formule. Vous pouvez utiliser la fonction <code>predict()</code> pour obtenir les valeurs ajustées sur une grille de points.</p></li>
+<li><p>La syntaxe n’est pas très intuitive pour faire une boucle sur tous les athlètes, je vous conseille d’aller directement dans l’onglet Solutions pour récupérer et executer le code.</p></li>
+<li><p>Utiliser la fonction <code>split()</code> pour formater les données par athlète comme attendu par la fonction <code>FPCA</code>.</p></li>
+<li><p>La part de variance expliquée est contenue dans l’élément <code>$FVE</code> du résultat de la fonction <code>FPCA</code>. Les fonctions principales sont contenues dans l’élément <code>$phi</code>.</p></li>
+<li><p>Les scores des athlètes sur les fonctions principales sont contenus dans l’élément <code>$xiEst</code>. Vous pouvez utiliser la fonction <code>kmeans()</code> de base R pour effectuer le clustering.</p></li>
 </ol>
 </div>
 <div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">##1## Define a B-spline basis of degree 3 with 4 equidistant knots on the interval [10, 20]</span></span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ## Define a B-spline basis of degree 3 with 4 equidistant knots on the interval [10, 20]</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="fl">0.1</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>sp_basis <span class="ot">=</span> <span class="fu">bSpline</span>(x, <span class="at">degree =</span> <span class="dv">3</span>, <span class="at">knots =</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">16</span>, <span class="dv">18</span>), <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the grid of evaluation and knots</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>x_grid <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="fl">0.1</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>knots <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">12</span>, <span class="dv">18</span>, <span class="at">by =</span> <span class="dv">2</span>)</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Easy (and ugly) version</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sp_basis)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the B-spline basis</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>sp_basis <span class="ot">=</span> <span class="fu">bs</span>(x_grid, <span class="at">degree =</span> <span class="dv">3</span>, <span class="at">knots =</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">16</span>, <span class="dv">18</span>), <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="do">## Nice version, for cool kids using ggplot2</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>sp_basis_df <span class="ot">=</span> sp_basis <span class="sc">%&gt;%</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Input =</span> x) <span class="sc">%&gt;%</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>Input, <span class="at">names_to =</span> <span class="st">'Basis'</span>, <span class="at">values_to =</span> <span class="st">'Value'</span>)</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sp_basis_df) <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Value, <span class="at">col =</span> Basis)) <span class="sc">+</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">'none'</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">'Basis value'</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="do">## Easy (and old school) plot using base R</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(x_grid, sp_basis, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">"Base de splines cubiques"</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Cool kids version using ggplot2</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>sp_basis_df <span class="ot">=</span> sp_basis <span class="sc">%&gt;%</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Input =</span> x_grid) <span class="sc">%&gt;%</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>Input, <span class="at">names_to =</span> <span class="st">'Basis'</span>, <span class="at">values_to =</span> <span class="st">'Value'</span>)</span>
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="do">##2## Extract data for a single athlete and fit a spline regression model</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sp_basis_df) <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Value, <span class="at">col =</span> Basis)) <span class="sc">+</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">'none'</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">'Basis value'</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 ## Extract data for a single athlete and fit a spline regression model</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Select a swimmer</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>swimmer <span class="ot">=</span> data_swim <span class="sc">%&gt;%</span> <span class="fu">filter</span>(ID <span class="sc">==</span> <span class="st">'ID_1'</span>)  </span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a spline and predict of a grid of values</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(Performance <span class="sc">~</span> <span class="fu">bs</span>(Age, <span class="at">degree =</span> <span class="dv">3</span>, <span class="at">knots =</span> knots, <span class="at">Boundary.knots =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>)), <span class="at">data =</span> swimmer)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>pred_spline <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">Age =</span> x_grid))</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the results</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">Age =</span> x_grid, <span class="at">Performance =</span> pred_spline) <span class="sc">%&gt;%</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Age, <span class="at">y =</span> Performance), <span class="at">col =</span> <span class="st">'#DD3497'</span>) <span class="sc">+</span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> swimmer, <span class="fu">aes</span>(<span class="at">x =</span> Age, <span class="at">y =</span> Performance)) <span class="sc">+</span> <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">'Age'</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">'Performance'</span>)</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 ## Fit splines basis to the full dataset</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a spline for each swimmer and predict on a grid of values</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>pred_all_spline <span class="ot">&lt;-</span> data_swim <span class="sc">%&gt;%</span> </span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ID) <span class="sc">%&gt;%</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">do</span>(<span class="fu">data.frame</span>(<span class="at">Age =</span> x_grid,</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="fu">predict</span>(<span class="fu">lm</span>(Performance <span class="sc">~</span> <span class="fu">bs</span>(Age, <span class="at">degree=</span><span class="dv">3</span>, <span class="at">knots=</span>knots, <span class="at">Boundary.knots=</span><span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">20</span>)),</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>                <span class="at">data=</span>.),</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>                <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">Age =</span> x_grid))))</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the resulting curves</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pred_all_spline) <span class="sc">+</span> </span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(Age, y, <span class="at">group =</span> ID)) <span class="sc">+</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">'Age'</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">'Performance'</span>)</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 ## Perform and FPCA on the full dataset</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset the data to 100 swimmers for computational time</span></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>sub_db_swim <span class="ot">=</span> data_swim <span class="sc">%&gt;%</span> <span class="fu">filter</span>(ID <span class="sc">%in%</span> <span class="fu">paste0</span>(<span class="st">'ID_'</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>))</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a><span class="co"># Format the data and apply FPCA</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>x_grid <span class="ot">&lt;-</span> <span class="fu">split</span>(sub_db_swim<span class="sc">$</span>Age, sub_db_swim<span class="sc">$</span>ID)</span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>y_grid <span class="ot">&lt;-</span> <span class="fu">split</span>(sub_db_swim<span class="sc">$</span>Performance, sub_db_swim<span class="sc">$</span>ID)</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>fpca <span class="ot">&lt;-</span> <span class="fu">FPCA</span>(y_grid, x_grid)</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 ## Display the results of the FPCA</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the variance explained by each component</span></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(fpca<span class="sc">$</span>FVE, <span class="at">names.arg =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(fpca<span class="sc">$</span>FVE), <span class="at">main =</span> <span class="st">"Variance expliquée (%)"</span>)</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the principal components</span></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(fpca<span class="sc">$</span>workGrid, fpca<span class="sc">$</span>phi[,<span class="dv">1</span>], <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lty=</span><span class="dv">1</span>)</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a><span class="do">## 6 ## Clustering based on the FPCA scores</span></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the scores on the first component</span></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> fpca<span class="sc">$</span>xiEst[,<span class="dv">1</span>]</span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform a k-means clustering on the scores</span></span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>cl <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(scores, <span class="dv">3</span>)<span class="sc">$</span>cluster</span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the cluster information to the dataset </span></span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>swim_with_clust <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ID =</span> <span class="fu">names</span>(x_grid), <span class="at">Cluster =</span> cl) <span class="sc">%&gt;%</span></span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(sub_db_swim, <span class="at">by =</span> <span class="st">"ID"</span>)<span class="sc">~</span></span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the clusters of curves</span></span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(swim_with_clust) <span class="sc">+</span></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(Age, Performance, <span class="at">col=</span><span class="fu">factor</span>(Cluster))) <span class="sc">+</span> </span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">col=</span><span class="st">'Cluster'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -469,7 +534,7 @@ Toujours pas ?
 <h2 class="anchored" data-anchor-id="importation-des-package-et-données-2">Importation des package et données</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MagmaClustR)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>data_gps <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(Data<span class="sc">/</span>data_GPS_rugby_with_speed.csv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>data_gps <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/data_GPS_rugby_with_speed.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="mise-en-pratique-2" class="level2">
@@ -495,34 +560,134 @@ Objectif
 <li><p>Convertir le jeu de données ‘data_swim’ au format attendu par les fonctions du package MagmaClustR. La colonne représentant le temps doit être nommée ‘Input’ et la colonne représentant les performances ‘Output’, tandis que la colonne identifiant les individus doit être nommée ‘ID’.</p></li>
 <li><p>Filtrer les données d’un.e seul.e individu.e et retirer la colonne ‘Gender’ du jeu de données. Découper aléatoirement le jeu de données en un ensemble d’entrainement (80% des données) et un ensemble de test (20% des données).</p></li>
 <li><p>Entrainer un modèle de processus gaussien sur ces données en optimisant les hyper-paramètres du noyau de covariance par défaut. Afficher la valeur des hyper-paramètres optimaux obtenus.</p></li>
-<li><p>Définir une fine grille de points d’observations (Input) sur l’intervalle de définition des données (en veillant à ne pas dépasser une vecteur de taille &gt; 2000 maximum environ). Calculer les prédictions sur les données de test en obtenant la loi normale a posteriori, caractérisée par sa moyenne et incertitude associée (variance) en tout point de cette grille.</p></li>
-<li><p>Afficher les résultats sous forme d’un graphique avec les données d’entrainement, les données de test, la moyenne prédite et une bande de confiance à 95%. Ajouter au graphique les points de test, en rouge, pour visualiser et discuter les erreurs de prédiction.</p></li>
+<li><p>Calculer les prédictions sur les données de test en obtenant la loi normale a posteriori, caractérisée par sa moyenne et l’incertitude associée (variance) en tout point de cette grille. Définir ensuite une fine grille de points d’observations (Input) sur un intervalle plus large, typiquement entre 10 et 20 ans (en veillant à ne pas dépasser une vecteur de taille &gt; 2000 maximum environ), puis relancer la prédiction sur cette grille.</p></li>
+<li><p>Utiliser la fonction <code>plot_gp()</code> les résultats sous forme d’un graphique personnalisé. Commencer par afficher la prédiction minimale avec la moyenne prédite et une bande de confiance à 95%, puis via les arguments supplémentaires, ajouter les données d’entarinement. Ajouter ‘à la main’ au graphique <code>ggplot</code> les points de test, en rouge, pour visualiser et discuter les erreurs de prédiction.</p></li>
 <li><p>Répéter les étapes 2 à 5 pour un.e nouvel.le d’individu.e du jeu de données. Essayer de définir une moyenne a priori de votre choix (via l’argument <code>prior_mean</code>) et d’utiliser un autre kernel (par exemple linéaire via l’argument kern = ‘LIN’ ou périodique via kern = ‘PER’). Essayer également de sélectionner des points de test de la fin de l’intervalle d’observation pour voir comment le modèle se comporte en extrapolation. Discuter des résultats obtenus, et le rôle de l’incertitude des prédictions.</p></li>
 <li><p>(Bonus) Utiliser les fonctions <code>pred_gif()</code> et <code>plot_gif()</code> pour créer votre propre animation de la prédiction par processus gaussien et son adaptation aux nouvelles données collectées au fil du temps.</p></li>
-<li><p>(Bonus) Utiliser le jeu de données <code>data_GPS_rugby_with_speed</code> pour répéter les étapes précédentes sur des données en 2-dimensions. Vous pouvez ainsi modéliser et prédire la vitesse d’un joueur de rugby en fonction de sa position sur le terrain (coordonnées X et Y).</p></li>
+<li><p>(Bonus) Utiliser le jeu de données <code>data_GPS_rugby_with_speed</code> pour répéter les étapes précédentes sur des données en 2-dimensions. En terme de format, toute colonne supplémentaire (autre que ID, Input, Output) est considéré comme un Input supplémentaire, quelque soit son nom. Vous pouvez ainsi modéliser et prédire la vitesse d’un joueur de rugby en fonction de sa position sur le terrain (coordonnées X et Y).</p></li>
 </ol>
 </div>
 <div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
-<p>Vous pouvez utiliser les fonctions :</p>
+<p>Vous pouvez utiliser :</p>
 <ol type="1">
-<li><code>format_data()</code><br>
-</li>
-<li><code>compute_redi()</code><br>
-</li>
-<li><code>loop_redi()</code><br>
-</li>
-<li><code>plot_redi()</code><br>
-</li>
-<li><code>redi()</code></li>
+<li><p>La fonction <code>rename()</code> de dplyr pour renommer les colonnes du jeu de données.</p></li>
+<li><p>Les fonctions <code>filter()</code>, <code>select()</code>, <code>sample()</code> et <code>slice()</code> pour extraire les données d’un individu, supprimer la colonne <code>Gender</code> et découper le jeu de données en entrainement/test.</p></li>
+<li><p>La fonction <code>train_gp()</code> directement sur le dataset pour entrainer le modèle de processus gaussien.</p></li>
+<li><p>La fonction <code>pred_gp()</code> pour calculer les prédictions sur les données de test et sur une grille d’inputs. Les arguments importants sont <code>data</code> (les données d’entrainement), <code>hp</code> (les hyper-paramètres optimaux obtenus à l’étape précédente), <code>grid_inputs</code> (une grille d’inputs où évaluer la prédiction).</p></li>
+<li><p>La fonction <code>plot_gp()</code> pour afficher les résultats. Les arguments importants sont <code>pred</code> (les résultats de la prédiction), <code>data</code> (les données d’entrainement, optionnel).</p></li>
+<li><p>Les fonction <code>head()</code> et <code>tail()</code> pour choisir des points de train/test en début/fin d’intervalle, et les arguments pour la moyenne a priori (<code>prior_mean</code>), le kernel (<code>kern</code>, options possibles <code>'PERIO'</code> ou <code>'LIN'</code>).</p></li>
+<li><p>La fonction <code>pred_gif()</code> pour créer une liste de prédictions successives, et la fonction <code>plot_gif()</code> pour afficher l’animation. L’argument important est <code>export_gif = TRUE</code> pour sauvegarder l’animation au format GIF.</p></li>
 </ol>
-<p>Assurez-vous de bien comprendre les arguments de chaque fonction en consultant la documentation si nécessaire : <a href="https://arthurleroy.github.io/MagmaClustR/" class="uri">https://arthurleroy.github.io/MagmaClustR/</a></p>
 </div>
 <div id="tabset-4-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-3-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">##1## Convert the dataset to the correct format</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>db_swim <span class="ot">&lt;-</span> data_swim <span class="sc">%&gt;%</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Input =</span> Age,</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">Output =</span> Performance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a seed for reproducibility</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ## Format the dataset </span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>db_swim <span class="ot">=</span> data_swim <span class="sc">%&gt;%</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Input =</span> Age, <span class="at">Output =</span> Performance)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 ## Extract data of one swimmer and split data into train and test sets</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>swimmer <span class="ot">=</span> db_swim <span class="sc">%&gt;%</span> </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">==</span> <span class="st">"ID_42"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span> Gender) </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>train_indices <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(swimmer), <span class="at">size =</span> <span class="fl">0.8</span><span class="sc">*</span><span class="fu">nrow</span>(swimmer))</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>swimmer_train <span class="ot">=</span> swimmer <span class="sc">%&gt;%</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(train_indices)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>swimmer_test <span class="ot">=</span> swimmer <span class="sc">%&gt;%</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="sc">-</span>train_indices)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 ## Train a default GP model on the training set and display hyper-parameters values</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>mod_gp <span class="ot">=</span> <span class="fu">train_gp</span>(<span class="at">data =</span> swimmer_train)</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mod_gp)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 ## Predict on the test set and display results</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>pred_gp <span class="ot">=</span> <span class="fu">pred_gp</span>(<span class="at">data =</span> swimmer_train, <span class="at">hp =</span> mod_gp)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>grid_inputs <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="fl">0.1</span>)</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>pred_gp_grid <span class="ot">=</span> <span class="fu">pred_gp</span>(<span class="at">data =</span> swimmer_train, <span class="at">hp =</span> mod_gp, <span class="at">grid_inputs =</span> grid_inputs)</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 ## Plot results with the dedicated function</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Minimal visualisation</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(pred_gp_grid)</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Add training points</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(pred_gp_grid, <span class="at">data =</span> swimmer_train)</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Add test points</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(pred_gp_grid, <span class="at">data =</span> swimmer_train) <span class="sc">+</span> </span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> swimmer_test, <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Output), <span class="at">col =</span> <span class="st">'red'</span>)</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="do">## 6 ## Try with another swimmer in a forecating context</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="co"># Format the train/test sets</span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>swimmer2 <span class="ot">=</span> db_swim <span class="sc">%&gt;%</span> </span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">==</span> <span class="st">"ID_17"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span> Gender) </span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>swimmer_train2 <span class="ot">=</span> swimmer2 <span class="sc">%&gt;%</span></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="fu">round</span>(<span class="fl">0.8</span><span class="sc">*</span><span class="fu">nrow</span>(swimmer2)))</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>swimmer_test2 <span class="ot">=</span> swimmer2 <span class="sc">%&gt;%</span></span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="sc">-</span><span class="fu">round</span>(<span class="fl">0.8</span><span class="sc">*</span><span class="fu">nrow</span>(swimmer2)))</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="co"># Train a periodic kernel and forecast</span></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>mod_gp_perio <span class="ot">=</span> <span class="fu">train_gp</span>(<span class="at">data =</span> swimmer_train2, <span class="at">prior_mean =</span> <span class="dv">50</span>,  <span class="at">kern =</span> <span class="st">'PERIO'</span>)</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>pred_gp_perio <span class="ot">=</span> <span class="fu">pred_gp</span>(<span class="at">data =</span> swimmer_train2, <span class="at">hp =</span> mod_gp_perio, <span class="at">kern =</span> <span class="st">'PERIO'</span>, <span class="at">grid_inputs =</span> grid_inputs, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(pred_gp_perio, <span class="at">data =</span> swimmer_train2) <span class="sc">+</span> </span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> swimmer_test2, <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Output), <span class="at">col =</span> <span class="st">'red'</span>)</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Train a linear kernel and forecast</span></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>mod_gp_lin <span class="ot">=</span> <span class="fu">train_gp</span>(<span class="at">data =</span> swimmer_train2, <span class="at">prior_mean =</span> <span class="dv">50</span>, <span class="at">kern =</span> <span class="st">'LIN'</span>)</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>pred_gp_lin <span class="ot">=</span> <span class="fu">pred_gp</span>(<span class="at">data =</span> swimmer_train2, <span class="at">hp =</span> mod_gp_lin, <span class="at">kern =</span> <span class="st">'LIN'</span>, <span class="at">grid_inputs =</span> grid_inputs, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(pred_gp_lin, <span class="at">data =</span> swimmer_train2) <span class="sc">+</span> </span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> swimmer_test2, <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Output), <span class="at">col =</span> <span class="st">'red'</span>)</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a><span class="do">## 7 ## Create a sequence of predictions to display an animation</span></span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>loop_pred <span class="ot">=</span> <span class="fu">pred_gif</span>(<span class="at">data =</span> swimmer, <span class="at">hp =</span> mod_gp, <span class="at">grid_inputs =</span> grid_inputs)</span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>gif <span class="ot">=</span> <span class="fu">plot_gif</span>(loop_pred, <span class="at">data =</span> swimmer, <span class="at">export_gif =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a><span class="do">## 8 ## Try with a 2D example</span></span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a><span class="co"># Import the dataset and format the train/test sets</span></span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>db_gps <span class="ot">=</span> data_gps <span class="sc">%&gt;%</span></span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">ID =</span> player, <span class="at">Input =</span> x, <span class="at">Input2 =</span> y, <span class="at">Time =</span> frame_id, <span class="at">Output =</span> speed) <span class="sc">%&gt;%</span></span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(ID, Input, Input2, Output)</span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>player <span class="ot">=</span> db_gps <span class="sc">%&gt;%</span></span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">==</span> <span class="dv">9</span>) </span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>player_train <span class="ot">=</span> player <span class="sc">%&gt;%</span></span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="fu">round</span>(<span class="fl">0.8</span><span class="sc">*</span><span class="fu">nrow</span>(player)))</span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>player_test <span class="ot">=</span> player <span class="sc">%&gt;%</span></span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="sc">-</span><span class="fu">round</span>(<span class="fl">0.8</span><span class="sc">*</span><span class="fu">nrow</span>(player)))</span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a><span class="co"># Train a 2D-Input GP model for this player</span></span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>mod_gp_2D <span class="ot">=</span> <span class="fu">train_gp</span>(<span class="at">data =</span> player_train)</span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a 2D grid of inputs for predictions with a dedicated function</span></span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>grid_inputs_2D <span class="ot">=</span> <span class="fu">expand_grid_inputs</span>(</span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>  <span class="at">Input =</span> <span class="fu">seq</span>(<span class="dv">60</span>, <span class="dv">95</span>, <span class="dv">1</span>),</span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>  <span class="at">Input2 =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="dv">1</span>)</span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a><span class="co"># Make predictions on the grid</span></span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>pred_gp_2D <span class="ot">=</span> <span class="fu">pred_gp</span>(<span class="at">data =</span> player_train, <span class="at">hp =</span> mod_gp_2D, <span class="at">grid_inputs =</span> grid_inputs_2D, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot results and add 2D testing points with labels of true Output values</span></span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(pred_gp_2D, <span class="at">data =</span> player_train) <span class="sc">+</span> </span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> player_test,</span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a>     <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Input2, <span class="at">label =</span> <span class="fu">round</span>(Output, <span class="dv">1</span>)), <span class="at">col =</span> <span class="st">"#16e30fff"</span>, <span class="at">check_overlap =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -549,34 +714,175 @@ Objectif
 <div class="tab-content">
 <div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
 <ol type="1">
-<li><p>Reprendre le format attendu par les fonctions du package MagmaClustR (ID, Input, Ouput), en conservant cette fois plusieurs individus pour l’entrainement. Choisir et extraire un individu de l’ensemble d’entrainement, et séparer ses données en 50% pour la prédiction et 50% pour le testing.</p></li>
-<li><p>Entrainer un modèle de processus gaussien multi-tâche via l’algorithme <em>Magma</em> sur ces données. Afficher le tableau des hyper-paramètres optimaux obtenus pour les individus, puis le graphique du processus moyen a posteriori via la fonction <code>plot_gp()</code>.</p></li>
+<li><p>Reprendre le format attendu par les fonctions du package MagmaClustR (ID, Input, Ouput), en conservant cette fois plusieurs individus pour l’entrainement. Pour conserver des temps de calculs raisonnables, conserver 30 individus. Choisir et extraire un individu de l’ensemble d’entrainement, et séparer ses données en 50% pour la prédiction et 50% pour le testing.</p></li>
+<li><p>Entrainer un modèle de processus gaussien multi-tâche via l’algorithme <em>Magma</em> sur ces données. Afficher le tableau des hyper-paramètres optimaux obtenus pour les individus, puis la distribution a posteriori du processus moyen (stockée dans l’élément <code>$hyperpost$pred</code> du modèle entrainé) a posteriori via la fonction <code>plot_gp()</code>.</p></li>
 <li><p>Entrainer un nouveau modèle en optimisant des hyper-paramètres individu-spécifiques grâce à l’argument <code>common_hp_i = FALSE</code>. Afficher le nouveau tableau des hyper-paramètres optimaux des individus, ainsi que le graphique du processus moyen a posteriori.</p></li>
-<li><p>Définir une fine grille d’inputs, et calculer la loi a posteriori de l’individu de test en fournissant ses données partiellement observées à la fonction de prédiction. Afficher le tableau des prédictions (moyenne et variance) pour chaque point de la grille, puis relancer la fonction de prédiction en spécifiant l’argument <code>get_hyperpost = TRUE</code> pour obtenir également la loi hyper-posterior du processus moyen.</p></li>
-<li><p>Utiliser la fonction <code>plot_magma()</code> pour personaliser la visualisation des résultats. Commencer par afficher la prédiction minimale, puis via les arguments supplémentaires, ajouter au graphique les données d’entrainement, les données de prédiction, puis le processus moyen (obtenu à l’étape précédente dans l’élément <code>hyperpost</code>). Ajouter au graphique obtenu les points de test, en rouge, pour visualiser et discuter les erreurs de prédiction.</p></li>
-<li><p>Calculer une nouvelle prédiction en utilisant le modèle entrainé avec l’argument <code>common_hp_i = FALSE</code> et comparer les résultats obtenus dans le cas d’hyper-paramètres partagés et individu-spécifiques.</p></li>
-<li><p>(Bonus) En utilisant un des modèles préalablement entrainés, utiliser la fonction <code>hyperposterior</code> afin de pré-calculer (pour accélérer des prédictions répétées) la loi hyper-posteriori du processus moyen sur une grille de prédiction contenant l’ensemble des valeurs d’Input du jeu de données. Ensuite, définir une boucle sur l’ensemble des individus pour calculer chaque prédiction en utilisant seulement une portion des données à chaque fois (par exemple 50%). Les 50% restant sont utilisés comme données de test, pour calculer des métriques d’erreur de prédiction (RMSE, calibration de l’intervalle de crédibilité).</p></li>
+<li><p>Utiliser à nouveau la grille d’inputs pour calculer la loi a posteriori de l’individu de test en fournissant ses données partiellement observées à la fonction de prédiction. Afficher le tableau des prédictions (moyenne et variance) pour chaque point de la grille, puis relancer la fonction de prédiction en spécifiant l’argument <code>get_hyperpost = TRUE</code> pour obtenir également la loi hyper-posterior du processus moyen.</p></li>
+<li><p>Utiliser la fonction <code>plot_magma()</code> pour personaliser la visualisation des résultats. Commencer par afficher la prédiction minimale, puis via les arguments supplémentaires, ajouter au graphique les données d’entrainement, les données de prédiction. Constater que le graphique inclus en ligne pointillée le processus moyen issu de l’entrainement multi-tâches (conséquence de l’argument <code>get_hyperpost = TRUE</code> pendant la prédiction). Ajouter au graphique obtenu les points de test, en rouge, pour visualiser et discuter les erreurs de prédiction.</p></li>
+<li><p>Calculer une nouvelle prédiction en utilisant le modèle entrainé avec l’argument <code>common_hp_i = FALSE</code> et comparer les résultats obtenus dans le cas d’hyper-paramètres partagés et individu-spécifiques. Que constatez-vous ?</p></li>
+</ol>
+<!-- 7. (Bonus) En utilisant un des modèles préalablement entrainés, utiliser la fonction `hyperposterior` afin de pré-calculer (pour accélérer des prédictions répétées) la loi hyper-posteriori du processus moyen sur une grille de prédiction contenant l'ensemble des valeurs d'Input du jeu de données. Ensuite, définir une boucle sur l'ensemble des individus pour calculer chaque prédiction en utilisant seulement une portion des données à chaque fois (par exemple 50%). Les 50% restant sont utilisés comme données de test, pour calculer des métriques d'erreur de prédiction (RMSE, calibration de l'intervalle de crédibilité). -->
+<ol start="7" type="1">
 <li><p>(Bonus) Utiliser les fonctions <code>pred_gif()</code> et <code>plot_gif()</code> pour créer votre propre animation de la prédiction par processus gaussien multi-tâches au fil du temps. Comparer cette animation à celle précédemment obtenue pour un processus gaussien simple.</p></li>
-<li><p>(Bonus) Utiliser le jeu de données <code>data_GPS_rugby_with_speed</code> pour répéter les étapes précédentes sur des données en 2-dimensions. Vous pouvez ainsi modéliser et prédire la vitesse d’un joueur de rugby en fonction de sa position sur le terrain (coordonnées X et Y). Comparer à nouveau les résultats obtenus avec un processus gaussien simple et multi-tâches.</p></li>
+<li><p>(Bonus) Utiliser le jeu de données <code>data_GPS_rugby_with_speed</code> pour répéter les étapes précédentes sur des données en 2-dimensions. Les données observées en 2D sur une grille très fine peuvent rapidement devenir coûteuses à entrainer dans un cadre multi-tâches. Il peut alors être utile de sous-échantillonner en utilisant la fonction dédiée du package <code>regularise_data()</code>. Vous pouvez ainsi modéliser et prédire la vitesse d’un joueur de rugby en fonction de sa position sur le terrain (coordonnées X et Y). Comparer à nouveau les résultats obtenus avec un processus gaussien simple et multi-tâches.</p></li>
 </ol>
 </div>
 <div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
-<p>Vous pouvez utiliser les fonctions :</p>
+<p>Vous pouvez utiliser :</p>
 <ol type="1">
-<li><code>format_data()</code><br>
+<li><p>La fonction <code>train_magma()</code> pour entraîner un GP multi-tâches sur un sous-ensemble d’individus (<code>data = db</code>).</p>
+<ul>
+<li>Comparer hyper-paramètres <em>partagés</em> vs <em>spécifiques</em> avec l’argument <code>common_hp = TRUE/FALSE</code>.<br>
 </li>
-<li><code>compute_redi()</code><br>
+<li>Inspecter <code>MODEL$hp_i</code> (tibble des HP par individu) et <code>MODEL$hyperpost$pred</code> (processus moyen a posteriori).</li>
+</ul></li>
+<li><p>La création d’une grille d’inputs avec <code>seq()</code> (1D) ou <code>expand_grid_inputs()</code> (2D) pour les prédictions (<code>grid_inputs = ...</code>).</p>
+<ul>
+<li>Conserver une taille raisonnable (&lt; ~2000 points) pour limiter le temps de calcul.</li>
+</ul></li>
+<li><p>La fonction <code>pred_magma()</code> pour la prédiction d’un individu partiellement observé (<code>data = swimmer_pred</code>, <code>trained_model = mod_magma</code>, <code>grid_inputs = ...</code>).</p>
+<ul>
+<li>Ajouter <code>get_hyperpost = TRUE</code> pour récupérer la loi hyper-postérieure du processus moyen ; utiliser <code>plot = FALSE</code> pour obtenir le tibble (moyenne/variance).</li>
+</ul></li>
+<li><p>La fonction <code>plot_magma()</code> pour visualiser la distribution prédictive.</p>
+<ul>
+<li>Paramètres utiles : <code>pred</code> (objet de <code>pred_magma()</code>), <code>data</code> (données de l’individu), <code>data_train</code> (pour afficher les autres individus).<br>
 </li>
-<li><code>loop_redi()</code><br>
-</li>
-<li><code>plot_redi()</code><br>
-</li>
-<li><code>redi()</code></li>
+<li>Ajouter au besoin les points de test : <code>+ geom_point(..., col = 'red')</code>.</li>
+</ul></li>
+<li><p>La comparaison des réglages via un second entraînement avec <code>train_magma(..., common_hp = FALSE)</code> puis <code>pred_magma(...)</code> sur le même individu/grille pour comparer les prédictions.</p></li>
+<li><p>L’animation avec <code>pred_gif()</code> puis <code>plot_gif(..., export_gif = TRUE, path = "magma.gif")</code> pour sauvegarder un GIF (fournir un chemin <strong>.gif</strong> valide afin d’éviter la création de PNG temporaires).</p></li>
 </ol>
-<p>Assurez-vous de bien comprendre les arguments de chaque fonction en consultant la documentation si nécessaire : <a href="https://arthurleroy.github.io/MagmaClustR/" class="uri">https://arthurleroy.github.io/MagmaClustR/</a></p>
 </div>
 <div id="tabset-5-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-3-tab">
-
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set a seed for reproducibility</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ## Subset 100 swimmers, format, extract a testing individual and split into prediction and testing sets</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>db <span class="ot">=</span> db_swim <span class="sc">%&gt;%</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">%in%</span> <span class="fu">paste0</span>(<span class="st">'ID_'</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span> Gender)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>swimmer <span class="ot">=</span> db_swim <span class="sc">%&gt;%</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">==</span> <span class="st">'ID_101'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span> Gender)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>swimmer_pred <span class="ot">=</span> swimmer <span class="sc">%&gt;%</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="fu">nrow</span>(swimmer)<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>swimmer_test <span class="ot">=</span> swimmer <span class="sc">%&gt;%</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="fu">nrow</span>(swimmer)<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 ## Train a Multi-Task GP model on the dataset with the algorithm Magma</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>mod_magma <span class="ot">=</span> <span class="fu">train_magma</span>(<span class="at">data =</span> db)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the tibble of all individual hyperparameters of the kernels</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>mod_magma<span class="sc">$</span>hp_i</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the hyperposterior distribution of the mean process</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(mod_magma<span class="sc">$</span>hyperpost<span class="sc">$</span>pred)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 ## Retrain a Multi-Task GP model with individual-specific hyperparameters</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>mod_magma_dif_hp <span class="ot">=</span> <span class="fu">train_magma</span>(<span class="at">data =</span> db, <span class="at">common_hp =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>mod_magma_dif_hp<span class="sc">$</span>hp_i</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(mod_magma_dif_hp<span class="sc">$</span>hyperpost<span class="sc">$</span>pred)</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 ## Make predictions on a grid of inputs for the testing individual</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">=</span> <span class="fu">pred_magma</span>(<span class="at">data =</span> swimmer_pred, <span class="at">trained_model =</span> mod_magma, <span class="at">grid_inputs =</span> grid_inputs)</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_magma</span>(pred, <span class="at">data =</span> swimmer_pred, <span class="at">data_train =</span> db) <span class="sc">+</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> swimmer_test, <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Output), <span class="at">col =</span> <span class="st">'red'</span>) </span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the predictive distribution and display it as a tibble</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a><span class="fu">pred_magma</span>(</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> swimmer_pred,</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">trained_model =</span> mod_magma,</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid_inputs =</span> grid_inputs, </span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the same distribution but keep the hyperposterior distribution of the mean process</span></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">=</span> <span class="fu">pred_magma</span>(</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> swimmer_pred,</span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">trained_model =</span> mod_magma,</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid_inputs =</span> grid_inputs,</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>  <span class="at">get_hyperpost =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 ## Plot the predictive distribution along with the training and testing data</span></span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a><span class="co"># Minimal plot with hyperposterior of the mean process (dashed line)</span></span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_magma</span>(pred)</span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a><span class="co"># Add data from training individuals</span></span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_magma</span>(pred, <span class="at">data_train =</span> db)</span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Add prediction data from the testing individual</span></span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_magma</span>(pred, <span class="at">data =</span> swimmer_pred, <span class="at">data_train =</span> db)</span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a><span class="co"># Add testing data from the testing individual</span></span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_magma</span>(pred, <span class="at">data =</span> swimmer_pred, <span class="at">data_train =</span> db) <span class="sc">+</span></span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> swimmer_test, <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Output), <span class="at">col =</span> <span class="st">'red'</span>) </span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a><span class="do">## 6 ## Compute predictions with individual-specific hyperparameters</span></span>
+<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a><span class="co"># This will optimise new hyperparameters for the testing individual</span></span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>pred_dif_hp <span class="ot">=</span> <span class="fu">pred_magma</span>(</span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> swimmer_pred,</span>
+<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a>  <span class="at">trained_model =</span> mod_magma_dif_hp,</span>
+<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid_inputs =</span> grid_inputs,</span>
+<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a>  <span class="at">get_hyperpost =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the prediction with individual-specific hyperparameters and compare with the previous one</span></span>
+<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_magma</span>(pred_dif_hp, <span class="at">data =</span> swimmer_pred, <span class="at">data_train =</span> db) <span class="sc">+</span></span>
+<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> swimmer_test, <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Output), <span class="at">col =</span> <span class="st">'red'</span>) </span>
+<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a><span class="do">## 8 ## Create and plot an animation of the prediction over time</span></span>
+<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>loop_pred_magma <span class="ot">=</span> <span class="fu">pred_gif</span>(</span>
+<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> swimmer,</span>
+<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a>  <span class="at">trained_model =</span> mod_magma,</span>
+<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid_inputs =</span> grid_inputs,</span>
+<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a>gif_magma <span class="ot">=</span> <span class="fu">plot_gif</span>(loop_pred_magma, <span class="at">data =</span> swimmer, <span class="at">export_gif =</span> <span class="cn">TRUE</span>, <span class="at">path =</span> <span class="st">"gif_magma.gif"</span>)</span>
+<span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a><span class="do">## 9 ## Repeat the previous steps with the 2D rugby data </span></span>
+<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a><span class="co"># Sub-sample the data set by regularising the input space on a grid of size 50x50</span></span>
+<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a>sub_db_gps <span class="ot">=</span> db_gps <span class="sc">%&gt;%</span></span>
+<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a>  <span class="fu">regularise_data</span>(<span class="at">size_grid =</span> <span class="dv">50</span>)</span>
+<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualise the difference between original and sub-sampled data</span></span>
+<span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(db_gps) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Input2, <span class="at">col =</span> Output, <span class="at">group =</span> ID)) <span class="sc">+</span> <span class="fu">theme_classic</span>()</span>
+<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sub_db_gps) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Input2, <span class="at">col =</span> Output, <span class="at">group =</span> ID)) <span class="sc">+</span> <span class="fu">theme_classic</span>()</span>
+<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a><span class="co"># Select a player (sub-sampling is not required because prediction is cheap), split into train/test sets</span></span>
+<span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a>player <span class="ot">=</span> db_gps <span class="sc">%&gt;%</span></span>
+<span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">==</span> <span class="dv">9</span>)</span>
+<span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a>player_train <span class="ot">=</span> player <span class="sc">%&gt;%</span></span>
+<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="fu">round</span>(<span class="fl">0.8</span><span class="sc">*</span><span class="fu">nrow</span>(player)))</span>
+<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a>player_test <span class="ot">=</span> player <span class="sc">%&gt;%</span></span>
+<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="sc">-</span><span class="fu">round</span>(<span class="fl">0.8</span><span class="sc">*</span><span class="fu">nrow</span>(player)))</span>
+<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a><span class="co"># Train a 2D-Input GP model on the sub-sampled dataset (without the testing player)</span></span>
+<span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a>mod_magma_2D <span class="ot">=</span> <span class="fu">train_magma</span>(<span class="at">data =</span> sub_db_gps <span class="sc">%&gt;%</span> <span class="fu">filter</span>(ID <span class="sc">!=</span> <span class="dv">9</span>))</span>
+<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a><span class="co"># Make predictions on the previous 2D grid of inputs</span></span>
+<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a>pred_magma_2D <span class="ot">=</span> <span class="fu">pred_magma</span>(</span>
+<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> player_train,</span>
+<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a>  <span class="at">trained_model =</span> mod_magma_2D,</span>
+<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid_inputs =</span> grid_inputs_2D,</span>
+<span id="cb8-121"><a href="#cb8-121" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb8-122"><a href="#cb8-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot results and add 2D testing points with labels of true Output values</span></span>
+<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(pred_magma_2D, <span class="at">data =</span> player_train) <span class="sc">+</span> </span>
+<span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> player_test,</span>
+<span id="cb8-126"><a href="#cb8-126" aria-hidden="true" tabindex="-1"></a>     <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Input2, <span class="at">label =</span> <span class="fu">round</span>(Output, <span class="dv">1</span>)), <span class="at">col =</span> <span class="st">"#16e30fff"</span>, <span class="at">check_overlap =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -601,32 +907,136 @@ Objectif
 <div class="tab-content">
 <div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
 <ol type="1">
-<li><p>Conserver à nouveau le format attendu par les fonctions du package MagmaClustR (ID, Input, Ouput), et isoler un individu d’entrainement, partiellement observé (50% des données pour la prédiction, 50% pour le test).</p></li>
-<li><p>Entrainer un modèle de mélange de GPs multi-tâches via l’algorithme <em>MagmaClust</em> sur ces données, en spécifiant un nombre de clusters égal à <span class="math inline">\(5\)</span>. Afficher le tableau des probabilités d’appartenance à chaque cluster pour chaque individu, ainsi que le graphique de chaque processus moyen cluster-spécifique via la fonction <code>plot_gp()</code>.</p></li>
+<li><p>Réutiliser la base de données d’entrainement au format attendu, ainsi que l’individu de test, partiellement observé (50% des données pour la prédiction, 50% pour le test). Entrainer un modèle de mélange de GPs multi-tâches via l’algorithme <em>MagmaClust</em> sur ces données, en spécifiant un nombre de clusters égal à <span class="math inline">\(2\)</span> et une moyenne a priori égale à la moyenne empirique des Ouputs dans le dataset (via l’argument <code>prior_mean_k</code>).</p></li>
+<li><p>Afficher le tableau des probabilités d’appartenance à chaque cluster pour chaque individu (via l’élément <code>$hyperpost$mixture</code>), ainsi que la distribution a posteriori chaque processus moyen cluster-spécifique (stockée dans un élément du type <code>$hyperpost$pred$K1</code> du modèle entrainé) a posteriori via la fonction <code>plot_gp()</code>.</p></li>
 <li><p>Calculer une prédiction ‘générique’ pour un nouvel individu jamais observé en laissant l’argument <code>data=NULL</code> dans la fonction de prédiction. A quoi correspond cette prédiction selon vous, et en quoi est-elle différente des processus moyens cluster-spécifiques ?</p></li>
 <li><p>Calculer maintenant la prédiction pour l’individu de test partiellement observées sur une grille d’inputs, en spécifiant les arguments <code>get_hyperpost = TRUE</code> pour obtenir la loi hyper-posteriori du processus moyen, ainsi que <code>get_full_cov = TRUE</code> pour la matrice de covariance prédictive complète (et pas seulement la variance ponctuelle). Afficher la probabilité d’appartenance à chaque cluster pour l’individu de test.</p></li>
-<li><p>Calculer le cluster d’appartenance le plus probable pour tous les individus d’entrainement à l’aide de la fonction <code>data_allocate_cluster()</code>, puis utiliser la fonction <code>plot_magmaclust()</code> pour personnaliser la visualisation des résultats. Ajouter les données d’entrainement coloriées par cluster d’appartenance (avec l’argument <code>col_clust = TRUE</code>), les données de prédiction, les processus moyens cluster-spécifiques (via l’argument <code>prior_mean</code>), puis représenter l’incertitude avec des échantillons plutôt qu’une bande de crédibilité (grâce à l’argument <code>samples = TRUE</code>). Ajouter au graphique les points de test, en rouge, pour visualiser et discuter les erreurs de prédiction.</p></li>
-<li><p>Visualiser les différentes prédictions cluster-spécifiques pour l’individu de test, en changeant la valeur de l’argument <code>cluster</code>. Comparer les résultats obtenus pour chaque cluster, et discuter de la pertinence de chaque prédiction en fonction de la probabilité d’appartenance associée. Comparer ces prédictions à la prédiction du mélange de GPs obtenue lorsque l’argument <code>cluster = 'all'</code>.</p></li>
-<li><p>(Bonus) Chercher sur internet la valeur actuelle du record de France du 100m nage libre masculin et féminin. Utiliser la fonction <code>sample_magmaclust()</code> pour générer 10 000 échantillons générés à partir de la prédiction d’un.e nageur.euse utilisant ses données de performance jusqu’à 16 ans. En calculant la proportion d’échantillons dont la trajectoire descend sous le temps record de France, déterminer la probabilité qu’il/elle batte ce record avant ses 20 ans ?</p></li>
+<li><p>Calculer le cluster d’appartenance le plus probable pour tous les individus d’entrainement à l’aide de la fonction <code>data_allocate_cluster()</code>, et afficher le nouveau tibble de données obtenu.</p></li>
+<li><p>Utiliser la fonction <code>plot_magmaclust()</code> pour personnaliser la visualisation des résultats. Ajouter les données d’entrainement coloriées par cluster d’appartenance (avec l’argument <code>col_clust = TRUE</code>), les données de prédiction, les processus moyens cluster-spécifiques (via l’argument <code>prior_mean = MODEL$hyperpost$mean</code>), puis représenter l’incertitude avec des échantillons plutôt qu’une bande de crédibilité (grâce à l’argument <code>samples = TRUE</code>). Ajouter au graphique les points de test, en <strong>vert</strong>, pour visualiser et discuter les erreurs de prédiction.</p></li>
+</ol>
+<!-- 6. Visualiser les différentes prédictions cluster-spécifiques pour l'individu de test, en changeant la valeur de l'argument `cluster`. Comparer les résultats obtenus pour chaque cluster, et discuter de la pertinence de chaque prédiction en fonction de la probabilité d'appartenance associée. Comparer ces prédictions à la prédiction du mélange de GPs obtenue lorsque l'argument `cluster = 'all'`. -->
+<ol start="7" type="1">
+<li>(Bonus) Chercher sur internet la valeur actuelle du record de France du 100m nage libre masculin et féminin. Utiliser la fonction <code>sample_magmaclust()</code> pour générer 1000 échantillons à partir de la prédiction d’un.e nageur.euse utilisant ses données de performance jusqu’à 16 ans. En calculant la proportion d’échantillons dont la trajectoire descend sous le temps du record de France, et déterminer la probabilité qu’il/elle batte ce record entre 16 et 20 ans ?</li>
 </ol>
 </div>
 <div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
-<p>Vous pouvez utiliser les fonctions :</p>
+<p>Vous pouvez utiliser :</p>
 <ol type="1">
-<li><code>format_data()</code><br>
+<li><p>La fonction <code>train_magmaclust()</code> pour entraîner un mélange de GPs multi-tâches (<code>data = db</code>, <code>nb_cluster = K</code>). Explorer <code>MODEL$hyperpost$mixture</code> (probas d’appartenance) et <code>MODEL$hyperpost$pred$K1/K2/...</code> (processus moyens cluster-spécifiques).</p></li>
+<li><p>La fonction <code>pred_magmaclust()</code> pour la prédiction :</p>
+<ul>
+<li>Générique (nouvel individu sans données) avec <code>data = NULL</code>.<br>
 </li>
-<li><code>compute_redi()</code><br>
+<li>Individu partiel avec <code>data = swimmer_pred</code>, <code>grid_inputs = ...</code>, et options <code>get_hyperpost = TRUE</code> (processus moyen) et <code>get_full_cov = TRUE</code> (matrice de covariance complète).</li>
+</ul></li>
+<li><p>La grille d’inputs comme en section V (<code>seq()</code> / <code>expand_grid_inputs()</code>), en veillant à des tailles raisonnables pour la stabilité et la vitesse.</p></li>
+<li><p>L’attribution de cluster la plus probable pour les individus d’entraînement avec <code>data_allocate_cluster(MODEL)</code> afin d’obtenir un tibble enrichi (ID + cluster).</p></li>
+<li><p>La fonction <code>plot_magmaclust()</code> pour visualiser les prédictions du mélange :</p>
+<ul>
+<li>Paramètres utiles : <code>pred</code>, <code>data</code> (individu), <code>data_train</code> (avec <code>col_clust = TRUE</code>), <code>prior_mean = MODEL$hyperpost$mean</code>, <code>samples = TRUE</code> (incertitude par échantillons).<br>
 </li>
-<li><code>loop_redi()</code><br>
-</li>
-<li><code>plot_redi()</code><br>
-</li>
-<li><code>redi()</code></li>
+<li>Ajouter les points de test en <strong>vert</strong> : <code>+ geom_point(..., col = 'green')</code>.</li>
+</ul></li>
+<li><p>La comparaison entre prédiction du mélange et prédictions cluster-spécifiques (en changeant <code>cluster</code> ou en traçant <code>MODEL$hyperpost$pred$K1/K2/...</code>) pour discuter des effets d’appartenance.</p></li>
+<li><p>La simulation avec <code>sample_magmaclust(pred_obj, nb_samples = 1000)</code> pour estimer des probabilités d’événements (ex. franchir un seuil) ; visualiser le seuil avec <code>geom_hline()</code> et fixer une seed pour la reproductibilité.</p></li>
 </ol>
-<p>Assurez-vous de bien comprendre les arguments de chaque fonction en consultant la documentation si nécessaire : <a href="https://arthurleroy.github.io/MagmaClustR/" class="uri">https://arthurleroy.github.io/MagmaClustR/</a></p>
 </div>
 <div id="tabset-6-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-3-tab">
-
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set a seed for reproducibility</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ## Train a Magmaclust model on a subset of swimmers</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>mod_clust <span class="ot">=</span> <span class="fu">train_magmaclust</span>(<span class="at">data =</span> db, <span class="at">nb_cluster =</span> <span class="dv">2</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 ## Display the probability of cluster memberships for all swimmers</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>mod_clust<span class="sc">$</span>hyperpost<span class="sc">$</span>mixture <span class="sc">%&gt;%</span> <span class="fu">print</span>(<span class="at">n=</span><span class="dv">30</span>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the cluster-specific mean process for each cluster</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(mod_clust<span class="sc">$</span>hyperpost<span class="sc">$</span>pred<span class="sc">$</span>K1)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(mod_clust<span class="sc">$</span>hyperpost<span class="sc">$</span>pred<span class="sc">$</span>K2)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 ## Predict on a grid of inputs for a new swimmer with no data point</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>pred_swim <span class="ot">=</span> <span class="fu">pred_magmaclust</span>(<span class="at">data =</span> <span class="cn">NULL</span>, <span class="at">trained_model =</span> mod_clust)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="do">## This prediction is a mixture of cluster-specific predictions weighted by the membership proportions</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="do">## It does not use any individual-specific information, and stands as a 'generic' prediction</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 ## Compute predictions for the testing swimmer</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>pred_clust <span class="ot">=</span> <span class="fu">pred_magmaclust</span>(</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> swimmer_pred, </span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">trained_model =</span> mod_clust,</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid_inputs =</span> grid_inputs,</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">get_hyperpost =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">get_full_cov =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the cluster membership probabilities for the testing swimmer</span></span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>pred_clust<span class="sc">$</span>mixture</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 ## Compute the most probable cluster for each individual for the next plot</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>db_with_clust <span class="ot">=</span> <span class="fu">data_allocate_cluster</span>(mod_clust)</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>db_with_clust <span class="sc">%&gt;%</span> <span class="fu">print</span>(<span class="at">n=</span><span class="dv">30</span>)</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a><span class="do">## 6 ## Display the mixture of GPs prediction for the testing swimmer</span></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_magmaclust</span>(</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">pred =</span> pred_clust,</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> swimmer_pred, </span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">data_train =</span> db_with_clust, </span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior_mean =</span> mod_clust<span class="sc">$</span>hyperpost<span class="sc">$</span>mean,</span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_clust =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">samples =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> </span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> swimmer_test, <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Output), <span class="at">col =</span> <span class="st">'green'</span>, <span class="at">size =</span> <span class="dv">3</span>)</span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a><span class="do">## 7 ## Compute the probability to break the French record of 100m freestyle before age 20</span></span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a><span class="co"># French record for 100m freestyle : 46s94 (Male) - 52s74 (Female)</span></span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a><span class="co"># Search for the best swimmer in the dataset and compte prediction from data up to 16 years</span></span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>best_swimmer <span class="ot">=</span> db <span class="sc">%&gt;%</span></span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Output <span class="sc">==</span> <span class="fu">min</span>(Output)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(ID)</span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>best_swimmer_pred <span class="ot">=</span> db <span class="sc">%&gt;%</span></span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">==</span> best_swimmer, Input <span class="sc">&lt;=</span> <span class="dv">16</span>)</span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>best_swimmer_test <span class="ot">=</span> db <span class="sc">%&gt;%</span></span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">==</span> best_swimmer, Input <span class="sc">&gt;</span> <span class="dv">16</span>)</span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the MagmaClust prediction for the best swimmer</span></span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a>pred_best <span class="ot">=</span> <span class="fu">pred_magmaclust</span>(</span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> best_swimmer_pred,</span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a>  <span class="at">trained_model =</span> mod_clust,</span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid_inputs =</span> grid_inputs,</span>
+<span id="cb9-70"><a href="#cb9-70" aria-hidden="true" tabindex="-1"></a>  <span class="at">get_full_cov =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a><span class="co"># Visual illustration of the prediction with the record line</span></span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_magmaclust</span>(</span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a>  <span class="at">pred =</span> pred_best,</span>
+<span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> best_swimmer_pred, </span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a>  <span class="at">data_train =</span> db_with_clust, </span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior_mean =</span> mod_clust<span class="sc">$</span>hyperpost<span class="sc">$</span>mean,</span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_clust =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb9-79"><a href="#cb9-79" aria-hidden="true" tabindex="-1"></a>  <span class="at">samples =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> </span>
+<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> best_swimmer_test, <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Output), <span class="at">col =</span> <span class="st">'green'</span>) <span class="sc">+</span> </span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">46.94</span>, <span class="at">lty =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">sort</span>(<span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">40</span>, <span class="dv">80</span>, <span class="dv">10</span>), <span class="fl">46.94</span>)))</span>
+<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate 10 000 sample curves from the posterior predictive distribution</span></span>
+<span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a>samples_pred <span class="ot">=</span> <span class="fu">sample_magmaclust</span>(pred_best, <span class="at">nb_samples =</span> <span class="dv">1000</span>)</span>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the proportion of samples breaking the record after age 16</span></span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a>prop_record <span class="ot">=</span> samples_pred <span class="sc">%&gt;%</span></span>
+<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Output <span class="sc">&lt;</span> <span class="fl">46.94</span>, Input <span class="sc">&gt;=</span> <span class="dv">16</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Sample) <span class="sc">%&gt;%</span></span>
+<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a>  <span class="fu">n_distinct</span>() <span class="sc">/</span> <span class="dv">1000</span> <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">paste0</span>(<span class="st">'Probability to break the French record before age 20 : '</span>, <span class="fu">round</span>(prop_record,<span class="dv">2</span>), <span class="st">'%</span><span class="sc">\n</span><span class="st">'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 </div>
 </div>

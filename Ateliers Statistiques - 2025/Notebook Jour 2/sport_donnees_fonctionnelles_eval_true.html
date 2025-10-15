@@ -1,0 +1,2171 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Arthur Leroy">
+<meta name="dcterms.date" content="2025-10-15">
+
+<title>Modélisation, prédiction et clustering de données fonctionnelles issues de problématiques sportives</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="sport_donnees_fonctionnelles_files/libs/clipboard/clipboard.min.js"></script>
+<script src="sport_donnees_fonctionnelles_files/libs/quarto-html/quarto.js"></script>
+<script src="sport_donnees_fonctionnelles_files/libs/quarto-html/popper.min.js"></script>
+<script src="sport_donnees_fonctionnelles_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="sport_donnees_fonctionnelles_files/libs/quarto-html/anchor.min.js"></script>
+<link href="sport_donnees_fonctionnelles_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="sport_donnees_fonctionnelles_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="sport_donnees_fonctionnelles_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="sport_donnees_fonctionnelles_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="sport_donnees_fonctionnelles_files/libs/bootstrap/bootstrap-8a79a254b8e706d3c925cde0a310d4f0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-full toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#i-traitement-basique-de-données-fonctionnelles-discrètes-lexemple-de-la-charge-dentrainement-cumulée" id="toc-i-traitement-basique-de-données-fonctionnelles-discrètes-lexemple-de-la-charge-dentrainement-cumulée" class="nav-link active" data-scroll-target="#i-traitement-basique-de-données-fonctionnelles-discrètes-lexemple-de-la-charge-dentrainement-cumulée">I) Traitement basique de données fonctionnelles discrètes : l’exemple de la charge d’entrainement cumulée</a>
+  <ul class="collapse">
+  <li><a href="#importation-des-package-et-données" id="toc-importation-des-package-et-données" class="nav-link" data-scroll-target="#importation-des-package-et-données">Importation des package et données</a></li>
+  <li><a href="#mise-en-pratique" id="toc-mise-en-pratique" class="nav-link" data-scroll-target="#mise-en-pratique">Mise en pratique</a></li>
+  </ul></li>
+  <li><a href="#ii-analyse-de-données-fonctionnelles-b-splines-fpca-et-clustering-de-courbes" id="toc-ii-analyse-de-données-fonctionnelles-b-splines-fpca-et-clustering-de-courbes" class="nav-link" data-scroll-target="#ii-analyse-de-données-fonctionnelles-b-splines-fpca-et-clustering-de-courbes">II) Analyse de données fonctionnelles : B-splines, FPCA et clustering de courbes</a>
+  <ul class="collapse">
+  <li><a href="#importation-des-package-et-données-1" id="toc-importation-des-package-et-données-1" class="nav-link" data-scroll-target="#importation-des-package-et-données-1">Importation des package et données</a></li>
+  <li><a href="#mise-en-pratique-1" id="toc-mise-en-pratique-1" class="nav-link" data-scroll-target="#mise-en-pratique-1">Mise en pratique</a></li>
+  </ul></li>
+  <li><a href="#iii-formule-de-bayes-et-modélisation-probabiliste" id="toc-iii-formule-de-bayes-et-modélisation-probabiliste" class="nav-link" data-scroll-target="#iii-formule-de-bayes-et-modélisation-probabiliste">III) Formule de Bayes et modélisation probabiliste</a></li>
+  <li><a href="#iv-apprentissage-par-processus-gaussiens" id="toc-iv-apprentissage-par-processus-gaussiens" class="nav-link" data-scroll-target="#iv-apprentissage-par-processus-gaussiens">IV) Apprentissage par processus gaussiens :</a>
+  <ul class="collapse">
+  <li><a href="#importation-des-package-et-données-2" id="toc-importation-des-package-et-données-2" class="nav-link" data-scroll-target="#importation-des-package-et-données-2">Importation des package et données</a></li>
+  <li><a href="#mise-en-pratique-2" id="toc-mise-en-pratique-2" class="nav-link" data-scroll-target="#mise-en-pratique-2">Mise en pratique</a></li>
+  </ul></li>
+  <li><a href="#v-apprentissage-par-processus-gaussiens-multi-tâches" id="toc-v-apprentissage-par-processus-gaussiens-multi-tâches" class="nav-link" data-scroll-target="#v-apprentissage-par-processus-gaussiens-multi-tâches">V) Apprentissage par processus gaussiens multi-tâches :</a></li>
+  <li><a href="#vi-modélisation-clustering-et-prédiction-simultanés" id="toc-vi-modélisation-clustering-et-prédiction-simultanés" class="nav-link" data-scroll-target="#vi-modélisation-clustering-et-prédiction-simultanés">VI) Modélisation, clustering et prédiction simultanés :</a></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+</div>
+<main class="content column-page-right" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Modélisation, prédiction et clustering de données fonctionnelles issues de problématiques sportives</h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-page-right">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Arthur Leroy </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 15, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Nous utiliserons dans ce document les conventions et les fonctions du tidyverse pour le formattage et la manipulation des données.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="i-traitement-basique-de-données-fonctionnelles-discrètes-lexemple-de-la-charge-dentrainement-cumulée" class="level1">
+<h1>I) Traitement basique de données fonctionnelles discrètes : l’exemple de la charge d’entrainement cumulée</h1>
+<section id="importation-des-package-et-données" class="level2">
+<h2 class="anchored" data-anchor-id="importation-des-package-et-données">Importation des package et données</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(REDI)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data_workload <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/data_workload_fm.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="mise-en-pratique" class="level2">
+<h2 class="anchored" data-anchor-id="mise-en-pratique">Mise en pratique</h2>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objectif
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Calculer la charge d’entrainement cumulé avec le Robust Exponential Decreasing Index (REDI) et visualiser les résultats.</p>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Questions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Conseils</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Solutions</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<ol type="1">
+<li><p>Convertir le jeu de données dans le format attendu (un tibble/dataframe avec une colonne <code>Input</code> pour la date, et <code>Output</code> pour la charge d’entrainement) par les fonctions du package REDI.</p></li>
+<li><p>Calculer la valeur de charge d’entrainement cumulée à la dernière date présente dans le jeu de données.</p></li>
+<li><p>Appliquer la fonction loop_redi() pour calculer le REDI successivement à toutes les dates du jeu de données.</p></li>
+<li><p>Afficher les résultats dans un graphique sous forme d’une séries temporelle des valeurs succéssives du REDI.</p></li>
+<li><p>Utiliser la fonction wrapprer redi() pour calculer le REDI pour différentes coefficients de décroissance <span class="math inline">\(\lambda\)</span> et afficher les résultats.</p></li>
+<li><p>Analyser les résultats obtenus et discuter de l’impact du choix du coefficient <span class="math inline">\(\lambda\)</span>, et proposer un critère de choix de ce coefficient dans un contexte sportif.</p></li>
+<li><p>(Bonus) Introduire des données manquantes dans le jeu de données en retirant aléatoirement 10%, 25% puis 50% des observations. Recalculer les valeurs correspondantes du REDI et afficher les trois courbes sur un même graphique. Discuter de sa robustesse aux données manquantes.</p></li>
+</ol>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>Vous pouvez utiliser les fonctions suivantes :</p>
+<ol type="1">
+<li><code>format_data()</code><br>
+</li>
+<li><code>compute_redi()</code><br>
+</li>
+<li><code>loop_redi()</code><br>
+</li>
+<li><code>plot_redi()</code><br>
+</li>
+<li><code>redi()</code><br>
+</li>
+<li>/</li>
+<li><code>slice_sample()</code></li>
+</ol>
+<p>Assurez-vous de bien comprendre les arguments de chaque fonction en consultant la documentation si nécessaire : <a href="https://grenouil.github.io/REDI/" class="uri">https://grenouil.github.io/REDI/</a></p>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ##  Convert the dataset to the correct format</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>db_workload <span class="ot">&lt;-</span> <span class="fu">format_data</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> data_workload,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">input =</span> <span class="st">'Date'</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">output =</span> <span class="st">'Training load'</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 ## Compute REDI for the last date in the dataset</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">compute_redi</span>(db_workload)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 176.2764</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 ## Apply loop_redi() to compute REDI for all dates in the dataset </span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>db_loop <span class="ot">&lt;-</span> <span class="fu">loop_redi</span>(<span class="at">data =</span> db_workload)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>db_loop</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 689 × 4
+   Input      Output  REDI Lambda
+   &lt;date&gt;      &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1 2024-07-21     75  176.    0.1
+ 2 2024-07-20     NA  197.    0.1
+ 3 2024-07-19     NA  197.    0.1
+ 4 2024-07-18    105  197.    0.1
+ 5 2024-07-17     30  214.    0.1
+ 6 2024-07-16    225  249.    0.1
+ 7 2024-07-15    120  254.    0.1
+ 8 2024-07-14     NA  286.    0.1
+ 9 2024-07-13     NA  286.    0.1
+10 2024-07-12     NA  286.    0.1
+# ℹ 679 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 ## Display results as a time series of REDI values</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_redi</span>(<span class="at">redi =</span> db_loop,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">x_axis =</span> <span class="st">'Date'</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">y_axis =</span> <span class="st">'Workload'</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">plot_data =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20I-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 ## Apply redi() on data using a vector of coefficients and display results</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>db_full_redi <span class="ot">&lt;-</span> <span class="fu">redi</span>(<span class="at">data =</span> db_workload, <span class="at">coef =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.5</span>), <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20I-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 6 ## </span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Le choix de lambda peut typiquement venir d'une connaissance expert, en fonction du sport</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># étudié, la charge d'activité peut être plus ou moins persistante dans le temps (très</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># différent entre un sport d'endurance et un sport de sprint par exemple). Si aucune</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># connaissance experte n'est disponible, on peut imaginer choisir lambda en optimisant, à</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># partir de données réelles, un critère de performance prédictive (par exemple en</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># cross-validation), ou une fonction de coût/perte spécifique au contexte sportif.</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="do">## 7 ## Create datasets with 10%, 25%, 50% of missing values </span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>db_10 <span class="ot">&lt;-</span> db_workload <span class="sc">%&gt;%</span> <span class="fu">slice_sample</span>(<span class="at">prop =</span> <span class="fl">0.9</span>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>db_25 <span class="ot">&lt;-</span> db_workload <span class="sc">%&gt;%</span> <span class="fu">slice_sample</span>(<span class="at">prop =</span> <span class="fl">0.75</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>db_50 <span class="ot">&lt;-</span> db_workload <span class="sc">%&gt;%</span> <span class="fu">slice_sample</span>(<span class="at">prop =</span> <span class="fl">0.5</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>db_missing <span class="ot">&lt;-</span> <span class="fu">redi</span>(db_10, <span class="at">coef =</span> <span class="fl">0.1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Missing  =</span> <span class="st">'10'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">redi</span>(db_25, <span class="at">coef =</span> <span class="fl">0.1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">Missing  =</span> <span class="st">'25'</span>)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">redi</span>(db_50, <span class="at">coef =</span> <span class="fl">0.1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">Missing  =</span> <span class="st">'50'</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20I-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20I-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20I-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot results coloured according to the missing data ratio</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(db_missing) <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> REDI, <span class="at">col =</span> Missing)) <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> db_workload, <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Output), </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">'grey'</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20I-6.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="ii-analyse-de-données-fonctionnelles-b-splines-fpca-et-clustering-de-courbes" class="level1">
+<h1>II) Analyse de données fonctionnelles : B-splines, FPCA et clustering de courbes</h1>
+<section id="importation-des-package-et-données-1" class="level2">
+<h2 class="anchored" data-anchor-id="importation-des-package-et-données-1">Importation des package et données</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(splines)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fdapace)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'fdapace' was built under R version 4.4.3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data_swim <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/db_100m_freestyle.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 76832 Columns: 4
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (1): ID
+dbl (3): Age, Performance, Gender
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
+</section>
+<section id="mise-en-pratique-1" class="level2">
+<h2 class="anchored" data-anchor-id="mise-en-pratique-1">Mise en pratique</h2>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objectif
+</div>
+</div>
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Questions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Conseils</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Solutions</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<ol type="1">
+<li><p>Définir une base de splines de degré 3, sur un intervalle couvrant l’ensemble des données entre 10 et 20 ans, avec 4 knots équidistants. Afficher cette base de fonctions sur un graphique.</p></li>
+<li><p>Extraire les données de performance au cours du temps, spécifiques à un.e athlète, et ajuster un modèle de régression spline sur ses données. Afficher les données et le courbe ajustée.</p></li>
+<li><p>Répéter l’ajustement par spline pour toutes les athlètes du jeu de données, et afficher les courbes ajustées pour chaque athlète sur un même graphique.</p></li>
+</ol>
+<!-- 4.  Définissez une grille de points plus large que l'intervalle des données pour extrapoler ses performances futures. Prédire les valeurs ajustées par spline sur cette grille pour une dizaine d'athlètes, et afficher les courbes correspondantes. -->
+<ol start="4" type="1">
+<li><p>Commencer par extraire un sous jeu de données pour 100 individus pour diminuer le temps de calcul Effectuer une analyse en composantes principales fonctionnelle (FPCA) sur le jeu de données à l’aide du package <code>fdapace</code>. Afficher la proportion de variance expliquée par chaque composante principale.</p></li>
+<li><p>Choisir le nombre de fonctions principales à retenir et afficher leur courbe correspondante, représentant les modes de variation principaux des données. Analyser ces modes de variation et discuter de leur interprétation dans un contexte sportif.</p></li>
+<li><p>(Bonus) Effectuer un clustering (via un algorithme des k-means par exemple) des athlètes basé sur les scores des premières composantes principales. Afficher les courbes moyennes ajustées par spline pour chaque cluster et discuter des différences entre les groupes.</p></li>
+</ol>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<ol type="1">
+<li><p>La fonction <code>bs()</code> du package <code>splines</code> permet de définir une base de splines. Vous pouvez utiliser la fonction <code>matplot()</code> de base R ou <code>ggplot2</code> pour afficher les différentes fonctions de la base.</p></li>
+<li><p>La syntaxe est proche d’une régression linéaire classique, mais en utilisant la fonction <code>bs()</code> pour définir la base de splines dans la formule. Vous pouvez utiliser la fonction <code>predict()</code> pour obtenir les valeurs ajustées sur une grille de points.</p></li>
+<li><p>La syntaxe n’est pas très intuitive pour faire une boucle sur tous les athlètes, je vous conseille d’aller directement dans l’onglet Solutions pour récupérer et executer le code.</p></li>
+<li><p>Utiliser la fonction <code>split()</code> pour formater les données par athlète comme attendu par la fonction <code>FPCA</code>.</p></li>
+<li><p>La part de variance expliquée est contenue dans l’élément <code>$FVE</code> du résultat de la fonction <code>FPCA</code>. Les fonctions principales sont contenues dans l’élément <code>$phi</code>.</p></li>
+<li><p>Les scores des athlètes sur les fonctions principales sont contenus dans l’élément <code>$xiEst</code>. Vous pouvez utiliser la fonction <code>kmeans()</code> de base R pour effectuer le clustering.</p></li>
+</ol>
+</div>
+<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ## Define a B-spline basis of degree 3 with 4 equidistant knots on the interval [10, 20]</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the grid of evaluation and knots</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>x_grid <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="fl">0.1</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>knots <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">12</span>, <span class="dv">18</span>, <span class="at">by =</span> <span class="dv">2</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the B-spline basis</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>sp_basis <span class="ot">=</span> <span class="fu">bs</span>(x_grid, <span class="at">degree =</span> <span class="dv">3</span>, <span class="at">knots =</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">16</span>, <span class="dv">18</span>), <span class="at">intercept =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="do">## Easy (and old school) plot using base R</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(x_grid, sp_basis, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lty =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">"Base de splines cubiques"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20II-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Cool kids version using ggplot2</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>sp_basis_df <span class="ot">=</span> sp_basis <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Input =</span> x_grid) <span class="sc">%&gt;%</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>Input, <span class="at">names_to =</span> <span class="st">'Basis'</span>, <span class="at">values_to =</span> <span class="st">'Value'</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sp_basis_df) <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Value, <span class="at">col =</span> Basis)) <span class="sc">+</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">'none'</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">'Basis value'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20II-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 ## Extract data for a single athlete and fit a spline regression model</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Select a swimmer</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>swimmer <span class="ot">=</span> data_swim <span class="sc">%&gt;%</span> <span class="fu">filter</span>(ID <span class="sc">==</span> <span class="st">'ID_1'</span>)  </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a spline and predict of a grid of values</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(Performance <span class="sc">~</span> <span class="fu">bs</span>(Age, <span class="at">degree =</span> <span class="dv">3</span>, <span class="at">knots =</span> knots, <span class="at">Boundary.knots =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>)), <span class="at">data =</span> swimmer)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>pred_spline <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">Age =</span> x_grid))</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the results</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">Age =</span> x_grid, <span class="at">Performance =</span> pred_spline) <span class="sc">%&gt;%</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> Age, <span class="at">y =</span> Performance), <span class="at">col =</span> <span class="st">'#DD3497'</span>) <span class="sc">+</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> swimmer, <span class="fu">aes</span>(<span class="at">x =</span> Age, <span class="at">y =</span> Performance)) <span class="sc">+</span> <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">'Age'</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">'Performance'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20II-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 ## Fit splines basis to the full dataset</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a spline for each swimmer and predict on a grid of values</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>pred_all_spline <span class="ot">&lt;-</span> data_swim <span class="sc">%&gt;%</span> </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ID) <span class="sc">%&gt;%</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">do</span>(<span class="fu">data.frame</span>(<span class="at">Age =</span> x_grid,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="fu">predict</span>(<span class="fu">lm</span>(Performance <span class="sc">~</span> <span class="fu">bs</span>(Age, <span class="at">degree=</span><span class="dv">3</span>, <span class="at">knots=</span>knots, <span class="at">Boundary.knots=</span><span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">20</span>)),</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">data=</span>.),</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">Age =</span> x_grid))))</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the resulting curves</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pred_all_spline) <span class="sc">+</span> </span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(Age, y, <span class="at">group =</span> ID)) <span class="sc">+</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">'Age'</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">'Performance'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20II-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 ## Perform and FPCA on the full dataset</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset the data to 100 swimmers for computational time</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>sub_db_swim <span class="ot">=</span> data_swim <span class="sc">%&gt;%</span> <span class="fu">filter</span>(ID <span class="sc">%in%</span> <span class="fu">paste0</span>(<span class="st">'ID_'</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>))</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Format the data and apply FPCA</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>x_grid <span class="ot">&lt;-</span> <span class="fu">split</span>(sub_db_swim<span class="sc">$</span>Age, sub_db_swim<span class="sc">$</span>ID)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>y_grid <span class="ot">&lt;-</span> <span class="fu">split</span>(sub_db_swim<span class="sc">$</span>Performance, sub_db_swim<span class="sc">$</span>ID)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>fpca <span class="ot">&lt;-</span> <span class="fu">FPCA</span>(y_grid, x_grid)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 ## Display the results of the FPCA</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the variance explained by each component</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(fpca<span class="sc">$</span>FVE, <span class="at">names.arg =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(fpca<span class="sc">$</span>FVE), <span class="at">main =</span> <span class="st">"Variance expliquée (%)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20II-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the principal components</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(fpca<span class="sc">$</span>workGrid, fpca<span class="sc">$</span>phi[,<span class="dv">1</span>], <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lty=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20II-6.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 6 ## Clustering based on the FPCA scores</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the scores on the first component</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> fpca<span class="sc">$</span>xiEst[,<span class="dv">1</span>]</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform a k-means clustering on the scores</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>cl <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(scores, <span class="dv">3</span>)<span class="sc">$</span>cluster</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Add the cluster information to the dataset </span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>swim_with_clust <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ID =</span> <span class="fu">names</span>(x_grid), <span class="at">Cluster =</span> cl) <span class="sc">%&gt;%</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(sub_db_swim, <span class="at">by =</span> <span class="st">"ID"</span>)<span class="sc">~</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the clusters of curves</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(swim_with_clust) <span class="sc">+</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(Age, Performance, <span class="at">col=</span><span class="fu">factor</span>(Cluster))) <span class="sc">+</span> </span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">col=</span><span class="st">'Cluster'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="iii-formule-de-bayes-et-modélisation-probabiliste" class="level1">
+<h1>III) Formule de Bayes et modélisation probabiliste</h1>
+<p>Cette partie s’effectue sur feuille, sans code R.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objectif
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Utiliser la formule de Bayes pour calculer des probabilités conditionnelles dans le cas dicret et continu.</p>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Questions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Conseils</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false" href="">Solutions</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<p>Imaginez qu’un.e athlète, à chaque séance d’entrainement, a 1 chance sur 1000 de se rompre le tendon d’Achille. Un nouveau test de prévention, lancé sur le marché, permet de détecter correctement 99% des ruptures du tendon d’Achille à l’avance si le test était <em>positif</em>. Le test en question permet même d’identifier correctement que 99% des séances ne provoqueront <strong>pas</strong> de blessure au tendon s’il est <em>négatif</em>.</p>
+<p>Si cet.te athlète obtient un résultat positif au test avant une séance, pensez vous que c’est complétement inconscient de prendre ce risque ?</p>
+<p>Quelle est la probabilité, connaissant ce résultat positif au test, qu’il/elle se rompe le tendon d’Achille lors de son entrainement ?</p>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<p>Rappelez vous de la formule des probabilités totales. La probabilité “totale” d’obtenir un test positif est la somme de la probabilité d’obtenir un test positif puis de se blesser et de la probabilité d’obtenir un test positif sans se blesser ensuite.</p>
+<p>Ou, pour les puristes (pour tout évènement <span class="math inline">\(T\)</span> et <span class="math inline">\(B\)</span>):</p>
+<p><span class="math display">\[\mathbb{P}(T) = \mathbb{P}(T \cap B) + \mathbb{P}(T \cap \bar{B} )\]</span></p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Vous l’avez ?">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Vous l’avez ?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Allez, si vraiment le terme d’<em>évidence</em> ne l’est pas tant que ça, rappelez vous également que l’intersection de deux évènements peut toujours s’écrire comme la probabilité conditionnelle de l’un sachant l’autre fois la probabilité de l’autre. Ou plus formellement : <span class="math display">\[\mathbb{P}(T \cap X) = \mathbb{P}(T | X)  \times \mathbb{P}(X), \ \ \ \ \forall X\]</span></p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Toujours pas ?">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Toujours pas ?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Allez un dernier indice, pour rappeler que pour tout évènement binaire (par exemple un test positif/négatif), la probabilité de l’évènement est égal à 1 moins la probabilité de son complémentaire. Ou plus formellement :</p>
+<p><span class="math display">\[\mathbb{P}(T) = 1 - \mathbb{P}(\bar{T})\]</span></p>
+<p>Ce qui reste vrai pour les évènements conditionnels :</p>
+<p><span class="math display">\[\mathbb{P}(T | X) = 1 - \mathbb{P}(\bar{T} | X), \ \ \ \ \forall X\]</span></p>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-3-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-3-tab">
+<p>Commençons par définir mathématiquement les évènements :</p>
+<ul>
+<li><span class="math inline">\(B\)</span> = “se rompre le tendon d’Achille”,</li>
+<li><span class="math inline">\(\bar{B}\)</span> = “ne pas se rompre le tendon d’Achille”,</li>
+<li><span class="math inline">\(T\)</span> = “test positif”,</li>
+<li><span class="math inline">\(\bar{T}\)</span> = “test négatif”.</li>
+</ul>
+<p>A partir de l’énoncé, nous avons les probabilités suivantes :</p>
+<ul>
+<li><span class="math inline">\(\mathbb{P}(B) = 0.001\)</span>, “A chaque séance d’entrainement, 1 chance sur 1000 de se rompre le tendon d’Achille”,</li>
+<li><span class="math inline">\(\mathbb{P}(T | B) = 0.99\)</span>, “permet de détecter correctement 99% des ruptures du tendon d’Achille à l’avance si le test était <em>positif</em>”,</li>
+<li><span class="math inline">\(\mathbb{P}(\bar{T} | \bar{B}) = 0.99\)</span>, “identifier correctement que 99% des séances ne provoqueront <strong>pas</strong> de blessure au tendon s’il est <em>négatif</em>”.</li>
+</ul>
+<p>Nous avons donc à notre disposition les termes de prior <span class="math inline">\(\mathbb{P}(B)\)</span> et de vraisemblance <span class="math inline">\(\mathbb{P}(T | B)\)</span>, il ne reste qu’à calculer le terme d’<strong>évidence</strong> <span class="math inline">\(\mathbb{P}(T)\)</span> pour pouvoir appliquer la formule de Bayes.</p>
+<p>Pour cela, nous allons utiliser la formule des probabilités totales : <span class="math display">\[\mathbb{P}(T) = \mathbb{P}(T \cap B) + \mathbb{P}(T \cap \bar{B} )\]</span></p>
+<p>Puis en utilisant la formule de l’intersection, nous obtenons : <span class="math display">\[\begin{align}
+\mathbb{P}(T)
+&amp;= \mathbb{P}(T | B)  \times \mathbb{P}(B) + \mathbb{P}(T | \bar{B})  \times \mathbb{P}(\bar{B}) \\
+&amp;= \mathbb{P}(T | B)  \times \mathbb{P}(B) + (1 - \mathbb{P}(\bar{T} | \bar{B}))  \times (1 - \mathbb{P}(B)) \\
+&amp;= 0.99 \times 0.001 + (1 - 0.99) \times (1 - 0.001) \\
+&amp;= 0.00099 + 0.00999 \\
+&amp;= 0.01098
+\end{align}\]</span></p>
+<p>Nous pouvons maintenant appliquer la formule de Bayes pour obtenir la probabilité conditionnelle recherchée :</p>
+<p><span class="math display">\[\mathbb{P}(B | T) = \frac{\mathbb{P}(T | B) \times \mathbb{P}(B)}{\mathbb{P}(T)} = \frac{0.99 \times 0.001}{0.01098} \approx 0.09016\]</span></p>
+<p>Donc, même avec un test positif, la probabilité que l’athlète se rompe le tendon d’Achille lors de son entrainement est d’environ 9.016%. Cela signifie qu’il y a environ 90.984% de chances de ne pas se blesser pas malgré le résultat positif du test.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="iv-apprentissage-par-processus-gaussiens" class="level1">
+<h1>IV) Apprentissage par processus gaussiens :</h1>
+<section id="importation-des-package-et-données-2" class="level2">
+<h2 class="anchored" data-anchor-id="importation-des-package-et-données-2">Importation des package et données</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MagmaClustR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'MagmaClustR'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:REDI':
+
+    simu_db</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>data_gps <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/data_GPS_rugby_with_speed.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 1308 Columns: 5</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+dbl (5): frame_id, player, x, y, speed
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
+</section>
+<section id="mise-en-pratique-2" class="level2">
+<h2 class="anchored" data-anchor-id="mise-en-pratique-2">Mise en pratique</h2>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objectif
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Se familiariser avec l’apprentissage par processus gaussiens pour la modélisation et la prédiction de données fonctionnelles. Faire des prédictions probabilistes pour des courbes avec leur incertitude associée. La documentation du package MagmaClustR, permettant cela, est disponible ici : <a href="https://arthurleroy.github.io/MagmaClustR/" class="uri">https://arthurleroy.github.io/MagmaClustR/</a></p>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">Questions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">Conseils</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-3" role="tab" aria-controls="tabset-4-3" aria-selected="false" href="">Solutions</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<ol type="1">
+<li><p>Convertir le jeu de données ‘data_swim’ au format attendu par les fonctions du package MagmaClustR. La colonne représentant le temps doit être nommée ‘Input’ et la colonne représentant les performances ‘Output’, tandis que la colonne identifiant les individus doit être nommée ‘ID’.</p></li>
+<li><p>Filtrer les données d’un.e seul.e individu.e et retirer la colonne ‘Gender’ du jeu de données. Découper aléatoirement le jeu de données en un ensemble d’entrainement (80% des données) et un ensemble de test (20% des données).</p></li>
+<li><p>Entrainer un modèle de processus gaussien sur ces données en optimisant les hyper-paramètres du noyau de covariance par défaut. Afficher la valeur des hyper-paramètres optimaux obtenus.</p></li>
+<li><p>Calculer les prédictions sur les données de test en obtenant la loi normale a posteriori, caractérisée par sa moyenne et l’incertitude associée (variance) en tout point de cette grille. Définir ensuite une fine grille de points d’observations (Input) sur un intervalle plus large, typiquement entre 10 et 20 ans (en veillant à ne pas dépasser une vecteur de taille &gt; 2000 maximum environ), puis relancer la prédiction sur cette grille.</p></li>
+<li><p>Utiliser la fonction <code>plot_gp()</code> les résultats sous forme d’un graphique personnalisé. Commencer par afficher la prédiction minimale avec la moyenne prédite et une bande de confiance à 95%, puis via les arguments supplémentaires, ajouter les données d’entarinement. Ajouter ‘à la main’ au graphique <code>ggplot</code> les points de test, en rouge, pour visualiser et discuter les erreurs de prédiction.</p></li>
+<li><p>Répéter les étapes 2 à 5 pour un.e nouvel.le d’individu.e du jeu de données. Essayer de définir une moyenne a priori de votre choix (via l’argument <code>prior_mean</code>) et d’utiliser un autre kernel (par exemple linéaire via l’argument kern = ‘LIN’ ou périodique via kern = ‘PER’). Essayer également de sélectionner des points de test de la fin de l’intervalle d’observation pour voir comment le modèle se comporte en extrapolation. Discuter des résultats obtenus, et le rôle de l’incertitude des prédictions.</p></li>
+<li><p>(Bonus) Utiliser les fonctions <code>pred_gif()</code> et <code>plot_gif()</code> pour créer votre propre animation de la prédiction par processus gaussien et son adaptation aux nouvelles données collectées au fil du temps.</p></li>
+<li><p>(Bonus) Utiliser le jeu de données <code>data_GPS_rugby_with_speed</code> pour répéter les étapes précédentes sur des données en 2-dimensions. En terme de format, toute colonne supplémentaire (autre que ID, Input, Output) est considéré comme un Input supplémentaire, quelque soit son nom. Vous pouvez ainsi modéliser et prédire la vitesse d’un joueur de rugby en fonction de sa position sur le terrain (coordonnées X et Y).</p></li>
+</ol>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<p>Vous pouvez utiliser :</p>
+<ol type="1">
+<li><p>La fonction <code>rename()</code> de dplyr pour renommer les colonnes du jeu de données.</p></li>
+<li><p>Les fonctions <code>filter()</code>, <code>select()</code>, <code>sample()</code> et <code>slice()</code> pour extraire les données d’un individu, supprimer la colonne <code>Gender</code> et découper le jeu de données en entrainement/test.</p></li>
+<li><p>La fonction <code>train_gp()</code> directement sur le dataset pour entrainer le modèle de processus gaussien.</p></li>
+<li><p>La fonction <code>pred_gp()</code> pour calculer les prédictions sur les données de test et sur une grille d’inputs. Les arguments importants sont <code>data</code> (les données d’entrainement), <code>hp</code> (les hyper-paramètres optimaux obtenus à l’étape précédente), <code>grid_inputs</code> (une grille d’inputs où évaluer la prédiction).</p></li>
+<li><p>La fonction <code>plot_gp()</code> pour afficher les résultats. Les arguments importants sont <code>pred</code> (les résultats de la prédiction), <code>data</code> (les données d’entrainement, optionnel).</p></li>
+<li><p>Les fonction <code>head()</code> et <code>tail()</code> pour choisir des points de train/test en début/fin d’intervalle, et les arguments pour la moyenne a priori (<code>prior_mean</code>), le kernel (<code>kern</code>, options possibles <code>'PERIO'</code> ou <code>'LIN'</code>).</p></li>
+<li><p>La fonction <code>pred_gif()</code> pour créer une liste de prédictions successives, et la fonction <code>plot_gif()</code> pour afficher l’animation. L’argument important est <code>export_gif = TRUE</code> pour sauvegarder l’animation au format GIF.</p></li>
+</ol>
+</div>
+<div id="tabset-4-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a seed for reproducibility</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ## Format the dataset </span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>db_swim <span class="ot">=</span> data_swim <span class="sc">%&gt;%</span> </span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Input =</span> Age, <span class="at">Output =</span> Performance)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 ## Extract data of one swimmer and split data into train and test sets</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>swimmer <span class="ot">=</span> db_swim <span class="sc">%&gt;%</span> </span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">==</span> <span class="st">"ID_42"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span> Gender) </span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>train_indices <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(swimmer), <span class="at">size =</span> <span class="fl">0.8</span><span class="sc">*</span><span class="fu">nrow</span>(swimmer))</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>swimmer_train <span class="ot">=</span> swimmer <span class="sc">%&gt;%</span></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(train_indices)</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>swimmer_test <span class="ot">=</span> swimmer <span class="sc">%&gt;%</span></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="sc">-</span>train_indices)</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 ## Train a default GP model on the training set and display hyper-parameters values</span></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>mod_gp <span class="ot">=</span> <span class="fu">train_gp</span>(<span class="at">data =</span> swimmer_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The 'prior_mean' argument has not been specified. The mean function is thus set to be 0 everywhere.
+ 
+The 'ini_hp' argument has not been specified. Random values of hyper-parameters are used as initialisation.
+ </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(mod_gp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  se_variance se_lengthscale  noise
+        &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt;
+1        8.72           4.46 -0.770</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 ## Predict on the test set and display results</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>pred_gp <span class="ot">=</span> <span class="fu">pred_gp</span>(<span class="at">data =</span> swimmer_train, <span class="at">hp =</span> mod_gp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The 'mean' argument has not been specified. The  mean function is thus set to be 0 everywhere.
+ </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in mvtnorm::rmvnorm(n = nb_samples, mean = mean, sigma = cov,
+checkSymmetry = FALSE): sigma is numerically not positive semidefinite</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20IV-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>grid_inputs <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="fl">0.1</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>pred_gp_grid <span class="ot">=</span> <span class="fu">pred_gp</span>(<span class="at">data =</span> swimmer_train, <span class="at">hp =</span> mod_gp, <span class="at">grid_inputs =</span> grid_inputs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The 'mean' argument has not been specified. The  mean function is thus set to be 0 everywhere.
+ </code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20IV-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 ## Plot results with the dedicated function</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Minimal visualisation</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(pred_gp_grid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20IV-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add training points</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(pred_gp_grid, <span class="at">data =</span> swimmer_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20IV-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add test points</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(pred_gp_grid, <span class="at">data =</span> swimmer_train) <span class="sc">+</span> </span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> swimmer_test, <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Output), <span class="at">col =</span> <span class="st">'red'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20IV-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 6 ## Try with another swimmer in a forecating context</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Format the train/test sets</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>swimmer2 <span class="ot">=</span> db_swim <span class="sc">%&gt;%</span> </span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">==</span> <span class="st">"ID_17"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span> Gender) </span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>swimmer_train2 <span class="ot">=</span> swimmer2 <span class="sc">%&gt;%</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="fu">round</span>(<span class="fl">0.8</span><span class="sc">*</span><span class="fu">nrow</span>(swimmer2)))</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>swimmer_test2 <span class="ot">=</span> swimmer2 <span class="sc">%&gt;%</span></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="sc">-</span><span class="fu">round</span>(<span class="fl">0.8</span><span class="sc">*</span><span class="fu">nrow</span>(swimmer2)))</span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Train a periodic kernel and forecast</span></span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>mod_gp_perio <span class="ot">=</span> <span class="fu">train_gp</span>(<span class="at">data =</span> swimmer_train2, <span class="at">prior_mean =</span> <span class="dv">50</span>,  <span class="at">kern =</span> <span class="st">'PERIO'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The provided 'prior_mean' argument is of length 1. Thus, the hyper-posterior mean function has set to be constant everywhere. 
+ 
+The 'ini_hp' argument has not been specified. Random values of hyper-parameters are used as initialisation.
+ </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>pred_gp_perio <span class="ot">=</span> <span class="fu">pred_gp</span>(<span class="at">data =</span> swimmer_train2, <span class="at">hp =</span> mod_gp_perio, <span class="at">kern =</span> <span class="st">'PERIO'</span>, <span class="at">grid_inputs =</span> grid_inputs, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The 'mean' argument has not been specified. The  mean function is thus set to be 0 everywhere.
+ </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(pred_gp_perio, <span class="at">data =</span> swimmer_train2) <span class="sc">+</span> </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> swimmer_test2, <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Output), <span class="at">col =</span> <span class="st">'red'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20IV-6.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Train a linear kernel and forecast</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>mod_gp_lin <span class="ot">=</span> <span class="fu">train_gp</span>(<span class="at">data =</span> swimmer_train2, <span class="at">prior_mean =</span> <span class="dv">50</span>, <span class="at">kern =</span> <span class="st">'LIN'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The provided 'prior_mean' argument is of length 1. Thus, the hyper-posterior mean function has set to be constant everywhere. 
+ 
+The 'ini_hp' argument has not been specified. Random values of hyper-parameters are used as initialisation.
+ </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>pred_gp_lin <span class="ot">=</span> <span class="fu">pred_gp</span>(<span class="at">data =</span> swimmer_train2, <span class="at">hp =</span> mod_gp_lin, <span class="at">kern =</span> <span class="st">'LIN'</span>, <span class="at">grid_inputs =</span> grid_inputs, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The 'mean' argument has not been specified. The  mean function is thus set to be 0 everywhere.
+ </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(pred_gp_lin, <span class="at">data =</span> swimmer_train2) <span class="sc">+</span> </span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> swimmer_test2, <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Output), <span class="at">col =</span> <span class="st">'red'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20IV-7.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 7 ## Create a sequence of predictions to display an animation</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>loop_pred <span class="ot">=</span> <span class="fu">pred_gif</span>(<span class="at">data =</span> swimmer, <span class="at">hp =</span> mod_gp, <span class="at">grid_inputs =</span> grid_inputs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> =&gt; 1 =&gt; 2 =&gt; 3 =&gt; 4 =&gt; 5 =&gt; 6 =&gt; 7 =&gt; 8 =&gt; 9 =&gt; 10 =&gt; 11 =&gt; 12 =&gt; 13 =&gt; 14 =&gt; 15 =&gt; 16 =&gt; 17</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>gif <span class="ot">=</span> <span class="fu">plot_gif</span>(loop_pred, <span class="at">data =</span> swimmer, <span class="at">export_gif =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="do">## 8 ## Try with a 2D example</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Import the dataset and format the train/test sets</span></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>db_gps <span class="ot">=</span> data_gps <span class="sc">%&gt;%</span></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">ID =</span> player, <span class="at">Input =</span> x, <span class="at">Input2 =</span> y, <span class="at">Time =</span> frame_id, <span class="at">Output =</span> speed) <span class="sc">%&gt;%</span></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(ID, Input, Input2, Output)</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>player <span class="ot">=</span> db_gps <span class="sc">%&gt;%</span></span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">==</span> <span class="dv">9</span>) </span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>player_train <span class="ot">=</span> player <span class="sc">%&gt;%</span></span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="fu">round</span>(<span class="fl">0.8</span><span class="sc">*</span><span class="fu">nrow</span>(player)))</span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>player_test <span class="ot">=</span> player <span class="sc">%&gt;%</span></span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="sc">-</span><span class="fu">round</span>(<span class="fl">0.8</span><span class="sc">*</span><span class="fu">nrow</span>(player)))</span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Train a 2D-Input GP model for this player</span></span>
+<span id="cb52-19"><a href="#cb52-19" aria-hidden="true" tabindex="-1"></a>mod_gp_2D <span class="ot">=</span> <span class="fu">train_gp</span>(<span class="at">data =</span> player_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The 'prior_mean' argument has not been specified. The mean function is thus set to be 0 everywhere.
+ 
+The 'ini_hp' argument has not been specified. Random values of hyper-parameters are used as initialisation.
+ </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a 2D grid of inputs for predictions with a dedicated function</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>grid_inputs_2D <span class="ot">=</span> <span class="fu">expand_grid_inputs</span>(</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Input =</span> <span class="fu">seq</span>(<span class="dv">60</span>, <span class="dv">95</span>, <span class="dv">1</span>),</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Input2 =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="dv">1</span>)</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Make predictions on the grid</span></span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>pred_gp_2D <span class="ot">=</span> <span class="fu">pred_gp</span>(<span class="at">data =</span> player_train, <span class="at">hp =</span> mod_gp_2D, <span class="at">grid_inputs =</span> grid_inputs_2D, <span class="at">plot =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The 'mean' argument has not been specified. The  mean function is thus set to be 0 everywhere.
+ </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot results and add 2D testing points with labels of true Output values</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(pred_gp_2D, <span class="at">data =</span> player_train) <span class="sc">+</span> </span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> player_test,</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>     <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Input2, <span class="at">label =</span> <span class="fu">round</span>(Output, <span class="dv">1</span>)), <span class="at">col =</span> <span class="st">"#16e30fff"</span>, <span class="at">check_overlap =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20IV-8.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="v-apprentissage-par-processus-gaussiens-multi-tâches" class="level1">
+<h1>V) Apprentissage par processus gaussiens multi-tâches :</h1>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objectif
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Découvrir le paradime multi-tâches pour l’apprentissage par processus gaussiens, pour la modéliser simultanément de multiples données fonctionnelles issues d’un même phénomène. L’implémentation repose toujours sur le package MagmaClustR dont la documentation est disponible ici : <a href="https://arthurleroy.github.io/MagmaClustR/" class="uri">https://arthurleroy.github.io/MagmaClustR/</a></p>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href="">Questions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href="">Conseils</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" role="tab" aria-controls="tabset-5-3" aria-selected="false" href="">Solutions</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<ol type="1">
+<li><p>Reprendre le format attendu par les fonctions du package MagmaClustR (ID, Input, Ouput), en conservant cette fois plusieurs individus pour l’entrainement. Pour conserver des temps de calculs raisonnables, conserver 30 individus. Choisir et extraire un individu de l’ensemble d’entrainement, et séparer ses données en 50% pour la prédiction et 50% pour le testing.</p></li>
+<li><p>Entrainer un modèle de processus gaussien multi-tâche via l’algorithme <em>Magma</em> sur ces données. Afficher le tableau des hyper-paramètres optimaux obtenus pour les individus, puis la distribution a posteriori du processus moyen (stockée dans l’élément <code>$hyperpost$pred</code> du modèle entrainé) a posteriori via la fonction <code>plot_gp()</code>.</p></li>
+<li><p>Entrainer un nouveau modèle en optimisant des hyper-paramètres individu-spécifiques grâce à l’argument <code>common_hp_i = FALSE</code>. Afficher le nouveau tableau des hyper-paramètres optimaux des individus, ainsi que le graphique du processus moyen a posteriori.</p></li>
+<li><p>Utiliser à nouveau la grille d’inputs pour calculer la loi a posteriori de l’individu de test en fournissant ses données partiellement observées à la fonction de prédiction. Afficher le tableau des prédictions (moyenne et variance) pour chaque point de la grille, puis relancer la fonction de prédiction en spécifiant l’argument <code>get_hyperpost = TRUE</code> pour obtenir également la loi hyper-posterior du processus moyen.</p></li>
+<li><p>Utiliser la fonction <code>plot_magma()</code> pour personaliser la visualisation des résultats. Commencer par afficher la prédiction minimale, puis via les arguments supplémentaires, ajouter au graphique les données d’entrainement, les données de prédiction. Constater que le graphique inclus en ligne pointillée le processus moyen issu de l’entrainement multi-tâches (conséquence de l’argument <code>get_hyperpost = TRUE</code> pendant la prédiction). Ajouter au graphique obtenu les points de test, en rouge, pour visualiser et discuter les erreurs de prédiction.</p></li>
+<li><p>Calculer une nouvelle prédiction en utilisant le modèle entrainé avec l’argument <code>common_hp_i = FALSE</code> et comparer les résultats obtenus dans le cas d’hyper-paramètres partagés et individu-spécifiques. Que constatez-vous ?</p></li>
+</ol>
+<!-- 7. (Bonus) En utilisant un des modèles préalablement entrainés, utiliser la fonction `hyperposterior` afin de pré-calculer (pour accélérer des prédictions répétées) la loi hyper-posteriori du processus moyen sur une grille de prédiction contenant l'ensemble des valeurs d'Input du jeu de données. Ensuite, définir une boucle sur l'ensemble des individus pour calculer chaque prédiction en utilisant seulement une portion des données à chaque fois (par exemple 50%). Les 50% restant sont utilisés comme données de test, pour calculer des métriques d'erreur de prédiction (RMSE, calibration de l'intervalle de crédibilité). -->
+<ol start="7" type="1">
+<li><p>(Bonus) Utiliser les fonctions <code>pred_gif()</code> et <code>plot_gif()</code> pour créer votre propre animation de la prédiction par processus gaussien multi-tâches au fil du temps. Comparer cette animation à celle précédemment obtenue pour un processus gaussien simple.</p></li>
+<li><p>(Bonus) Utiliser le jeu de données <code>data_GPS_rugby_with_speed</code> pour répéter les étapes précédentes sur des données en 2-dimensions. Les données observées en 2D sur une grille très fine peuvent rapidement devenir coûteuses à entrainer dans un cadre multi-tâches. Il peut alors être utile de sous-échantillonner en utilisant la fonction dédiée du package <code>regularise_data()</code>. Vous pouvez ainsi modéliser et prédire la vitesse d’un joueur de rugby en fonction de sa position sur le terrain (coordonnées X et Y). Comparer à nouveau les résultats obtenus avec un processus gaussien simple et multi-tâches.</p></li>
+</ol>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<p>Vous pouvez utiliser :</p>
+<ol type="1">
+<li><p>La fonction <code>train_magma()</code> pour entraîner un GP multi-tâches sur un sous-ensemble d’individus (<code>data = db</code>).</p>
+<ul>
+<li>Comparer hyper-paramètres <em>partagés</em> vs <em>spécifiques</em> avec l’argument <code>common_hp = TRUE/FALSE</code>.<br>
+</li>
+<li>Inspecter <code>MODEL$hp_i</code> (tibble des HP par individu) et <code>MODEL$hyperpost$pred</code> (processus moyen a posteriori).</li>
+</ul></li>
+<li><p>La création d’une grille d’inputs avec <code>seq()</code> (1D) ou <code>expand_grid_inputs()</code> (2D) pour les prédictions (<code>grid_inputs = ...</code>).</p>
+<ul>
+<li>Conserver une taille raisonnable (&lt; ~2000 points) pour limiter le temps de calcul.</li>
+</ul></li>
+<li><p>La fonction <code>pred_magma()</code> pour la prédiction d’un individu partiellement observé (<code>data = swimmer_pred</code>, <code>trained_model = mod_magma</code>, <code>grid_inputs = ...</code>).</p>
+<ul>
+<li>Ajouter <code>get_hyperpost = TRUE</code> pour récupérer la loi hyper-postérieure du processus moyen ; utiliser <code>plot = FALSE</code> pour obtenir le tibble (moyenne/variance).</li>
+</ul></li>
+<li><p>La fonction <code>plot_magma()</code> pour visualiser la distribution prédictive.</p>
+<ul>
+<li>Paramètres utiles : <code>pred</code> (objet de <code>pred_magma()</code>), <code>data</code> (données de l’individu), <code>data_train</code> (pour afficher les autres individus).<br>
+</li>
+<li>Ajouter au besoin les points de test : <code>+ geom_point(..., col = 'red')</code>.</li>
+</ul></li>
+<li><p>La comparaison des réglages via un second entraînement avec <code>train_magma(..., common_hp = FALSE)</code> puis <code>pred_magma(...)</code> sur le même individu/grille pour comparer les prédictions.</p></li>
+<li><p>L’animation avec <code>pred_gif()</code> puis <code>plot_gif(..., export_gif = TRUE, path = "magma.gif")</code> pour sauvegarder un GIF (fournir un chemin <strong>.gif</strong> valide afin d’éviter la création de PNG temporaires).</p></li>
+</ol>
+</div>
+<div id="tabset-5-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set a seed for reproducibility</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ## Subset 100 swimmers, format, extract a testing individual and split into prediction and testing sets</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>db <span class="ot">=</span> db_swim <span class="sc">%&gt;%</span></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">%in%</span> <span class="fu">paste0</span>(<span class="st">'ID_'</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span> Gender)</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>swimmer <span class="ot">=</span> db_swim <span class="sc">%&gt;%</span></span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">==</span> <span class="st">'ID_101'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span> Gender)</span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a>swimmer_pred <span class="ot">=</span> swimmer <span class="sc">%&gt;%</span></span>
+<span id="cb57-14"><a href="#cb57-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="fu">nrow</span>(swimmer)<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb57-15"><a href="#cb57-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-16"><a href="#cb57-16" aria-hidden="true" tabindex="-1"></a>swimmer_test <span class="ot">=</span> swimmer <span class="sc">%&gt;%</span></span>
+<span id="cb57-17"><a href="#cb57-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="fu">nrow</span>(swimmer)<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb57-18"><a href="#cb57-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-19"><a href="#cb57-19" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 ## Train a Multi-Task GP model on the dataset with the algorithm Magma</span></span>
+<span id="cb57-20"><a href="#cb57-20" aria-hidden="true" tabindex="-1"></a>mod_magma <span class="ot">=</span> <span class="fu">train_magma</span>(<span class="at">data =</span> db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The 'prior_mean' argument has not been specified. The hyper_prior mean function is thus set to be 0 everywhere.
+ 
+The 'ini_hp_0' argument has not been specified. Random values of hyper-parameters for the mean process are used as initialisation.
+ 
+The 'ini_hp_i' argument has not been specified. Random values of hyper-parameters for the individal processes are used as initialisation.
+ 
+EM algorithm, step 1: 16.41 seconds 
+ 
+Value of the likelihood: -1915.9799 --- Convergence ratio = Inf
+ 
+EM algorithm, step 2: 3.99 seconds 
+ 
+Value of the likelihood: -1876.00712 --- Convergence ratio = 0.02131
+ 
+EM algorithm, step 3: 4.14 seconds 
+ 
+Value of the likelihood: -1872.94807 --- Convergence ratio = 0.00163
+ 
+EM algorithm, step 4: 8.92 seconds 
+ 
+Value of the likelihood: -1871.44354 --- Convergence ratio = 8e-04
+ 
+The EM algorithm successfully converged, training is completed. 
+ </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the tibble of all individual hyperparameters of the kernels</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>mod_magma<span class="sc">$</span>hp_i</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 4
+   ID    se_variance se_lengthscale   noise
+   &lt;chr&gt;       &lt;dbl&gt;          &lt;dbl&gt;   &lt;dbl&gt;
+ 1 ID_1         3.14           1.75 -0.0220
+ 2 ID_10        3.14           1.75 -0.0220
+ 3 ID_11        3.14           1.75 -0.0220
+ 4 ID_12        3.14           1.75 -0.0220
+ 5 ID_13        3.14           1.75 -0.0220
+ 6 ID_14        3.14           1.75 -0.0220
+ 7 ID_15        3.14           1.75 -0.0220
+ 8 ID_16        3.14           1.75 -0.0220
+ 9 ID_17        3.14           1.75 -0.0220
+10 ID_18        3.14           1.75 -0.0220
+# ℹ 20 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the hyperposterior distribution of the mean process</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(mod_magma<span class="sc">$</span>hyperpost<span class="sc">$</span>pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20V-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 ## Retrain a Multi-Task GP model with individual-specific hyperparameters</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>mod_magma_dif_hp <span class="ot">=</span> <span class="fu">train_magma</span>(<span class="at">data =</span> db, <span class="at">common_hp =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The 'prior_mean' argument has not been specified. The hyper_prior mean function is thus set to be 0 everywhere.
+ 
+The 'ini_hp_0' argument has not been specified. Random values of hyper-parameters for the mean process are used as initialisation.
+ 
+The 'ini_hp_i' argument has not been specified. Random values of hyper-parameters for the individal processes are used as initialisation.
+ 
+EM algorithm, step 1: 8.32 seconds 
+ 
+Value of the likelihood: -1852.81285 --- Convergence ratio = Inf
+ 
+EM algorithm, step 2: 4.42 seconds 
+ 
+Value of the likelihood: -1790.43834 --- Convergence ratio = 0.03484
+ 
+EM algorithm, step 3: 3.57 seconds 
+ 
+Value of the likelihood: -1776.19267 --- Convergence ratio = 0.00802
+ 
+EM algorithm, step 4: 3.42 seconds 
+ 
+Value of the likelihood: -1763.74407 --- Convergence ratio = 0.00706
+ 
+EM algorithm, step 5: 3.23 seconds 
+ 
+Value of the likelihood: -1753.93591 --- Convergence ratio = 0.00559
+ 
+EM algorithm, step 6: 3.32 seconds 
+ 
+Value of the likelihood: -1749.80156 --- Convergence ratio = 0.00236
+ 
+EM algorithm, step 7: 3.35 seconds 
+ 
+Value of the likelihood: -1746.83703 --- Convergence ratio = 0.0017
+ 
+EM algorithm, step 8: 7.91 seconds 
+ 
+Value of the likelihood: -1745.20604 --- Convergence ratio = 0.00093
+ 
+The EM algorithm successfully converged, training is completed. 
+ </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>mod_magma_dif_hp<span class="sc">$</span>hp_i</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 4
+   ID    se_variance se_lengthscale   noise
+   &lt;chr&gt;       &lt;dbl&gt;          &lt;dbl&gt;   &lt;dbl&gt;
+ 1 ID_1       -1.84         5.27    -1.50  
+ 2 ID_10       3.75         4.62    -0.739 
+ 3 ID_11       3.66         1.36    -0.485 
+ 4 ID_12       2.34         1.83    -0.568 
+ 5 ID_13       2.01         0.00451 -0.313 
+ 6 ID_14       0.287        5.98    -1.05  
+ 7 ID_15      -0.936        1.74     0.326 
+ 8 ID_16       4.39         1.51    -0.368 
+ 9 ID_17       1.56        -2.59     0.672 
+10 ID_18       4.37         2.49     0.0627
+# ℹ 20 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(mod_magma_dif_hp<span class="sc">$</span>hyperpost<span class="sc">$</span>pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20V-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 ## Make predictions on a grid of inputs for the testing individual</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">=</span> <span class="fu">pred_magma</span>(<span class="at">data =</span> swimmer_pred, <span class="at">trained_model =</span> mod_magma, <span class="at">grid_inputs =</span> grid_inputs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The hyper-posterior distribution of the mean process provided in 'hyperpost' argument isn't evaluated on the expected inputs.
+ 
+ Start evaluating the hyper-posterior on the correct inputs...
+ 
+The 'prior_mean' argument has not been specified. The hyper-prior mean function is thus set to be 0 everywhere.
+ 
+Done!
+ </code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20V-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_magma</span>(pred, <span class="at">data =</span> swimmer_pred, <span class="at">data_train =</span> db) <span class="sc">+</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> swimmer_test, <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Output), <span class="at">col =</span> <span class="st">'red'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20V-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the predictive distribution and display it as a tibble</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pred_magma</span>(</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> swimmer_pred,</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">trained_model =</span> mod_magma,</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid_inputs =</span> grid_inputs, </span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The hyper-posterior distribution of the mean process provided in 'hyperpost' argument isn't evaluated on the expected inputs.
+ 
+ Start evaluating the hyper-posterior on the correct inputs...
+ 
+The 'prior_mean' argument has not been specified. The hyper-prior mean function is thus set to be 0 everywhere.
+ 
+Done!
+ </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 101 × 3
+    Mean   Var Input
+   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1  79.9  3.89  10  
+ 2  79.8  3.32  10.1
+ 3  79.6  2.86  10.2
+ 4  79.5  2.51  10.3
+ 5  79.3  2.24  10.4
+ 6  79.0  2.06  10.5
+ 7  78.8  1.94  10.6
+ 8  78.6  1.87  10.7
+ 9  78.3  1.86  10.8
+10  78.0  1.87  10.9
+# ℹ 91 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the same distribution but keep the hyperposterior distribution of the mean process</span></span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">=</span> <span class="fu">pred_magma</span>(</span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> swimmer_pred,</span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">trained_model =</span> mod_magma,</span>
+<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid_inputs =</span> grid_inputs,</span>
+<span id="cb73-6"><a href="#cb73-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb73-7"><a href="#cb73-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">get_hyperpost =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The hyper-posterior distribution of the mean process provided in 'hyperpost' argument isn't evaluated on the expected inputs.
+ 
+ Start evaluating the hyper-posterior on the correct inputs...
+ 
+The 'prior_mean' argument has not been specified. The hyper-prior mean function is thus set to be 0 everywhere.
+ 
+Done!
+ </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 ## Plot the predictive distribution along with the training and testing data</span></span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Minimal plot with hyperposterior of the mean process (dashed line)</span></span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_magma</span>(pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20V-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add data from training individuals</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_magma</span>(pred, <span class="at">data_train =</span> db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20V-6.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add prediction data from the testing individual</span></span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_magma</span>(pred, <span class="at">data =</span> swimmer_pred, <span class="at">data_train =</span> db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20V-7.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add testing data from the testing individual</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_magma</span>(pred, <span class="at">data =</span> swimmer_pred, <span class="at">data_train =</span> db) <span class="sc">+</span></span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> swimmer_test, <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Output), <span class="at">col =</span> <span class="st">'red'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20V-8.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 6 ## Compute predictions with individual-specific hyperparameters</span></span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a><span class="co"># This will optimise new hyperparameters for the testing individual</span></span>
+<span id="cb79-4"><a href="#cb79-4" aria-hidden="true" tabindex="-1"></a>pred_dif_hp <span class="ot">=</span> <span class="fu">pred_magma</span>(</span>
+<span id="cb79-5"><a href="#cb79-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> swimmer_pred,</span>
+<span id="cb79-6"><a href="#cb79-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">trained_model =</span> mod_magma_dif_hp,</span>
+<span id="cb79-7"><a href="#cb79-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid_inputs =</span> grid_inputs,</span>
+<span id="cb79-8"><a href="#cb79-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb79-9"><a href="#cb79-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">get_hyperpost =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The hyper-posterior distribution of the mean process provided in 'hyperpost' argument isn't evaluated on the expected inputs.
+ 
+ Start evaluating the hyper-posterior on the correct inputs...
+ 
+The 'prior_mean' argument has not been specified. The hyper-prior mean function is thus set to be 0 everywhere.
+ 
+Done!
+ 
+The 'hp' argument has not been specified. The 'train_gp()' function (with random initialisation) has been used to learn ML estimators for the hyper-parameters associated with the 'kern' argument.
+ </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the prediction with individual-specific hyperparameters and compare with the previous one</span></span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_magma</span>(pred_dif_hp, <span class="at">data =</span> swimmer_pred, <span class="at">data_train =</span> db) <span class="sc">+</span></span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> swimmer_test, <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Output), <span class="at">col =</span> <span class="st">'red'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20V-9.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 8 ## Create and plot an animation of the prediction over time</span></span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>loop_pred_magma <span class="ot">=</span> <span class="fu">pred_gif</span>(</span>
+<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> swimmer,</span>
+<span id="cb82-5"><a href="#cb82-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">trained_model =</span> mod_magma,</span>
+<span id="cb82-6"><a href="#cb82-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid_inputs =</span> grid_inputs,</span>
+<span id="cb82-7"><a href="#cb82-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> =&gt; 1 =&gt; 2 =&gt; 3 =&gt; 4 =&gt; 5 =&gt; 6 =&gt; 7 =&gt; 8 =&gt; 9 =&gt; 10 =&gt; 11 =&gt; 12 =&gt; 13 =&gt; 14 =&gt; 15 =&gt; 16 =&gt; 17 =&gt; 18 =&gt; 19 =&gt; 20</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>gif_magma <span class="ot">=</span> <span class="fu">plot_gif</span>(loop_pred_magma, <span class="at">data =</span> swimmer, <span class="at">export_gif =</span> <span class="cn">TRUE</span>, <span class="at">path =</span> <span class="st">"gif_magma.gif"</span>)</span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a><span class="do">## 9 ## Repeat the previous steps with the 2D rugby data </span></span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Sub-sample the data set by regularising the input space on a grid of size 50x50</span></span>
+<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a>sub_db_gps <span class="ot">=</span> db_gps <span class="sc">%&gt;%</span></span>
+<span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">regularise_data</span>(<span class="at">size_grid =</span> <span class="dv">50</span>)</span>
+<span id="cb84-8"><a href="#cb84-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-9"><a href="#cb84-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualise the difference between original and sub-sampled data</span></span>
+<span id="cb84-10"><a href="#cb84-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(db_gps) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Input2, <span class="at">col =</span> Output, <span class="at">group =</span> ID)) <span class="sc">+</span> <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20V-10.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sub_db_gps) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Input2, <span class="at">col =</span> Output, <span class="at">group =</span> ID)) <span class="sc">+</span> <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20V-11.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select a player (sub-sampling is not required because prediction is cheap), split into train/test sets</span></span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>player <span class="ot">=</span> db_gps <span class="sc">%&gt;%</span></span>
+<span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">==</span> <span class="dv">9</span>)</span>
+<span id="cb86-4"><a href="#cb86-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb86-5"><a href="#cb86-5" aria-hidden="true" tabindex="-1"></a>player_train <span class="ot">=</span> player <span class="sc">%&gt;%</span></span>
+<span id="cb86-6"><a href="#cb86-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="fu">round</span>(<span class="fl">0.8</span><span class="sc">*</span><span class="fu">nrow</span>(player)))</span>
+<span id="cb86-7"><a href="#cb86-7" aria-hidden="true" tabindex="-1"></a>player_test <span class="ot">=</span> player <span class="sc">%&gt;%</span></span>
+<span id="cb86-8"><a href="#cb86-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="sc">-</span><span class="fu">round</span>(<span class="fl">0.8</span><span class="sc">*</span><span class="fu">nrow</span>(player)))</span>
+<span id="cb86-9"><a href="#cb86-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb86-10"><a href="#cb86-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Train a 2D-Input GP model on the sub-sampled dataset (without the testing player)</span></span>
+<span id="cb86-11"><a href="#cb86-11" aria-hidden="true" tabindex="-1"></a>mod_magma_2D <span class="ot">=</span> <span class="fu">train_magma</span>(<span class="at">data =</span> sub_db_gps <span class="sc">%&gt;%</span> <span class="fu">filter</span>(ID <span class="sc">!=</span> <span class="dv">9</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The 'prior_mean' argument has not been specified. The hyper_prior mean function is thus set to be 0 everywhere.
+ 
+The 'ini_hp_0' argument has not been specified. Random values of hyper-parameters for the mean process are used as initialisation.
+ 
+The 'ini_hp_i' argument has not been specified. Random values of hyper-parameters for the individal processes are used as initialisation.
+ 
+EM algorithm, step 1: 2.54 seconds 
+ 
+Value of the likelihood: -1041.77569 --- Convergence ratio = Inf
+ 
+EM algorithm, step 2: 2.49 seconds 
+ 
+Value of the likelihood: -1017.20409 --- Convergence ratio = 0.02416
+ 
+EM algorithm, step 3: 2.65 seconds 
+ 
+Value of the likelihood: -999.9191 --- Convergence ratio = 0.01729
+ 
+EM algorithm, step 4: 2.85 seconds 
+ 
+Value of the likelihood: -987.20051 --- Convergence ratio = 0.01288
+ 
+EM algorithm, step 5: 3.43 seconds 
+ 
+Value of the likelihood: -971.94643 --- Convergence ratio = 0.01569
+ 
+EM algorithm, step 6: 3.01 seconds 
+ 
+Value of the likelihood: -957.37594 --- Convergence ratio = 0.01522
+ 
+EM algorithm, step 7: 3.66 seconds 
+ 
+Value of the likelihood: -944.49224 --- Convergence ratio = 0.01364
+ 
+EM algorithm, step 8: 4.35 seconds 
+ 
+Value of the likelihood: -932.68132 --- Convergence ratio = 0.01266
+ 
+EM algorithm, step 9: 5 seconds 
+ 
+Value of the likelihood: -922.0025 --- Convergence ratio = 0.01158
+ 
+EM algorithm, step 10: 3.46 seconds 
+ 
+Value of the likelihood: -909.24872 --- Convergence ratio = 0.01403
+ 
+EM algorithm, step 11: 3.25 seconds 
+ 
+Value of the likelihood: -898.96669 --- Convergence ratio = 0.01144
+ 
+EM algorithm, step 12: 2.82 seconds 
+ 
+Value of the likelihood: -891.28835 --- Convergence ratio = 0.00861
+ 
+EM algorithm, step 13: 2.34 seconds 
+ 
+Value of the likelihood: -885.87724 --- Convergence ratio = 0.00611
+ 
+EM algorithm, step 14: 2.26 seconds 
+ 
+Value of the likelihood: -882.09722 --- Convergence ratio = 0.00429
+ 
+EM algorithm, step 15: 2.31 seconds 
+ 
+Value of the likelihood: -879.40755 --- Convergence ratio = 0.00306
+ 
+EM algorithm, step 16: 2.34 seconds 
+ 
+Value of the likelihood: -877.76553 --- Convergence ratio = 0.00187
+ 
+EM algorithm, step 17: 1.84 seconds 
+ 
+Value of the likelihood: -877.00711 --- Convergence ratio = 0.00086
+ 
+The EM algorithm successfully converged, training is completed. 
+ </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make predictions on the previous 2D grid of inputs</span></span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a>pred_magma_2D <span class="ot">=</span> <span class="fu">pred_magma</span>(</span>
+<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> player_train,</span>
+<span id="cb88-4"><a href="#cb88-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">trained_model =</span> mod_magma_2D,</span>
+<span id="cb88-5"><a href="#cb88-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid_inputs =</span> grid_inputs_2D,</span>
+<span id="cb88-6"><a href="#cb88-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The hyper-posterior distribution of the mean process provided in 'hyperpost' argument isn't evaluated on the expected inputs.
+ 
+ Start evaluating the hyper-posterior on the correct inputs...
+ 
+The 'prior_mean' argument has not been specified. The hyper-prior mean function is thus set to be 0 everywhere.
+ 
+Done!
+ </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot results and add 2D testing points with labels of true Output values</span></span>
+<span id="cb90-2"><a href="#cb90-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(pred_magma_2D, <span class="at">data =</span> player_train) <span class="sc">+</span> </span>
+<span id="cb90-3"><a href="#cb90-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> player_test,</span>
+<span id="cb90-4"><a href="#cb90-4" aria-hidden="true" tabindex="-1"></a>     <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Input2, <span class="at">label =</span> <span class="fu">round</span>(Output, <span class="dv">1</span>)), <span class="at">col =</span> <span class="st">"#16e30fff"</span>, <span class="at">check_overlap =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20V-12.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="vi-modélisation-clustering-et-prédiction-simultanés" class="level1">
+<h1>VI) Modélisation, clustering et prédiction simultanés :</h1>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objectif
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Etendre le cadre de l’apprentissage GPs multi-tâches pour introduire la prise en compte d’un clustering (via un modèle de mélange de GPs), en complément de la modélisation et de la prédiction de données fonctionnelles. Rappel de la documentation : <a href="https://arthurleroy.github.io/MagmaClustR/" class="uri">https://arthurleroy.github.io/MagmaClustR/</a></p>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true" href="">Questions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false" href="">Conseils</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-3" role="tab" aria-controls="tabset-6-3" aria-selected="false" href="">Solutions</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<ol type="1">
+<li><p>Réutiliser la base de données d’entrainement au format attendu, ainsi que l’individu de test, partiellement observé (50% des données pour la prédiction, 50% pour le test). Entrainer un modèle de mélange de GPs multi-tâches via l’algorithme <em>MagmaClust</em> sur ces données, en spécifiant un nombre de clusters égal à <span class="math inline">\(2\)</span> et une moyenne a priori égale à la moyenne empirique des Ouputs dans le dataset (via l’argument <code>prior_mean_k</code>).</p></li>
+<li><p>Afficher le tableau des probabilités d’appartenance à chaque cluster pour chaque individu (via l’élément <code>$hyperpost$mixture</code>), ainsi que la distribution a posteriori chaque processus moyen cluster-spécifique (stockée dans un élément du type <code>$hyperpost$pred$K1</code> du modèle entrainé) a posteriori via la fonction <code>plot_gp()</code>.</p></li>
+<li><p>Calculer une prédiction ‘générique’ pour un nouvel individu jamais observé en laissant l’argument <code>data=NULL</code> dans la fonction de prédiction. A quoi correspond cette prédiction selon vous, et en quoi est-elle différente des processus moyens cluster-spécifiques ?</p></li>
+<li><p>Calculer maintenant la prédiction pour l’individu de test partiellement observées sur une grille d’inputs, en spécifiant les arguments <code>get_hyperpost = TRUE</code> pour obtenir la loi hyper-posteriori du processus moyen, ainsi que <code>get_full_cov = TRUE</code> pour la matrice de covariance prédictive complète (et pas seulement la variance ponctuelle). Afficher la probabilité d’appartenance à chaque cluster pour l’individu de test.</p></li>
+<li><p>Calculer le cluster d’appartenance le plus probable pour tous les individus d’entrainement à l’aide de la fonction <code>data_allocate_cluster()</code>, et afficher le nouveau tibble de données obtenu.</p></li>
+<li><p>Utiliser la fonction <code>plot_magmaclust()</code> pour personnaliser la visualisation des résultats. Ajouter les données d’entrainement coloriées par cluster d’appartenance (avec l’argument <code>col_clust = TRUE</code>), les données de prédiction, les processus moyens cluster-spécifiques (via l’argument <code>prior_mean = MODEL$hyperpost$mean</code>), puis représenter l’incertitude avec des échantillons plutôt qu’une bande de crédibilité (grâce à l’argument <code>samples = TRUE</code>). Ajouter au graphique les points de test, en <strong>vert</strong>, pour visualiser et discuter les erreurs de prédiction.</p></li>
+</ol>
+<!-- 6. Visualiser les différentes prédictions cluster-spécifiques pour l'individu de test, en changeant la valeur de l'argument `cluster`. Comparer les résultats obtenus pour chaque cluster, et discuter de la pertinence de chaque prédiction en fonction de la probabilité d'appartenance associée. Comparer ces prédictions à la prédiction du mélange de GPs obtenue lorsque l'argument `cluster = 'all'`. -->
+<ol start="7" type="1">
+<li>(Bonus) Chercher sur internet la valeur actuelle du record de France du 100m nage libre masculin et féminin. Utiliser la fonction <code>sample_magmaclust()</code> pour générer 1000 échantillons à partir de la prédiction d’un.e nageur.euse utilisant ses données de performance jusqu’à 16 ans. En calculant la proportion d’échantillons dont la trajectoire descend sous le temps du record de France, et déterminer la probabilité qu’il/elle batte ce record entre 16 et 20 ans ?</li>
+</ol>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<p>Vous pouvez utiliser :</p>
+<ol type="1">
+<li><p>La fonction <code>train_magmaclust()</code> pour entraîner un mélange de GPs multi-tâches (<code>data = db</code>, <code>nb_cluster = K</code>). Explorer <code>MODEL$hyperpost$mixture</code> (probas d’appartenance) et <code>MODEL$hyperpost$pred$K1/K2/...</code> (processus moyens cluster-spécifiques).</p></li>
+<li><p>La fonction <code>pred_magmaclust()</code> pour la prédiction :</p>
+<ul>
+<li>Générique (nouvel individu sans données) avec <code>data = NULL</code>.<br>
+</li>
+<li>Individu partiel avec <code>data = swimmer_pred</code>, <code>grid_inputs = ...</code>, et options <code>get_hyperpost = TRUE</code> (processus moyen) et <code>get_full_cov = TRUE</code> (matrice de covariance complète).</li>
+</ul></li>
+<li><p>La grille d’inputs comme en section V (<code>seq()</code> / <code>expand_grid_inputs()</code>), en veillant à des tailles raisonnables pour la stabilité et la vitesse.</p></li>
+<li><p>L’attribution de cluster la plus probable pour les individus d’entraînement avec <code>data_allocate_cluster(MODEL)</code> afin d’obtenir un tibble enrichi (ID + cluster).</p></li>
+<li><p>La fonction <code>plot_magmaclust()</code> pour visualiser les prédictions du mélange :</p>
+<ul>
+<li>Paramètres utiles : <code>pred</code>, <code>data</code> (individu), <code>data_train</code> (avec <code>col_clust = TRUE</code>), <code>prior_mean = MODEL$hyperpost$mean</code>, <code>samples = TRUE</code> (incertitude par échantillons).<br>
+</li>
+<li>Ajouter les points de test en <strong>vert</strong> : <code>+ geom_point(..., col = 'green')</code>.</li>
+</ul></li>
+<li><p>La comparaison entre prédiction du mélange et prédictions cluster-spécifiques (en changeant <code>cluster</code> ou en traçant <code>MODEL$hyperpost$pred$K1/K2/...</code>) pour discuter des effets d’appartenance.</p></li>
+<li><p>La simulation avec <code>sample_magmaclust(pred_obj, nb_samples = 1000)</code> pour estimer des probabilités d’événements (ex. franchir un seuil) ; visualiser le seuil avec <code>geom_hline()</code> et fixer une seed pour la reproductibilité.</p></li>
+</ol>
+</div>
+<div id="tabset-6-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set a seed for reproducibility</span></span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb91-3"><a href="#cb91-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-4"><a href="#cb91-4" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ## Train a Magmaclust model on a subset of swimmers</span></span>
+<span id="cb91-5"><a href="#cb91-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-6"><a href="#cb91-6" aria-hidden="true" tabindex="-1"></a>mod_clust <span class="ot">=</span> <span class="fu">train_magmaclust</span>(<span class="at">data =</span> db, <span class="at">nb_cluster =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The 'ini_hp_i' argument has not been specified. Random values of hyper-parameters for the individual processes are used as initialisation.
+ 
+The 'ini_hp_k' argument has not been specified. Random values of hyper-parameters for the mean processes are used as initialisation.
+ 
+The 'prior_mean' argument has not been specified. The hyper_prior mean function is thus set to be 0 everywhere.
+ 
+VEM algorithm, step 1: 13.77 seconds 
+ 
+Value of the elbo: -2622.35094 --- Convergence ratio = Inf
+ 
+VEM algorithm, step 2: 6.54 seconds 
+ 
+Value of the elbo: -2544.7667 --- Convergence ratio = 0.03049
+ 
+VEM algorithm, step 3: 13.24 seconds 
+ 
+Value of the elbo: -2539.06337 --- Convergence ratio = 0.00225
+ 
+VEM algorithm, step 4: 5.75 seconds 
+ 
+Value of the elbo: -2536.66247 --- Convergence ratio = 0.00095
+ 
+The EM algorithm successfully converged, training is completed. 
+ </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 ## Display the probability of cluster memberships for all swimmers</span></span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>mod_clust<span class="sc">$</span>hyperpost<span class="sc">$</span>mixture <span class="sc">%&gt;%</span> <span class="fu">print</span>(<span class="at">n=</span><span class="dv">30</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 3
+   ID         K1      K2
+   &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+ 1 ID_4  1.000   0.00002
+ 2 ID_12 0.835   0.165  
+ 3 ID_17 1       0      
+ 4 ID_19 1       0      
+ 5 ID_3  1       0      
+ 6 ID_26 0.00128 0.999  
+ 7 ID_24 0.0270  0.973  
+ 8 ID_13 0.999   0.00058
+ 9 ID_25 0.0706  0.929  
+10 ID_22 0.203   0.797  
+11 ID_20 0.916   0.0838 
+12 ID_16 0.877   0.123  
+13 ID_7  0.208   0.792  
+14 ID_6  0.983   0.0173 
+15 ID_5  0.327   0.673  
+16 ID_29 0.840   0.160  
+17 ID_9  0.0220  0.978  
+18 ID_23 0.337   0.663  
+19 ID_11 0.968   0.0320 
+20 ID_2  0.841   0.159  
+21 ID_28 0.104   0.896  
+22 ID_8  0.180   0.820  
+23 ID_27 0.0382  0.962  
+24 ID_21 0.366   0.634  
+25 ID_18 0.946   0.0536 
+26 ID_1  0.193   0.807  
+27 ID_10 0.879   0.121  
+28 ID_15 0.101   0.899  
+29 ID_30 0.989   0.0112 
+30 ID_14 0.225   0.775  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the cluster-specific mean process for each cluster</span></span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(mod_clust<span class="sc">$</span>hyperpost<span class="sc">$</span>pred<span class="sc">$</span>K1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20VI-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(mod_clust<span class="sc">$</span>hyperpost<span class="sc">$</span>pred<span class="sc">$</span>K2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20VI-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 ## Predict on a grid of inputs for a new swimmer with no data point</span></span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a>pred_swim <span class="ot">=</span> <span class="fu">pred_magmaclust</span>(<span class="at">data =</span> <span class="cn">NULL</span>, <span class="at">trained_model =</span> mod_clust)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20VI-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="do">## This prediction is a mixture of cluster-specific predictions weighted by the membership proportions</span></span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a><span class="do">## It does not use any individual-specific information, and stands as a 'generic' prediction</span></span>
+<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-4"><a href="#cb98-4" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 ## Compute predictions for the testing swimmer</span></span>
+<span id="cb98-5"><a href="#cb98-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-6"><a href="#cb98-6" aria-hidden="true" tabindex="-1"></a>pred_clust <span class="ot">=</span> <span class="fu">pred_magmaclust</span>(</span>
+<span id="cb98-7"><a href="#cb98-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> swimmer_pred, </span>
+<span id="cb98-8"><a href="#cb98-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">trained_model =</span> mod_clust,</span>
+<span id="cb98-9"><a href="#cb98-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid_inputs =</span> grid_inputs,</span>
+<span id="cb98-10"><a href="#cb98-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">get_hyperpost =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb98-11"><a href="#cb98-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">get_full_cov =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The hyper-posterior distribution of the mean process provided in 'hyperpost' argument isn't evaluated on the expected inputs. Start evaluating the hyper-posterior on the correct inputs...
+ 
+The 'prior_mean_k' argument has not been specified. The hyper-prior  mean functions are thus set to be 0 everywhere.
+ 
+Done!
+ </code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20VI-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the cluster membership probabilities for the testing swimmer</span></span>
+<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a>pred_clust<span class="sc">$</span>mixture</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  ID        K1      K2
+  &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+1 ID_101 0.998 0.00202</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 ## Compute the most probable cluster for each individual for the next plot</span></span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-3"><a href="#cb102-3" aria-hidden="true" tabindex="-1"></a>db_with_clust <span class="ot">=</span> <span class="fu">data_allocate_cluster</span>(mod_clust)</span>
+<span id="cb102-4"><a href="#cb102-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-5"><a href="#cb102-5" aria-hidden="true" tabindex="-1"></a>db_with_clust <span class="sc">%&gt;%</span> <span class="fu">print</span>(<span class="at">n=</span><span class="dv">30</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 695 × 5
+   ID    Input Output Cluster Proba
+   &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;
+ 1 ID_1   14.9   57.7 K2      0.807
+ 2 ID_1   14.9   56.4 K2      0.807
+ 3 ID_1   15.3   56.3 K2      0.807
+ 4 ID_1   15.4   55.9 K2      0.807
+ 5 ID_1   15.6   56.1 K2      0.807
+ 6 ID_1   15.8   56.2 K2      0.807
+ 7 ID_1   15.8   56.6 K2      0.807
+ 8 ID_1   16.0   55.5 K2      0.807
+ 9 ID_1   16.4   56.1 K2      0.807
+10 ID_1   16.6   55.2 K2      0.807
+11 ID_1   16.7   55.2 K2      0.807
+12 ID_1   16.8   54.8 K2      0.807
+13 ID_1   16.9   54.4 K2      0.807
+14 ID_1   17.4   54.6 K2      0.807
+15 ID_1   17.5   54.8 K2      0.807
+16 ID_1   17.6   55.1 K2      0.807
+17 ID_1   17.6   55.1 K2      0.807
+18 ID_1   17.7   55.3 K2      0.807
+19 ID_1   17.8   55.5 K2      0.807
+20 ID_1   18.0   54   K2      0.807
+21 ID_1   18.4   54.7 K2      0.807
+22 ID_1   18.5   55.2 K2      0.807
+23 ID_1   18.6   54.3 K2      0.807
+24 ID_1   18.8   54.4 K2      0.807
+25 ID_1   18.9   54.3 K2      0.807
+26 ID_10  15.0   65.3 K1      0.879
+27 ID_10  15.4   64.8 K1      0.879
+28 ID_10  15.6   64.6 K1      0.879
+29 ID_10  15.7   64.0 K1      0.879
+30 ID_10  15.9   63.9 K1      0.879
+# ℹ 665 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 6 ## Display the mixture of GPs prediction for the testing swimmer</span></span>
+<span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb104-3"><a href="#cb104-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_magmaclust</span>(</span>
+<span id="cb104-4"><a href="#cb104-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">pred =</span> pred_clust,</span>
+<span id="cb104-5"><a href="#cb104-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> swimmer_pred, </span>
+<span id="cb104-6"><a href="#cb104-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data_train =</span> db_with_clust, </span>
+<span id="cb104-7"><a href="#cb104-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior_mean =</span> mod_clust<span class="sc">$</span>hyperpost<span class="sc">$</span>mean,</span>
+<span id="cb104-8"><a href="#cb104-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_clust =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb104-9"><a href="#cb104-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">samples =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> </span>
+<span id="cb104-10"><a href="#cb104-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> swimmer_test, <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Output), <span class="at">col =</span> <span class="st">'green'</span>, <span class="at">size =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20VI-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 7 ## Compute the probability to break the French record of 100m freestyle before age 20</span></span>
+<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-3"><a href="#cb105-3" aria-hidden="true" tabindex="-1"></a><span class="co"># French record for 100m freestyle : 46s94 (Male) - 52s74 (Female)</span></span>
+<span id="cb105-4"><a href="#cb105-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Search for the best swimmer in the dataset and compte prediction from data up to 16 years</span></span>
+<span id="cb105-5"><a href="#cb105-5" aria-hidden="true" tabindex="-1"></a>best_swimmer <span class="ot">=</span> db <span class="sc">%&gt;%</span></span>
+<span id="cb105-6"><a href="#cb105-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Output <span class="sc">==</span> <span class="fu">min</span>(Output)) <span class="sc">%&gt;%</span></span>
+<span id="cb105-7"><a href="#cb105-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(ID)</span>
+<span id="cb105-8"><a href="#cb105-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-9"><a href="#cb105-9" aria-hidden="true" tabindex="-1"></a>best_swimmer_pred <span class="ot">=</span> db <span class="sc">%&gt;%</span></span>
+<span id="cb105-10"><a href="#cb105-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">==</span> best_swimmer, Input <span class="sc">&lt;=</span> <span class="dv">16</span>)</span>
+<span id="cb105-11"><a href="#cb105-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-12"><a href="#cb105-12" aria-hidden="true" tabindex="-1"></a>best_swimmer_test <span class="ot">=</span> db <span class="sc">%&gt;%</span></span>
+<span id="cb105-13"><a href="#cb105-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">==</span> best_swimmer, Input <span class="sc">&gt;</span> <span class="dv">16</span>)</span>
+<span id="cb105-14"><a href="#cb105-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-15"><a href="#cb105-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the MagmaClust prediction for the best swimmer</span></span>
+<span id="cb105-16"><a href="#cb105-16" aria-hidden="true" tabindex="-1"></a>pred_best <span class="ot">=</span> <span class="fu">pred_magmaclust</span>(</span>
+<span id="cb105-17"><a href="#cb105-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> best_swimmer_pred,</span>
+<span id="cb105-18"><a href="#cb105-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">trained_model =</span> mod_clust,</span>
+<span id="cb105-19"><a href="#cb105-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid_inputs =</span> grid_inputs,</span>
+<span id="cb105-20"><a href="#cb105-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">get_full_cov =</span> <span class="cn">TRUE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The hyper-posterior distribution of the mean process provided in 'hyperpost' argument isn't evaluated on the expected inputs. Start evaluating the hyper-posterior on the correct inputs...
+ 
+The 'prior_mean_k' argument has not been specified. The hyper-prior  mean functions are thus set to be 0 everywhere.
+ 
+Done!
+ </code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20VI-6.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visual illustration of the prediction with the record line</span></span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_magmaclust</span>(</span>
+<span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">pred =</span> pred_best,</span>
+<span id="cb107-4"><a href="#cb107-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> best_swimmer_pred, </span>
+<span id="cb107-5"><a href="#cb107-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">data_train =</span> db_with_clust, </span>
+<span id="cb107-6"><a href="#cb107-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior_mean =</span> mod_clust<span class="sc">$</span>hyperpost<span class="sc">$</span>mean,</span>
+<span id="cb107-7"><a href="#cb107-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_clust =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb107-8"><a href="#cb107-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">samples =</span> <span class="cn">TRUE</span>) <span class="sc">+</span> </span>
+<span id="cb107-9"><a href="#cb107-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> best_swimmer_test, <span class="fu">aes</span>(<span class="at">x =</span> Input, <span class="at">y =</span> Output), <span class="at">col =</span> <span class="st">'green'</span>) <span class="sc">+</span> </span>
+<span id="cb107-10"><a href="#cb107-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">46.94</span>, <span class="at">lty =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb107-11"><a href="#cb107-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">sort</span>(<span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">40</span>, <span class="dv">80</span>, <span class="dv">10</span>), <span class="fl">46.94</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="sport_donnees_fonctionnelles_files/figure-html/Solutions%20partie%20VI-7.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate 10 000 sample curves from the posterior predictive distribution</span></span>
+<span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a>samples_pred <span class="ot">=</span> <span class="fu">sample_magmaclust</span>(pred_best, <span class="at">nb_samples =</span> <span class="dv">1000</span>)</span>
+<span id="cb108-3"><a href="#cb108-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb108-4"><a href="#cb108-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the proportion of samples breaking the record after age 16</span></span>
+<span id="cb108-5"><a href="#cb108-5" aria-hidden="true" tabindex="-1"></a>prop_record <span class="ot">=</span> samples_pred <span class="sc">%&gt;%</span></span>
+<span id="cb108-6"><a href="#cb108-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Output <span class="sc">&lt;</span> <span class="fl">46.94</span>, Input <span class="sc">&gt;=</span> <span class="dv">16</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb108-7"><a href="#cb108-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Sample) <span class="sc">%&gt;%</span></span>
+<span id="cb108-8"><a href="#cb108-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">n_distinct</span>() <span class="sc">/</span> <span class="dv">1000</span> <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb108-9"><a href="#cb108-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb108-10"><a href="#cb108-10" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">paste0</span>(<span class="st">'Probability to break the French record before age 20 : '</span>, <span class="fu">round</span>(prop_record,<span class="dv">2</span>), <span class="st">'%</span><span class="sc">\n</span><span class="st">'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Probability to break the French record before age 20 : 7%</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
