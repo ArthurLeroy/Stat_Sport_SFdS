@@ -1,0 +1,209 @@
+###############################################################
+# COMPARAISON DES DEUX MODÈLES DE BANISTER (BASE R)
+# Style "matplotlib": ligne bleue, croix rouges, charge gris pointillé
+# Auteur: Léo Gerville-Réache
+###############################################################
+
+## ===== Données =====
+df <- data.frame(
+  Temps  = 1:30,
+  Charge = c(0,0,0,0,0,0,0,0,0,0,0,5,30,50,50,50,50,50,40,30,10,0,0,0,0,0,0,0,0,0),
+  Perf   = c(97,99,106,99,NA,102,102,97,103,NA,100,100,NA,93,92,95,87,NA,89,93,91,108,NA,101,113,109,115,105,103,105)
+)
+load  <- df$Charge
+perf  <- df$Perf
+temps <- df$Temps
+
+na_min <- function(x) min(x, na.rm = TRUE)
+na_max <- function(x) max(x, na.rm = TRUE)
+rng    <- function(x) na_max(x) - na_min(x)
+
+## ===== 1) Modèle classique (convolution exponentielle) =====
+banister_states <- function(load, tau) {
+  alpha <- exp(-1 / tau)
+  s <- numeric(length(load))
+  for (t in seq_along(load)) s[t] <- if (t == 1) load[t] else alpha*s[t-1] + load[t]
+  s
+}
+banister_predict <- function(load, k1, k2, tau1, tau2, P0, delta) {
+  x1 <- banister_states(load, tau1)
+  x2 <- banister_states(load, tau2)
+  yhat <- P0 + k1*x1 - k2*x2
+  if (delta > 0) yhat <- c(rep(NA, delta), yhat[1:(length(yhat)-delta)])
+  yhat
+}
+objective_classique <- function(par, load, perf, delta = 0) {
+  yhat <- banister_predict(load, par[1], par[2], par[3], par[4], par[5], delta)
+  mask <- !is.na(perf) & !is.na(yhat)
+  sum((perf[mask] - yhat[mask])^2)
+}
+
+# Recherche du meilleur délai (robuste aux échecs d'optimisation)
+best <- list(sse = Inf)
+for (delta in 0:7) {
+  fit <- tryCatch(
+    optim(par = c(0.05, 0.10, 30, 10, 100),
+          fn  = objective_classique,
+          load = load, perf = perf, delta = delta,
+          method = "L-BFGS-B",
+          lower = c(0,0,2,2,50),
+          upper = c(Inf,Inf,400,400,150)),
+    error = function(e) NULL
+  )
+  if (!is.null(fit) && !is.na(fit$value) && fit$value < best$sse) {
+    best <- list(delta = delta, par = fit$par, sse = fit$value)
+  }
+}
+
+k1c   <- best$par[1]; k2c <- best$par[2]
+tau1c <- best$par[3]; tau2c <- best$par[4]
+P0c   <- best$par[5]; deltac <- best$delta
+yhat_c <- banister_predict(load, k1c, k2c, tau1c, tau2c, P0c, deltac)
+mask_c <- !is.na(perf) & !is.na(yhat_c)
+n <- sum(mask_c); p <- 5
+R2_c    <- 1 - sum((perf[mask_c]-yhat_c[mask_c])^2) / sum((perf[mask_c]-mean(perf[mask_c]))^2)
+adjR2_c <- 1 - (1 - R2_c)*(n-1)/(n-p-1)
+
+## ===== 2) Modèle simplifié (récurrence linéaire) =====
+simulate_linear <- function(load, params) {
+  a1 <- params["a1"]; b1 <- params["b1"]
+  a2 <- params["a2"]; b2 <- params["b2"]
+  P0 <- params["P0"]
+  A <- F <- numeric(length(load))
+  for (t in 2:length(load)) {
+    A[t] <- a1*A[t-1] + b1*load[t-1]
+    F[t] <- a2*F[t-1] + b2*load[t-1]
+  }
+  P <- P0 + A - F
+  list(A=A, F=F, P=P)
+}
+objective_linear <- function(par, load, perf) {
+  names(par) <- c("a1","b1","a2","b2","P0")
+  sim <- simulate_linear(load, par)
+  mask <- !is.na(perf)
+  sum((perf[mask] - sim$P[mask])^2)
+}
+
+fit_lin <- optim(
+  par = c(0.90, 0.50, 0.90, 0.50, 100),
+  fn  = objective_linear,
+  load = load, perf = perf,
+  method = "L-BFGS-B",
+  lower = c(0,0,0,0,50),
+  upper = c(0.999,Inf,0.999,Inf,150)
+)
+
+params_l <- fit_lin$par; names(params_l) <- c("a1","b1","a2","b2","P0")
+sim_l    <- simulate_linear(load, params_l)
+mask_l   <- !is.na(perf)
+R2_l     <- 1 - sum((perf[mask_l]-sim_l$P[mask_l])^2) / sum((perf[mask_l]-mean(perf[mask_l]))^2)
+adjR2_l  <- 1 - (1 - R2_l)*(n-1)/(n-p-1)
+# Équivalents
+tau1_l <- -1/log(params_l["a1"]); tau2_l <- -1/log(params_l["a2"])
+k1_l   <- params_l["b1"];         k2_l   <- params_l["b2"]
+
+## ===== 3) Graphiques base R (style matplotlib) =====
+
+# petit utilitaire: trace charge en pointillés + axe secondaire
+draw_charge_with_sec_axis <- function(x, charge, y_min, y_max, frac = 0.30, col = "grey40") {
+  M <- max(charge, na.rm = TRUE)
+  amp <- frac * (y_max - y_min)
+  charge_scaled <- if (is.finite(M) && M > 0) y_min + (charge / M) * amp else rep(NA_real_, length(charge))
+  lines(x, charge_scaled, lty = 2, lwd = 2, col = col)
+  # ticks pour l'axe droit
+  ticks <- pretty(charge, n = 5)
+  ticks_y <- if (is.finite(M) && M > 0) y_min + (ticks / M) * amp else rep(NA_real_, length(ticks))
+  axis(side = 4, at = ticks_y, labels = ticks)
+  mtext("Charge (échelle réduite)", side = 4, line = 3)
+}
+
+# 3.1 Performance observée & prédite + charge
+par(mar = c(5,5,4,5) + 0.1)
+ylim_perf <- c(na_min(perf), na_max(perf))
+plot(df$Temps, yhat_c, type = "l", lwd = 2, col = "blue",
+     xlab = "Jour", ylab = "Performance",
+     main = "Modèle de Banister – Données Léo Gerville-Réache",
+     ylim = ylim_perf)
+points(df$Temps, df$Perf, pch = 4, col = "red", lwd = 1.5, cex = 1.1)  # croix rouges
+draw_charge_with_sec_axis(df$Temps, df$Charge, ylim_perf[1], ylim_perf[2], frac = 0.30)
+legend("topleft",
+       legend = c("Performance prédite (classique)", "Performance observée", "Charge (échelle réduite)"),
+       col    = c("blue", "red", "grey40"),
+       lty    = c(1, NA, 2),
+       pch    = c(NA, 4, NA),
+       lwd    = c(2, 1.5, 2),
+       bty    = "n")
+
+# 3.2 Aptitude & Fatigue (modèle simplifié) + charge
+par(mar = c(5,5,4,5) + 0.1)
+ylim_AF <- range(c(sim_l$A, sim_l$F), na.rm = TRUE)
+plot(df$Temps, sim_l$A, type = "l", lwd = 2, col = "forestgreen",
+     xlab = "Jour", ylab = "Valeur (u.a.)",
+     main = "Aptitude & Fatigue (modèle simplifié)",
+     ylim = ylim_AF)
+lines(df$Temps, sim_l$F, lwd = 2, col = "darkred")
+draw_charge_with_sec_axis(df$Temps, df$Charge, ylim_AF[1], ylim_AF[2], frac = 0.30)
+legend("topleft",
+       legend = c("Aptitude", "Fatigue", "Charge (échelle réduite)"),
+       col    = c("forestgreen", "darkred", "grey40"),
+       lty    = c(1,1,2), lwd = c(2,2,2), bty = "n")
+
+# 3.3 Comparaison des prédictions (scatter)
+par(mar = c(5,5,4,2) + 0.1)
+plot(yhat_c, sim_l$P,
+     xlab = "Prédiction modèle classique",
+     ylab = "Prédiction modèle simplifié",
+     main = "Comparaison des prédictions",
+     pch = 16, col = "purple")
+abline(0, 1, lty = 2, lwd = 2, col = "gray50")
+
+## ===== 4) Test t apparié sur les résidus =====
+mask_common <- !is.na(perf) & !is.na(yhat_c) & !is.na(sim_l$P)
+res_c <- perf[mask_common] - yhat_c[mask_common]
+res_l <- perf[mask_common] - sim_l$P[mask_common]
+t_test <- t.test(res_c, res_l, paired = TRUE)
+
+## ===== 5) Résumé final =====
+resume_param <- data.frame(
+  Modele     = c("Classique", "Simplifie"),
+  k1_ou_b1   = c(k1c,  k1_l),
+  k2_ou_b2   = c(k2c,  k2_l),
+  tau1       = c(tau1c, tau1_l),
+  tau2       = c(tau2c, tau2_l),
+  P0         = c(P0c,  as.numeric(params_l["P0"])),
+  delta      = c(deltac, NA)
+)
+resume_perf <- data.frame(
+  Modele    = c("Classique", "Simplifie"),
+  R2        = c(R2_c, R2_l),
+  R2_ajuste = c(adjR2_c, adjR2_l)
+)
+
+cat("\n==================  R É S U M É   F I N A L  ==================\n")
+cat("PARAMÈTRES ESTIMÉS\n"); print(resume_param, row.names = FALSE)
+cat("\nQUALITÉ D'AJUSTEMENT\n"); print(resume_perf, row.names = FALSE)
+cat("\nTEST DE COMPARAISON DES RÉSIDUS (appairé)\n")
+cat(sprintf("t = %.3f, df = %d, p-value = %.4f\n",
+            as.numeric(t_test$statistic),
+            as.integer(t_test$parameter),
+            as.numeric(t_test$p.value)))
+
+interp <- c()
+if (R2_c > R2_l + 0.05) {
+  interp <- c(interp, sprintf("- Le modèle classique explique mieux la variance (R²=%.2f) que le modèle simplifié (R²=%.2f).", R2_c, R2_l))
+} else if (R2_l > R2_c + 0.05) {
+  interp <- c(interp, sprintf("- Le modèle simplifié explique mieux (R²=%.2f) que le modèle classique (R²=%.2f).", R2_l, R2_c))
+} else {
+  interp <- c(interp, sprintf("- Les deux modèles sont comparables : R²_classique=%.2f, R²_simplifié=%.2f.", R2_c, R2_l))
+}
+if (t_test$p.value < 0.05) {
+  interp <- c(interp, "- Les résidus diffèrent significativement (p < 0,05) : modèles non équivalents.")
+} else {
+  interp <- c(interp, "- Pas de différence significative entre les résidus : modèles équivalents sur ces données.")
+}
+interp <- c(interp,
+            sprintf("- Constantes classiques : tau1 = %.1f j (fitness), tau2 = %.1f j (fatigue).", tau1c, tau2c),
+            sprintf("- Équivalents du modèle simplifié : tau1 = %.1f j, tau2 = %.1f j.", tau1_l, tau2_l))
+
+cat("\nINTERPRÉTATION\n"); cat(paste(interp, collapse = "\n"))
+cat("\n===============================================================\n")

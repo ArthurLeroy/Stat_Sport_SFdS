@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulateur Probabilités Badminton (Combinatoire)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    input[type=range] {
+      accent-color: #3b82f6;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 h-screen overflow-hidden flex flex-col p-3">
+
+  <!-- En-tête compact -->
+  <header class="flex-none flex justify-between items-center pb-2 mb-2 border-b border-slate-800">
+    <h1 class="text-lg font-bold text-blue-400 flex items-center gap-2">
+      <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      Simulateur de Probabilités au Badminton
+    </h1>
+    <span class="text-xs text-slate-400 bg-slate-800 px-2 py-1 rounded border border-slate-700">Calcul Combinatoire Analytique &amp; Zoom sur p entre 0,4 et 0,6</span>
+  </header>
+
+  <!-- Zone Principale 2 Colonnes -->
+  <div class="flex-1 grid grid-cols-12 gap-3 min-h-0">
+    
+    <!-- Colonne Gauche : Commandes & Tableau (5 cols) -->
+    <div class="col-span-5 flex flex-col gap-3 min-h-0 overflow-y-auto pr-1">
+      
+      <!-- Option Sets Gagnants -->
+      <div class="bg-slate-800/80 p-2.5 rounded-lg border border-slate-700/60">
+        <label class="text-xs font-semibold text-slate-300 block mb-1.5 uppercase tracking-wider">Format de Match</label>
+        <div class="grid grid-cols-2 gap-2">
+          <button id="btnBestOf3" onclick="setSetsFormat(2)" class="py-1.5 px-3 text-xs font-bold rounded-md border transition-all duration-150 bg-blue-600 border-blue-500 text-white">
+            2 Sets Gagnants (Best of 3)
+          </button>
+          <button id="btnBestOf5" onclick="setSetsFormat(3)" class="py-1.5 px-3 text-xs font-bold rounded-md border transition-all duration-150 bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-650">
+            3 Sets Gagnants (Best of 5)
+          </button>
+        </div>
+      </div>
+
+      <!-- Option Format Référent pour l'inversion -->
+      <div class="bg-slate-800/80 p-2.5 rounded-lg border border-slate-700/60">
+        <label class="text-xs font-semibold text-slate-300 block mb-1.5 uppercase tracking-wider">Format Référent pour l'Inversion</label>
+        <div class="grid grid-cols-2 gap-2">
+          <button id="btnTarget21" onclick="setTargetFormat(21)" class="py-1 px-2 text-xs font-semibold rounded border bg-blue-600/30 border-blue-500 text-blue-300">
+            Basé sur 21 pts (Cap 30)
+          </button>
+          <button id="btnTarget15" onclick="setTargetFormat(15)" class="py-1 px-2 text-xs font-semibold rounded border bg-slate-700 border-slate-600 text-slate-400">
+            Basé sur 15 pts (Cap 21)
+          </button>
+        </div>
+      </div>
+
+      <!-- Curseurs Réciproques -->
+      <div class="bg-slate-800/80 p-3 rounded-lg border border-slate-700/60 flex flex-col gap-3">
+        
+        <!-- Curseur Probabilité de Point (p) borné entre 0.40 et 0.60 -->
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-xs font-semibold text-slate-200">Probabilité d'exécution (Point <i>p</i>)</span>
+            <span id="valP" class="text-sm font-mono font-bold text-blue-400">50.0%</span>
+          </div>
+          <input type="range" id="sliderP" min="0.40" max="0.60" step="0.001" value="0.5" 
+                 oninput="updateFromP(parseFloat(this.value))"
+                 class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+        </div>
+
+        <!-- Curseur Probabilité de Match (P_match) -->
+        <div class="pt-2 border-t border-slate-700/50">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-xs font-semibold text-slate-200">Probabilité d'issue (Match <i>P</i><sub>match</sub>)</span>
+            <span id="valPMatch" class="text-sm font-mono font-bold text-amber-400">50.0%</span>
+          </div>
+          <input type="range" id="sliderPMatch" min="0.001" max="0.999" step="0.001" value="0.5" 
+                 oninput="updateFromPMatch(parseFloat(this.value))"
+                 class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+          <p class="text-[10px] text-slate-400 mt-1 italic">
+            Modifier <i>P</i><sub>match</sub> recalcule automatiquement <i>p</i> par dichotomie combinatoire.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Tableau Synthétique Comparatif -->
+      <div class="bg-slate-800/80 p-3 rounded-lg border border-slate-700/60 flex-1 flex flex-col justify-between">
+        <h3 class="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Comparatif en temps réel</h3>
+        
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="border-b border-slate-700 text-slate-400">
+              <th class="pb-1.5 font-medium">Métrique</th>
+              <th class="pb-1.5 font-semibold text-blue-400 text-right">21 Points</th>
+              <th class="pb-1.5 font-semibold text-amber-400 text-right">15 Points</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-700/40 font-mono">
+            <tr>
+              <td class="py-2 text-slate-300">P(Gagner 1 Set)</td>
+              <td id="tblSet21" class="py-2 text-right font-bold text-blue-400">50.0%</td>
+              <td id="tblSet15" class="py-2 text-right font-bold text-amber-400">50.0%</td>
+            </tr>
+            <tr>
+              <td class="py-2 text-slate-300">P(Gagner le Match)</td>
+              <td id="tblMatch21" class="py-2 text-right font-bold text-blue-300">50.0%</td>
+              <td id="tblMatch15" class="py-2 text-right font-bold text-amber-300">50.0%</td>
+            </tr>
+            <tr>
+              <td class="py-2 text-slate-300">Points / Set (Espérés)</td>
+              <td id="tblPts21" class="py-2 text-right text-slate-300">38.4 pts</td>
+              <td id="tblPts15" class="py-2 text-right text-slate-300">27.6 pts</td>
+            </tr>
+            <tr>
+              <td class="py-2 text-slate-300">Sets / Match (Espérés)</td>
+              <td id="tblSets21" class="py-2 text-right text-slate-300">2.50 sets</td>
+              <td id="tblSets15" class="py-2 text-right text-slate-300">2.50 sets</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="mt-2 pt-2 border-t border-slate-700/50 flex justify-between text-[11px]">
+          <span class="text-slate-400">Facteur d'amplification (21 pts) :</span>
+          <span id="ampFactor" class="font-mono text-blue-400 font-bold">1.00x</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Colonne Droite : Graphique SVG Grand Format (7 cols) -->
+    <div class="col-span-7 bg-slate-800/80 rounded-lg border border-slate-700/60 p-3 flex flex-col justify-between relative min-h-0">
+      
+      <div class="flex justify-between items-center mb-1">
+        <div>
+          <h2 class="text-xs font-bold text-slate-200 uppercase tracking-wider">Probabilité de Victoire du Match (<i>p</i> compris entre 0,4 et 0,6)</h2>
+          <p class="text-[11px] text-slate-400">Comparaison <i>P</i><sub>match</sub>(<i>p</i>) par formules combinatoires : 21 pts (Bleu) vs 15 pts (Orange)</p>
+        </div>
+        <div class="flex gap-3 text-xs font-semibold">
+          <span class="flex items-center gap-1.5 text-blue-400">
+            <span class="w-3 h-0.5 bg-blue-500 rounded"></span> 21 pts
+          </span>
+          <span class="flex items-center gap-1.5 text-amber-400">
+            <span class="w-3 h-0.5 bg-amber-500 rounded"></span> 15 pts
+          </span>
+        </div>
+      </div>
+
+      <!-- Container SVG interactif -->
+      <div class="flex-1 relative w-full h-full min-h-0" id="svgContainer">
+        <svg id="chartSvg" class="w-full h-full overflow-visible" viewBox="0 0 600 380" preserveAspectRatio="none">
+          <!-- Le contenu dynamique SVG est injecté via JavaScript -->
+        </svg>
+
+        <!-- Tooltip au survol -->
+        <div id="chartTooltip" class="absolute hidden bg-slate-900/95 border border-slate-700 text-xs p-2 rounded shadow-lg pointer-events-none z-10 backdrop-blur-sm">
+        </div>
+      </div>
+
+      <div class="flex justify-between text-[10px] text-slate-500 mt-1 font-mono">
+        <span>0,40 (Désavantage net)</span>
+        <span>0,50 (Équilibre parfait)</span>
+        <span>0,60 (Avantage net)</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Moteur Logique et Mathématique Analytique (Combinatoire) -->
+  <script>
+    // --- VARIABLES D'ÉTAT ---
+    let state = {
+      p: 0.50,               // Probabilité de gagner un point (restreinte entre 0.4 et 0.6)
+      targetFormat: 21,      // Format référent pour l'inversion (21 ou 15)
+      targetWins: 2          // Nombre de sets gagnants (2 = Best of 3, 3 = Best of 5)
+    };
+
+    // --- OUTILS COMBINATOIRES ---
+    // Calcul de n Combinaison k : n! / (k! * (n-k)!)
+    function combinations(n, k) {
+      if (k < 0 || k > n) return 0;
+      if (k === 0 || k === n) return 1;
+      if (k > n / 2) k = n - k;
+      let res = 1;
+      for (let i = 1; i <= k; i++) {
+        res = res * (n - i + 1) / i;
+      }
+      return res;
+    }
+
+    // --- FORMULES COMBINATOIRES ANALYTIQUES DE SET ---
+    function calculateSetStatsCombinatorial(p, targetScore) {
+      const q = 1 - p;
+      const N = targetScore; // 21 ou 15
+      const maxScore = N === 21 ? 30 : 21;
+
+      // 1. Probabilité de gagner avant égalité (N-1, N-1)
+      let pSetDirect = 0;
+      let expectedPtsDirect = 0;
+
+      for (let b = 0; b <= N - 2; b++) {
+        const paths = combinations((N - 1) + b, b);
+        const probScore = paths * Math.pow(p, N) * Math.pow(q, b);
+        pSetDirect += probScore;
+        expectedPtsDirect += (N + b) * probScore;
+      }
+
+      // Perte directe sur le score (a, N) pour a de 0 à N-2
+      let pLossDirect = 0;
+      let expectedPtsLossDirect = 0;
+      for (let a = 0; a <= N - 2; a++) {
+        const paths = combinations((N - 1) + a, a);
+        const probScore = paths * Math.pow(q, N) * Math.pow(p, a);
+        pLossDirect += probScore;
+        expectedPtsLossDirect += (N + a) * probScore;
+      }
+
+      // 2. Égalité à (N-1, N-1)
+      const probDeuceReached = combinations(2 * (N - 1), N - 1) * Math.pow(p * q, N - 1);
+      const ptsToDeuce = 2 * (N - 1);
+
+      // Transitions de deuce : Gain 2-0 (p^2), Perte 0-2 (q^2), Égalité 1-1 (2pq)
+      const pDeuceWin2 = p * p;
+      const pDeuceLoss2 = q * q;
+      const pDeuceTie2 = 2 * p * q;
+
+      let pSetDeuce = 0;
+      let expectedPtsDeuceRel = 0;
+
+      const maxDeucePairs = maxScore - N; // 9 paires pour 21 pts, 6 pour 15 pts
+
+      for (let k = 0; k < maxDeucePairs; k++) {
+        pSetDeuce += Math.pow(pDeuceTie2, k) * pDeuceWin2;
+        expectedPtsDeuceRel += 2 * (k + 1) * Math.pow(pDeuceTie2, k) * pDeuceWin2;
+        expectedPtsDeuceRel += 2 * (k + 1) * Math.pow(pDeuceTie2, k) * pDeuceLoss2;
+      }
+
+      // Cap ultime à maxScore - 1 (ex: 29-29)
+      const probCapReached = Math.pow(pDeuceTie2, maxDeucePairs);
+      pSetDeuce += probCapReached * p;
+      expectedPtsDeuceRel += (2 * maxDeucePairs + 1) * probCapReached;
+
+      const pSet = pSetDirect + probDeuceReached * pSetDeuce;
+      const expectedPts = expectedPtsDirect + expectedPtsLossDirect + probDeuceReached * (ptsToDeuce + expectedPtsDeuceRel);
+
+      return { pSet, expectedPts };
+    }
+
+    // --- FORMULES COMBINATOIRES ANALYTIQUES DE MATCH ---
+    function calculateMatchStatsCombinatorial(pSet, targetWins) {
+      const qSet = 1 - pSet;
+      const W = targetWins; // 2 pour Best of 3, 3 pour Best of 5
+
+      let pMatch = 0;
+      let expectedSets = 0;
+
+      for (let l = 0; l < W; l++) {
+        const pathsWin = combinations((W - 1) + l, l);
+        const probWinMatch = pathsWin * Math.pow(pSet, W) * Math.pow(qSet, l);
+        pMatch += probWinMatch;
+        expectedSets += (W + l) * probWinMatch;
+
+        const probLossMatch = pathsWin * Math.pow(qSet, W) * Math.pow(pSet, l);
+        expectedSets += (W + l) * probLossMatch;
+      }
+
+      return { pMatch, expectedSets };
+    }
+
+    // --- DICHOTOMIE SUR LA FORMULE ANALYTIQUE ---
+    function findPFromPMatch(targetPMatch, targetScore, targetWins) {
+      let low = 0.0001;
+      let high = 0.9999;
+      let mid = 0.5;
+
+      for (let i = 0; i < 25; i++) {
+        mid = (low + high) / 2;
+        const { pSet } = calculateSetStatsCombinatorial(mid, targetScore);
+        const { pMatch } = calculateMatchStatsCombinatorial(pSet, targetWins);
+
+        if (pMatch < targetPMatch) {
+          low = mid;
+        } else {
+          high = mid;
+        }
+      }
+      return mid;
+    }
+
+    // --- MISE À JOUR DE L'INTERFACE ---
+    function updateUI() {
+      // 1. Calculs combinatoires pour 21 pts et 15 pts
+      const stats21Set = calculateSetStatsCombinatorial(state.p, 21);
+      const stats21Match = calculateMatchStatsCombinatorial(stats21Set.pSet, state.targetWins);
+
+      const stats15Set = calculateSetStatsCombinatorial(state.p, 15);
+      const stats15Match = calculateMatchStatsCombinatorial(stats15Set.pSet, state.targetWins);
+
+      // 2. Mise à jour des affichages textes
+      document.getElementById('valP').innerText = (state.p * 100).toFixed(1) + '%';
+      document.getElementById('sliderP').value = state.p;
+
+      const currentPMatch = state.targetFormat === 21 ? stats21Match.pMatch : stats15Match.pMatch;
+      document.getElementById('valPMatch').innerText = (currentPMatch * 100).toFixed(1) + '%';
+      document.getElementById('sliderPMatch').value = currentPMatch;
+
+      // Tableau comparatif
+      document.getElementById('tblSet21').innerText = (stats21Set.pSet * 100).toFixed(1) + '%';
+      document.getElementById('tblMatch21').innerText = (stats21Match.pMatch * 100).toFixed(1) + '%';
+      document.getElementById('tblPts21').innerText = stats21Set.expectedPts.toFixed(1) + ' pts';
+      document.getElementById('tblSets21').innerText = stats21Match.expectedSets.toFixed(2) + ' sets';
+
+      document.getElementById('tblSet15').innerText = (stats15Set.pSet * 100).toFixed(1) + '%';
+      document.getElementById('tblMatch15').innerText = (stats15Match.pMatch * 100).toFixed(1) + '%';
+      document.getElementById('tblPts15').innerText = stats15Set.expectedPts.toFixed(1) + ' pts';
+      document.getElementById('tblSets15').innerText = stats15Match.expectedSets.toFixed(2) + ' sets';
+
+      // Amplification (P_match / p) pour 21 pts autour de 50%
+      const amp = (stats21Match.pMatch - 0.5) / (state.p - 0.5 || 0.0001);
+      document.getElementById('ampFactor').innerText = (Math.abs(state.p - 0.5) < 0.0001 ? 1.0 : amp).toFixed(2) + 'x';
+
+      // 3. Rendu du graphique SVG (Zoom [0.4, 0.6])
+      renderGraph(stats21Match.pMatch, stats15Match.pMatch);
+    }
+
+    // --- ACTIONS UTILISATEUR ---
+    function updateFromP(val) {
+      state.p = Math.max(0.40, Math.min(0.60, val));
+      updateUI();
+    }
+
+    function updateFromPMatch(val) {
+      const pMatchTarget = Math.max(0.0001, Math.min(0.9999, val));
+      state.p = Math.max(0.40, Math.min(0.60, findPFromPMatch(pMatchTarget, state.targetFormat, state.targetWins)));
+      updateUI();
+    }
+
+    function setSetsFormat(wins) {
+      state.targetWins = wins;
+      document.getElementById('btnBestOf3').className = wins === 2 
+        ? "py-1.5 px-3 text-xs font-bold rounded-md border transition-all duration-150 bg-blue-600 border-blue-500 text-white"
+        : "py-1.5 px-3 text-xs font-bold rounded-md border transition-all duration-150 bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-650";
+      document.getElementById('btnBestOf5').className = wins === 3 
+        ? "py-1.5 px-3 text-xs font-bold rounded-md border transition-all duration-150 bg-blue-600 border-blue-500 text-white"
+        : "py-1.5 px-3 text-xs font-bold rounded-md border transition-all duration-150 bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-650";
+      updateUI();
+    }
+
+    function setTargetFormat(fmt) {
+      state.targetFormat = fmt;
+      document.getElementById('btnTarget21').className = fmt === 21
+        ? "py-1 px-2 text-xs font-semibold rounded border bg-blue-600/30 border-blue-500 text-blue-300"
+        : "py-1 px-2 text-xs font-semibold rounded border bg-slate-700 border-slate-600 text-slate-400";
+      document.getElementById('btnTarget15').className = fmt === 15
+        ? "py-1 px-2 text-xs font-semibold rounded border bg-amber-600/30 border-amber-500 text-amber-300"
+        : "py-1 px-2 text-xs font-semibold rounded border bg-slate-700 border-slate-600 text-slate-400";
+      updateUI();
+    }
+
+    // --- RENDU GRAPHIQUE SVG (ZOOM p ∈ [0.4, 0.6]) ---
+    function renderGraph(currentPMatch21, currentPMatch15) {
+      const svg = document.getElementById('chartSvg');
+      const W = 600, H = 380;
+      const padL = 45, padR = 25, padT = 20, padB = 35;
+      const graphW = W - padL - padR;
+      const graphH = H - padT - padB;
+
+      // Bornes en X : [0.4, 0.6]
+      const minP = 0.40, maxP = 0.60;
+
+      const toX = val => padL + ((val - minP) / (maxP - minP)) * graphW;
+      const toY = val => padT + graphH - val * graphH;
+
+      let path21 = "";
+      let path15 = "";
+      const steps = 60;
+
+      for (let i = 0; i <= steps; i++) {
+        const px = minP + (i / steps) * (maxP - minP);
+        
+        const s21 = calculateSetStatsCombinatorial(px, 21);
+        const m21 = calculateMatchStatsCombinatorial(s21.pSet, state.targetWins);
+        const x21 = toX(px);
+        const y21 = toY(m21.pMatch);
+        path21 += (i === 0 ? `M ${x21} ${y21}` : ` L ${x21} ${y21}`);
+
+        const s15 = calculateSetStatsCombinatorial(px, 15);
+        const m15 = calculateMatchStatsCombinatorial(s15.pSet, state.targetWins);
+        const x15 = toX(px);
+        const y15 = toY(m15.pMatch);
+        path15 += (i === 0 ? `M ${x15} ${y15}` : ` L ${x15} ${y15}`);
+      }
+
+      let gridHTML = "";
+      
+      // Grille Y (0.0 à 1.0 par pas de 0.2)
+      for (let v = 0; v <= 1.0; v += 0.2) {
+        const y = toY(v);
+        gridHTML += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="#334155" stroke-width="1" stroke-dasharray="3,3"/>`;
+        gridHTML += `<text x="${padL - 8}" y="${y + 4}" fill="#94a3b8" font-size="10" text-anchor="end" font-family="monospace">${v.toFixed(1)}</text>`;
+      }
+
+      // Grille X (0.40 à 0.60 par pas de 0.02)
+      for (let v = minP; v <= maxP + 0.001; v += 0.02) {
+        const x = toX(v);
+        gridHTML += `<line x1="${x}" y1="${padT}" x2="${x}" y2="${H - padB}" stroke="#334155" stroke-width="1" stroke-dasharray="3,3"/>`;
+        gridHTML += `<text x="${x}" y="${H - padB + 16}" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="monospace">${v.toFixed(2)}</text>`;
+      }
+
+      const currX = toX(state.p);
+      const currY21 = toY(currentPMatch21);
+      const currY15 = toY(currentPMatch15);
+
+      svg.innerHTML = `
+        <!-- Grille arrière-plan -->
+        ${gridHTML}
+
+        <!-- Axe de référence central à p = 0.5 -->
+        <line x1="${toX(0.5)}" y1="${padT}" x2="${toX(0.5)}" y2="${H - padB}" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+        <!-- Courbe 15 pts (Orange) -->
+        <path d="${path15}" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+
+        <!-- Courbe 21 pts (Bleue) -->
+        <path d="${path21}" fill="none" stroke="#3b82f6" stroke-width="3" stroke-linecap="round"/>
+
+        <!-- Ligne verticale indicatrice de p courant -->
+        <line x1="${currX}" y1="${padT}" x2="${currX}" y2="${H - padB}" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,4"/>
+
+        <!-- Point courant 15 pts -->
+        <circle cx="${currX}" cy="${currY15}" r="5" fill="#f59e0b" stroke="#0f172a" stroke-width="2"/>
+
+        <!-- Point courant 21 pts -->
+        <circle cx="${currX}" cy="${currY21}" r="6" fill="#3b82f6" stroke="#0f172a" stroke-width="2"/>
+      `;
+    }
+
+    // Tooltip au survol du graphique
+    const container = document.getElementById('svgContainer');
+    const tooltip = document.getElementById('chartTooltip');
+
+    container.addEventListener('mousemove', (e) => {
+      const rect = container.getBoundingClientRect();
+      const relX = e.clientX - rect.left;
+      const padL = 45, padR = 25;
+      const graphW = rect.width - padL - padR;
+
+      const minP = 0.40, maxP = 0.60;
+      let hoverP = minP + ((relX - padL) / graphW) * (maxP - minP);
+      
+      if (hoverP >= minP && hoverP <= maxP) {
+        const s21 = calculateSetStatsCombinatorial(hoverP, 21);
+        const m21 = calculateMatchStatsCombinatorial(s21.pSet, state.targetWins);
+        const s15 = calculateSetStatsCombinatorial(hoverP, 15);
+        const m15 = calculateMatchStatsCombinatorial(s15.pSet, state.targetWins);
+
+        tooltip.style.display = 'block';
+        tooltip.style.left = `${Math.min(relX + 15, rect.width - 150)}px`;
+        tooltip.style.top = `${Math.max(10, e.clientY - rect.top - 60)}px`;
+        tooltip.innerHTML = `
+          <div class="font-bold border-b border-slate-700 pb-1 mb-1">Point p = ${(hoverP * 100).toFixed(1)}%</div>
+          <div class="text-blue-400">Match 21 pts : ${(m21.pMatch * 100).toFixed(1)}%</div>
+          <div class="text-amber-400">Match 15 pts : ${(m15.pMatch * 100).toFixed(1)}%</div>
+        `;
+      } else {
+        tooltip.style.display = 'none';
+      }
+    });
+
+    container.addEventListener('mouseleave', () => {
+      tooltip.style.display = 'none';
+    });
+
+    // Initialisation au chargement
+    updateUI();
+  </script>
+</body>
+</html>
