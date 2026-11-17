@@ -1,0 +1,24 @@
+﻿#############################################################
+# Lecture des données et éventuelle sélection d'une épreuve #
+#############################################################
+
+# Fichier contenant toutes les épreuves sauf R7 et R8
+link <- str_c("C:/Users/chris/Documents/Portable EDF (14-11-2022)/Groupe Stat et Sport - SFdS/Atelier Stat et Sport/Session 2/Matin - 1/Matériel à fournir aux participants/","tir_para_sans_R7_R8.csv")
+
+# Lecture du fichier
+tir_para <- read_delim(file=link,na="",col_names=TRUE,delim=",")
+tir_para <- data.frame(tir_para)
+
+# Sélection d'une discipline : par exemple P1
+tir_para_P1 <- tir_para %>% filter(Type == "P1")
+
+
+# Fichier contenant seulement les épreuves R7 et R8 : trois positions
+link <- str_c("C:/Users/chris/Documents/Portable EDF (14-11-2022)/Groupe Stat et Sport - SFdS/Atelier Stat et Sport/Session 2/Matin - 1/Matériel à fournir aux participants/","tir_para_R7_R8.csv")
+
+# Lecture du fichier
+tir_para <- read_delim(file=link,na="",col_names=TRUE,delim=",")
+tir_para <- data.frame(tir_para)
+
+# Sélection d'une discipline : par exemple R7
+tir_para_P1 <- tir_para %>% filter(Type == "R7")

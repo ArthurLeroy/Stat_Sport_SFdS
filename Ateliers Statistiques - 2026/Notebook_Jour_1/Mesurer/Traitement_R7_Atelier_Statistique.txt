@@ -1,0 +1,1292 @@
+﻿########################################################
+# Lecture des données et sélection de la discipline R7 #
+########################################################
+
+link <- str_c("C:/Users/chris/Documents/Portable EDF (14-11-2022)/Groupe Stat et Sport - SFdS/Atelier Stat et Sport/Session 2/Matin - 1/Matériel à fournir aux participants/","tir_para_R7_R8.csv")
+
+tir_para <- read_delim(file=link,na="NA",col_names=TRUE,delim=",")
+tir_para <- data.frame(tir_para)
+
+tir_para_R7 <- tir_para %>% filter(Type == "R7") %>% select(Annee,Lieu,Competition,Ident,Phase,Serie_1,Serie_2,Serie_3,Serie_4,Serie_5,Serie_6,Serie_7,Serie_8,Serie_9,Serie_10,Serie_11,Serie_12,Total,Rank)
+
+############################
+# Petites fonctions utiles #
+############################
+ 
+fun_min <- function(x){
+ y <- min(x,na.rm=TRUE)
+ return(y)
+}
+ 
+fun_max <- function(x){
+ y <- max(x,na.rm=TRUE)
+ return(y)
+}
+
+fun_sum <- function(x){
+ y <- sum(x,na.rm=TRUE)
+ return(y)
+}
+
+fun_mean <- function(x){
+ y <- mean(x,na.rm=TRUE)
+ return(y)
+}
+ 
+fun_std <- function(x){
+ y <- sd(x,na.rm=TRUE)
+ return(y)
+}
+ 
+
+###########################
+## Nettoyage des données ##
+###########################
+
+# Filtre des athlètes en R7 et en phase de qualification
+tir_para_R7_qualif <- tir_para %>% filter(Type == "R7" & Phase == "Qualification") %>% select(Ident,Annee,Lieu,Competition,Serie_1,Serie_2,Serie_3,Serie_4,Serie_5,Serie_6,Serie_7,Serie_8,Serie_9,Serie_10,Serie_11,Serie_12,Total,Rank)
+
+# Elimination des valeurs manquantes de la variable Rank
+tir_para_R7_qualif <- tir_para_R7_qualif[-c(7,8,9,10,63,64,65,112,130,131,132,133,134,135,136,150,151,164,165,166,183,184,185,236,237,238,239,240,241,256,257,258,290,291,310,332,346,367,388,401,427),]
+
+# Filtre des athlètes en R7 et en phase finale et sélection de certaines variables utiles 
+tir_para_R7_finale <- tir_para %>% filter(Type == "R7" & Phase == "Final") %>% select(Ident,Annee,Lieu,Competition,Serie_1,Serie_2,Serie_3,Serie_4,Serie_5,Serie_6,Serie_7,Serie_8,Serie_9,Serie_10,Serie_11,Serie_12,Total,Rank)
+tir_para_R7_finale$Rank_finale <- tir_para_R7_finale$Rank
+
+
+############################################################
+## Calcul de nouvelles variables pour les trois positions ## 
+############################################################
+
+genou <- matrix(0,nrow(tir_para_R7_qualif))
+couche <- matrix(0,nrow(tir_para_R7_qualif))
+debout <- matrix(0,nrow(tir_para_R7_qualif))
+genou_prop <- matrix(0,nrow(tir_para_R7_qualif))
+couche_prop <- matrix(0,nrow(tir_para_R7_qualif))
+debout_prop <- matrix(0,nrow(tir_para_R7_qualif))
+for (i in 1:nrow(tir_para_R7_qualif))
+    {genou[i]=tir_para_R7_qualif$Serie_1[i]+tir_para_R7_qualif$Serie_2[i]+tir_para_R7_qualif$Serie_3[i]+tir_para_R7_qualif$Serie_4[i]
+     couche[i]=tir_para_R7_qualif$Serie_5[i]+tir_para_R7_qualif$Serie_6[i]+tir_para_R7_qualif$Serie_7[i]+tir_para_R7_qualif$Serie_8[i]
+     debout[i]=tir_para_R7_qualif$Serie_9[i]+tir_para_R7_qualif$Serie_10[i]+tir_para_R7_qualif$Serie_11[i]+tir_para_R7_qualif$Serie_12[i]
+     genou_prop[i]=genou[i]/1200
+     couche_prop[i]=couche[i]/1200
+     debout_prop[i]=debout[i]/1200
+    }
+ID <- tir_para_R7_qualif %>% select(Annee,Lieu,Competition,Ident,Total,Rank)
+trois_pos_prop_all <- data.frame(ID,genou,couche,debout,genou_prop,couche_prop,debout_prop)
+std_row <- apply(trois_pos_prop_all[10:12],1,fun_std)
+trois_pos_prop_all$disp_std <- sqrt(2/3)*std_row
+trois_pos_prop_all$performance <- (genou+couche+debout)/1200
+trois_pos_prop_all$performance <- as.numeric(trois_pos_prop_all$performance)
+trois_pos_prop_all$Rank_qualif <- as.numeric(trois_pos_prop_all$Rank)
+trois_pos_prop_all$Indic_CV <- trois_pos_prop_all$disp_std/trois_pos_prop_all$performance
+
+# Scatter-plots des proportions des trois positions
+ggpairs(trois_pos_prop_all[,c(10:12)]) + theme_bw()
+
+# Lien entre les rangs de qualification et la performance avec la dispersion
+num <- 1:nrow(trois_pos_prop_all)
+ggplot(trois_pos_prop_all,aes(x = Rank_qualif)) + geom_point(aes(y = disp_std),size=2,colour="blue") + theme_bw()
+ggplot(trois_pos_prop_all,aes(x = performance)) + geom_point(aes(y = disp_std),size=2,colour="blue") + theme_bw()
+
+# fusion des tables des données avec les nouvelles variables + création de la variable Rank_global qui vaut 1 si le par-athlète a été qualifié en finale, sinon elle vaut 2
+tir_para_R7_qualif_finale <- full_join(trois_pos_prop_all,tir_para_R7_finale,by=c('Annee','Lieu','Competition','Ident'))
+tir_para_R7_qualif_finale$Rank_global <- (tir_para_R7_qualif_finale$Rank_qualif > 8)*1+1
+
+# Sélection de certaines variables utiles 
+tir_para_R7_qualif_finale <- tir_para_R7_qualif_finale %>% select(Annee,Lieu,Competition,Ident,genou,couche,debout,Total.x,Rank.x,Total.y,Rank.y,genou_prop,couche_prop,debout_prop,disp_std,performance,Rank_qualif,Indic_CV,performance,Rank_qualif,Indic_CV,Rank_finale,Rank_global)
+
+## Table sur les scores ##
+res_finale <- tir_para_R7_qualif_finale %>% filter(Rank_global == 1)
+acces <- matrix("Finalistes",nrow=nrow(res_finale))
+position <- matrix("Couché",nrow=nrow(res_finale))
+score <- res_finale$couche
+result_all <- data.frame(acces,position,score)
+position <- matrix("Genou",nrow=nrow(res_finale))
+score <- res_finale$genou
+result <- data.frame(acces,position,score)
+result_all <- rbind(result_all,result)
+position <- matrix("Debout",nrow=nrow(res_finale))
+score <- res_finale$debout
+result <- data.frame(acces,position,score)
+result_all <- rbind(result_all,result)
+
+res_finale <- tir_para_R7_qualif_finale %>% filter(Rank_global == 2)
+acces <- matrix("Non finalistes",nrow=nrow(res_finale))
+position <- matrix("Couché",nrow=nrow(res_finale))
+score <- res_finale$couche
+result <- data.frame(acces,position,score)
+result_all <- rbind(result_all,result)
+position <- matrix("Genou",nrow=nrow(res_finale))
+score <- res_finale$genou
+result <- data.frame(acces,position,score)
+result_all <- rbind(result_all,result)
+position <- matrix("Debout",nrow=nrow(res_finale))
+score <- res_finale$debout
+result <- data.frame(acces,position,score)
+result_all <- rbind(result_all,result)
+
+result_all_score <- result_all
+
+# Boxplot des scores des trois positions et de l'accès à la finale
+ggplot(result_all_score, aes(x=score, y=position, fill=acces)) + geom_boxplot() + coord_flip() + theme_bw()
+ggplot(result_all_score, aes(x=score, y=acces, fill=position)) + geom_boxplot() + coord_flip() + theme_bw()
+
+
+## Table sur les proportions ##
+res_finale <- tir_para_R7_qualif_finale %>% filter(Rank_global == 1)
+acces <- matrix("Finalistes",nrow=nrow(res_finale))
+position <- matrix("Couché",nrow=nrow(res_finale))
+proportion <- res_finale$couche_prop
+result_all <- data.frame(acces,position,proportion)
+position <- matrix("Genou",nrow=nrow(res_finale))
+proportion <- res_finale$genou_prop
+result <- data.frame(acces,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Debout",nrow=nrow(res_finale))
+proportion <- res_finale$debout_prop
+result <- data.frame(acces,position,proportion)
+result_all <- rbind(result_all,result)
+
+res_finale <- tir_para_R7_qualif_finale %>% filter(Rank_global == 2)
+acces <- matrix("Non finalistes",nrow=nrow(res_finale))
+position <- matrix("Couché",nrow=nrow(res_finale))
+proportion <- res_finale$couche_prop
+result <- data.frame(acces,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Genou",nrow=nrow(res_finale))
+proportion <- res_finale$genou_prop
+result <- data.frame(acces,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Debout",nrow=nrow(res_finale))
+proportion <- res_finale$debout_prop
+result <- data.frame(acces,position,proportion)
+result_all <- rbind(result_all,result)
+
+result_all_prop <- result_all
+
+# Boxplot des proportions des trois positions et de l'accès à la finale
+ggplot(result_all_prop, aes(x=proportion, y=position, fill=acces)) + geom_boxplot() + coord_flip() + theme_bw()
+ggplot(result_all_prop, aes(x=proportion, y=acces, fill=position)) + geom_boxplot() + coord_flip() + theme_bw()
+
+
+###########################################################################
+## Construction des rangs de chacune des trois positions par compétition ##
+###########################################################################
+
+tir_para_R7_qualif_finale_bis <- tir_para_R7_qualif_finale
+Annee_Lieu <- str_c(tir_para_R7_qualif_finale$Annee,'_',tir_para_R7_qualif_finale$Lieu)
+tir_para_R7_qualif_finale$Annee_Lieu <- Annee_Lieu
+unique_Annee_Lieu <- unique(tir_para_R7_qualif_finale$Annee_Lieu)
+
+Annee_Lieu_k <- unique_Annee_Lieu[1]
+filter_file <- tir_para_R7_qualif_finale %>% filter(Annee_Lieu == Annee_Lieu_k)
+rang_debout <- rank(-filter_file$debout_prop,ties.method=c("first"))
+rang_genou <- rank(-filter_file$genou_prop,ties.method=c("first"))
+rang_couche <- rank(-filter_file$couche_prop,ties.method=c("first"))
+Rank_finale_num <- rank(-filter_file$Total.y,ties.method=c("first"))
+rang_3_pos_finale <- data.frame(rang_genou,rang_couche,rang_debout,Rank_finale_num)
+
+for (k in 2:nrow(as.matrix(unique_Annee_Lieu)))
+    {Annee_Lieu_k <- unique_Annee_Lieu[k]
+     filter_file <- tir_para_R7_qualif_finale %>% filter(Annee_Lieu == Annee_Lieu_k)
+     rang_debout <- rank(-filter_file$debout_prop,ties.method=c("first"))
+     rang_genou <- rank(-filter_file$genou_prop,ties.method=c("first"))
+     rang_couche <- rank(-filter_file$couche_prop,ties.method=c("first"))
+     Rank_finale_num <- rank(-filter_file$Total.y,ties.method=c("first"))
+     rang_3_pos_finale <- rbind(rang_3_pos_finale,data.frame(rang_genou,rang_couche,rang_debout,Rank_finale_num))
+    }
+     
+tir_para_R7_qualif_finale <- data.frame(tir_para_R7_qualif_finale,rang_3_pos_finale)
+
+for (i in 1:nrow(tir_para_R7_qualif_finale))
+    {if (tir_para_R7_qualif_finale$Rank_global[i] == 2) {tir_para_R7_qualif_finale$Rank_finale_num[i] <- NA}
+    }
+
+ggpairs(tir_para_R7_qualif_finale[,c('rang_genou','rang_couche','rang_debout','Rank_qualif')]) + theme_bw()
+
+
+#############################################################################################################################################################################
+## Scatter-plots entre les rangs de la phase de qualification et les trois rangs des trois positions par rapport au maximum de 1200 points sur l'ensemble des compétitions ##
+#############################################################################################################################################################################
+
+test_couche_pearson <- cor.test(tir_para_R7_qualif_finale$rang_couche,tir_para_R7_qualif_finale$Rank_qualif,method = c("pearson"))
+variable <- c('rang_couche')
+method <- c('Pearson')
+rho <- round(test_couche_pearson$estimate,3)
+ddl <- test_couche_pearson$parameter
+p_value <- test_couche_pearson$p.value
+vtest <- round(qnorm(p_value),2)
+result_test_all <- data.frame(variable,method,rho,ddl,p_value,vtest)
+
+test_couche_kendall <- cor.test(tir_para_R7_qualif_finale$rang_couche,tir_para_R7_qualif_finale$Rank_qualif,method = c("kendall"))
+variable <- c('rang_couche')
+method <- c('Kendall')
+rho <- round(test_couche_kendall$estimate,3)
+ddl <- NA
+p_value <- test_couche_kendall$p.value
+vtest <- round(qnorm(p_value),2)
+result_test <- data.frame(variable,method,rho,ddl,p_value,vtest)
+result_test_all <- rbind(result_test_all,result_test)
+
+test_couche_spearman <- cor.test(tir_para_R7_qualif_finale$rang_couche,tir_para_R7_qualif_finale$Rank_qualif,method = c("spearman"))
+variable <- c('rang_couche')
+method <- c('Spearman')
+rho <- round(test_couche_spearman$estimate,3)
+ddl <- NA
+p_value <- test_couche_spearman$p.value
+vtest <- round(qnorm(p_value),2)
+result_test <- data.frame(variable,method,rho,ddl,p_value,vtest)
+result_test_all <- rbind(result_test_all,result_test)
+
+test_genou_pearson <- cor.test(tir_para_R7_qualif_finale$rang_genou,tir_para_R7_qualif_finale$Rank_qualif,method = c("pearson"))
+variable <- c('rang_genou')
+method <- c('Pearson')
+rho <- round(test_genou_pearson$estimate,3)
+ddl <- test_genou_pearson$parameter
+p_value <- test_genou_pearson$p.value
+vtest <- round(qnorm(p_value),2)
+result_test <- data.frame(variable,method,rho,ddl,p_value,vtest)
+result_test_all <- rbind(result_test_all,result_test)
+
+test_genou_kendall <- cor.test(tir_para_R7_qualif_finale$rang_genou,tir_para_R7_qualif_finale$Rank_qualif,method = c("kendall"))
+variable <- c('rang_genou')
+method <- c('Kendall')
+rho <- round(test_genou_kendall$estimate,3)
+ddl <- NA
+p_value <- test_genou_kendall$p.value
+vtest <- round(qnorm(p_value),2)
+result_test <- data.frame(variable,method,rho,ddl,p_value,vtest)
+result_test_all <- rbind(result_test_all,result_test)
+
+test_genou_spearman <- cor.test(tir_para_R7_qualif_finale$rang_genou,tir_para_R7_qualif_finale$Rank_qualif,method = c("spearman"))
+variable <- c('rang_genou')
+method <- c('Spearman')
+rho <- round(test_genou_spearman$estimate,3)
+ddl <- NA
+p_value <- test_genou_spearman$p.value
+vtest <- round(qnorm(p_value),2)
+result_test <- data.frame(variable,method,rho,ddl,p_value,vtest)
+result_test_all <- rbind(result_test_all,result_test)
+
+test_debout_pearson <- cor.test(tir_para_R7_qualif_finale$rang_debout,tir_para_R7_qualif_finale$Rank_qualif,method = c("pearson"))
+variable <- c('rang_debout')
+method <- c('Pearson')
+rho <- round(test_debout_pearson$estimate,3)
+ddl <- test_debout_pearson$parameter
+p_value <- test_debout_pearson$p.value
+vtest <- round(qnorm(p_value),2)
+result_test <- data.frame(variable,method,rho,ddl,p_value,vtest)
+result_test_all <- rbind(result_test_all,result_test)
+
+test_debout_kendall <- cor.test(tir_para_R7_qualif_finale$rang_debout,tir_para_R7_qualif_finale$Rank_qualif,method = c("kendall"))
+variable <- c('rang_debout')
+method <- c('Kendall')
+rho <- round(test_debout_kendall$estimate,3)
+ddl <- NA
+p_value <- test_debout_kendall$p.value
+vtest <- round(qnorm(p_value),2)
+result_test <- data.frame(variable,method,rho,ddl,p_value,vtest)
+result_test_all <- rbind(result_test_all,result_test)
+
+test_debout_spearman <- cor.test(tir_para_R7_qualif_finale$rang_debout,tir_para_R7_qualif_finale$Rank_qualif,method = c("spearman"))
+variable <- c('rang_debout')
+method <- c('Spearman')
+rho <- round(test_debout_spearman$estimate,3)
+ddl <- NA
+p_value <- test_debout_spearman$p.value
+vtest <- round(qnorm(p_value),2)
+result_test <- data.frame(variable,method,rho,ddl,p_value,vtest)
+result_test_all <- rbind(result_test_all,result_test)# scat
+
+
+################################################################################
+# Scatter-plots entre les proportions des trois positions et l'accès en finale #
+################################################################################
+
+res_qualif <- matrix(0,nrow=nrow(tir_para_R7_qualif_finale))
+for (i in 1:nrow(tir_para_R7_qualif_finale))
+    {if (tir_para_R7_qualif_finale$Rank_global[i] == 1) {res_qualif[i] <- c('Finale')}
+     if (tir_para_R7_qualif_finale$Rank_global[i] == 2) {res_qualif[i] <- c('Pas finale')} 
+    }
+tir_para_R7_qualif_finale$res_qualif_ter <- as.factor(res_qualif)
+
+ggpairs(tir_para_R7_qualif_finale[,c('couche_prop','genou_prop','debout_prop','res_qualif_ter')]) + theme_bw()
+
+
+#####################################################################################
+# Caractérisation de l'accès en finale à l'aide des proportions des trois positions #
+#####################################################################################
+
+file_train <- tir_para_R7_qualif_finale %>%select(res_qualif_ter,genou_prop,couche_prop,debout_prop)
+cat_finale <- catdes(file_train,num.var=1,prob=0.15)
+plot(cat_finale,barplot=TRUE)
+
+
+################################################################################################################################
+# Liens entre les indicateurs de performance, reproductibilité (dispersion) et coefficient de variation avec l'accès en finale #
+################################################################################################################################
+
+num <- 1:nrow(tir_para_R7_qualif_finale)
+ggplot(tir_para_R7_qualif_finale, aes(x=performance, fill=res_qualif_ter)) + geom_boxplot() + coord_flip() + theme_bw()
+ggplot(tir_para_R7_qualif_finale, aes(x=disp_std, fill=res_qualif_ter)) + geom_boxplot() + coord_flip() + theme_bw()
+par(oma=c(0,0,0,0),bg="white")
+plot(tir_para_R7_qualif_finale$performance,tir_para_R7_qualif_finale$disp_std,type="n", main="Performance vs reproductibilité",xlab="Performance",ylab="Reproductibilité")
+text(tir_para_R7_qualif_finale$performance,tir_para_R7_qualif_finale$disp_std,num,col=c("green","red")[tir_para_R7_qualif_finale$Rank_global],cex=1)
+
+ggplot(tir_para_R7_qualif_finale, aes(x=Indic_CV, fill=res_qualif_ter)) + geom_boxplot() + coord_flip() + theme_bw()
+par(oma=c(0,0,0,0),bg="white")
+plot(num,tir_para_R7_qualif_finale$Indic_CV,type="n", main="Coefficient de variation et accès en finale",xlab="Performance",ylab="Reproductibilité")
+text(num,tir_para_R7_qualif_finale$Indic_CV,num,col=c("green","red")[tir_para_R7_qualif_finale$Rank_global],cex=1)
+
+
+########################################
+## Classification sur les proportions ##
+########################################
+
+# Représentation en 3D des trois positions
+scatter3D(tir_para_R7_qualif_finale$debout_prop, tir_para_R7_qualif_finale$genou_prop, tir_para_R7_qualif_finale$couche_prop, xlab = "Proportion debout", ylab = "Proportion genou", zlab = "Proportion couchée",col=c("blue"),pch = ".", bty = "f", cex = 5, colkey = FALSE)
+
+# Représentation en 3D des trois positions et de la target (Finale vs Non finale)
+scatter3D(tir_para_R7_qualif_finale$debout_prop, tir_para_R7_qualif_finale$genou_prop,tir_para_R7_qualif_finale$couche_prop, type="n",pch = ".", bty = "f", cex = 5, colkey = FALSE)
+text3D(tir_para_R7_qualif_finale$debout_prop, tir_para_R7_qualif_finale$genou_prop,tir_para_R7_qualif_finale$couche_prop, xlab = "Proportion debout", ylab = "Proportion genou", zlab = "Proportion couchée",col=c("green","red")[tir_para_R7_qualif_finale$Rank_global],cex=1,labels=rownames(tir_para_R7_qualif_finale))
+
+# Matrice de distances euclidiennes sur les trois positions
+d.prop <- dist(tir_para_R7_qualif_finale[,12:14])
+
+# Matrice de distances euclidiennes sur les trois positions et disp_std
+d.prop <- dist(tir_para_R7_qualif_finale[,12:15])
+
+# CAH avec le critère de Ward
+cah.ward <- hclust(d.prop,method="ward.D2")
+cah.ward$height <- cah.ward$height^2/2
+
+# Dendrogramme
+plot(cah.ward)
+
+# Affichage de la décroissance de perte d'inertie inter-classes
+n <- 397
+cah.ward$height <- cah.ward$height/n
+SMR2_Cm <- cah.ward$height/(sum(d.prop^2)/((n-1)^2))
+som_SMR2_Cm=0
+R2_Cm <- matrix(0,nrow=99)
+for (i in 1:396)
+    {som_SMR2_Cm=som_SMR2_Cm+SMR2_Cm[i]
+     R2_Cm[i]=round((1-som_SMR2_Cm)*100,4)
+    }
+SMR2_Cm <- SMR2_Cm*100
+res_ward <- data.frame(cah.ward$height,SMR2_Cm,R2_Cm)
+etape <- 1:396
+nb_cls <- 397:2
+process <- data.frame(etape,nb_cls,res_ward)
+par(oma=c(0,0,0,0)+1,bg="white")
+plot (process$etape, process$SMR2_Cm, type = "n", xlab="Etapes",ylab="Proportion de variation Ward",main="")
+text (process$etape, process$SMR2_Cm, process$nb_cls,col='red',cex=1)
+
+#dendrogramme avec matérialisation en quatre groupes pour les trois positions seulement
+rect.hclust(cah.ward,k=4)
+#découpage en 4 groupes avec les proportions des 3 positions seulement
+groupes.cah_ward <- cutree(cah.ward,k=4)
+
+# Fusion du tableau de données et de la variable de classe
+tir_para_R7_qualif_finale <- data.frame(tir_para_R7_qualif_finale,groupes.cah_ward)
+
+# Représentation en 3D des trois positions et des classes
+scatter3D(tir_para_R7_qualif_finale$debout_prop, tir_para_R7_qualif_finale$genou_prop,tir_para_R7_qualif_finale$couche_prop, type="n",pch = ".", bty = "f", cex = 5, colkey = FALSE)
+text3D(tir_para_R7_qualif_finale$debout_prop, tir_para_R7_qualif_finale$genou_prop,tir_para_R7_qualif_finale$couche_prop, xlab = "Proportion debout", ylab = "Proportion genou", zlab = "Proportion couchée",col=c("green","red","blue","cyan")[tir_para_R7_qualif_finale$groupes.cah_ward],cex=1,labels=rownames(tir_para_R7_qualif_finale))
+
+# Transformation de la variable de classe en type caractère pour pouvoir utiliser la fonction catdes  
+tir_para_R7_qualif_finale$cluster <- as.character(tir_para_R7_qualif_finale$groupes.cah_ward)
+
+table(tir_para_R7_qualif_finale$cluster)
+
+# Construction de la table de données pour afficher les box-plots des classes pour les trois positions seulement
+res_finale <- tir_para_R7_qualif_finale %>% filter(cluster == "1")
+classe <- matrix("Classe 1",nrow=nrow(res_finale))
+position <- matrix("Couché",nrow=nrow(res_finale))
+proportion <- res_finale$couche_prop
+result_all <- data.frame(classe,position,proportion)
+position <- matrix("Genou",nrow=nrow(res_finale))
+proportion <- res_finale$genou_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Debout",nrow=nrow(res_finale))
+proportion <- res_finale$debout_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+
+res_finale <- tir_para_R7_qualif_finale %>% filter(cluster == "2")
+classe <- matrix("Classe 2",nrow=nrow(res_finale))
+position <- matrix("Couché",nrow=nrow(res_finale))
+proportion <- res_finale$couche_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Genou",nrow=nrow(res_finale))
+proportion <- res_finale$genou_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Debout",nrow=nrow(res_finale))
+proportion <- res_finale$debout_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+
+res_finale <- tir_para_R7_qualif_finale %>% filter(cluster == "3")
+classe <- matrix("Classe 3",nrow=nrow(res_finale))
+position <- matrix("Couché",nrow=nrow(res_finale))
+proportion <- res_finale$couche_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Genou",nrow=nrow(res_finale))
+proportion <- res_finale$genou_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Debout",nrow=nrow(res_finale))
+proportion <- res_finale$debout_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+
+res_finale <- tir_para_R7_qualif_finale %>% filter(cluster == "4")
+classe <- matrix("Classe 4",nrow=nrow(res_finale))
+position <- matrix("Couché",nrow=nrow(res_finale))
+proportion <- res_finale$couche_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Genou",nrow=nrow(res_finale))
+proportion <- res_finale$genou_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Debout",nrow=nrow(res_finale))
+proportion <- res_finale$debout_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+
+ggplot(result_all, aes(x=proportion, y=classe, fill=position)) + geom_boxplot() + coord_flip()
+
+# Caractérisation des classes à l'aide du concept de la valeur-test #
+file_train <- tir_para_R7_qualif_finale %>% select(cluster,res_qualif_ter,genou_prop,couche_prop,debout_prop,disp_std,Rank_qualif)
+cat_finale <- catdes(file_train,num.var=1)
+plot(cat_finale,barplot=TRUE)
+
+# Construction de la table de données pour afficher les box-plots des classes pour les trois positions de la reproductibilité (disp_std) 
+res_finale <- tir_para_R7_qualif_finale %>% filter(cluster == "1")
+classe <- matrix("Classe 1",nrow=nrow(res_finale))
+position <- matrix("Couché",nrow=nrow(res_finale))
+proportion <- res_finale$couche_prop
+result_all <- data.frame(classe,position,proportion)
+position <- matrix("Genou",nrow=nrow(res_finale))
+proportion <- res_finale$genou_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Debout",nrow=nrow(res_finale))
+proportion <- res_finale$debout_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Reproductibilité",nrow=nrow(res_finale))
+proportion <- res_finale$disp_std*sqrt(3)
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+
+res_finale <- tir_para_R7_qualif_finale %>% filter(cluster == "2")
+classe <- matrix("Classe 2",nrow=nrow(res_finale))
+position <- matrix("Couché",nrow=nrow(res_finale))
+proportion <- res_finale$couche_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Genou",nrow=nrow(res_finale))
+proportion <- res_finale$genou_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Debout",nrow=nrow(res_finale))
+proportion <- res_finale$debout_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Reproductibilité",nrow=nrow(res_finale))
+proportion <- res_finale$disp_std*sqrt(3)
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+
+res_finale <- tir_para_R7_qualif_finale %>% filter(cluster == "3")
+classe <- matrix("Classe 3",nrow=nrow(res_finale))
+position <- matrix("Couché",nrow=nrow(res_finale))
+proportion <- res_finale$couche_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Genou",nrow=nrow(res_finale))
+proportion <- res_finale$genou_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Debout",nrow=nrow(res_finale))
+proportion <- res_finale$debout_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Reproductibilité",nrow=nrow(res_finale))
+proportion <- res_finale$disp_std*sqrt(3)
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+
+res_finale <- tir_para_R7_qualif_finale %>% filter(cluster == "4")
+classe <- matrix("Classe 4",nrow=nrow(res_finale))
+position <- matrix("Couché",nrow=nrow(res_finale))
+proportion <- res_finale$couche_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Genou",nrow=nrow(res_finale))
+proportion <- res_finale$genou_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Debout",nrow=nrow(res_finale))
+proportion <- res_finale$debout_prop
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+position <- matrix("Reproductibilité",nrow=nrow(res_finale))
+proportion <- res_finale$disp_std*sqrt(3)
+result <- data.frame(classe,position,proportion)
+result_all <- rbind(result_all,result)
+
+ggplot(result_all, aes(x=proportion, y=classe, fill=position)) + geom_boxplot() + coord_flip()
+
+
+#######################################################################################################
+## Test t sur échantillons appariés sur chaque accès pour comparer deux à deux les positions: scores ##
+#######################################################################################################
+
+finalistes <- tir_para_R7_qualif_finale %>% filter(Rank_global == 1) 
+non_finalistes <- tir_para_R7_qualif_finale %>% filter(Rank_global == 2) 
+
+# Test de normalité des différences 
+diff_finalistes_couche_genou <- finalistes$couche-finalistes$genou
+num <- 1:185
+data_finalistes_couche_genou <- data.frame(num,diff_finalistes_couche_genou)
+test_KS_finalistes_couche_genou <- ks.test(data_finalistes_couche_genou[,2],"pnorm")
+test_KS_finalistes_couche_genou
+test_SW_finalistes_couche_genou <- shapiro.test(data_finalistes_couche_genou[,2])
+test_SW_finalistes_couche_genou
+
+# Test t 
+test_t_finalistes_couche_genou <- t.test(finalistes$couche, finalistes$genou, paired = TRUE)
+test_t_finalistes_couche_genou
+
+# Test de normalité des différences 
+diff_finalistes_couche_debout <- finalistes$couche-finalistes$debout
+num <- 1:185
+data_finalistes_couche_debout <- data.frame(num,diff_finalistes_couche_debout)
+test_KS_finalistes_couche_debout <- ks.test(data_finalistes_couche_debout[,2],"pnorm")
+test_KS_finalistes_couche_debout
+test_SW_finalistes_couche_debout <- shapiro.test(data_finalistes_couche_debout[,2])
+test_SW_finalistes_couche_debout
+
+# Test t 
+test_t_finalistes_couche_debout <- t.test(finalistes$couche, finalistes$debout, paired = TRUE)
+test_t_finalistes_couche_debout
+
+# Test de normalité des différences 
+diff_finalistes_genou_debout <- finalistes$genou-finalistes$debout
+num <- 1:185
+data_finalistes_genou_debout <- data.frame(num,diff_finalistes_genou_debout)
+test_KS_finalistes_genou_debout <- ks.test(data_finalistes_genou_debout[,2],"pnorm")
+test_KS_finalistes_genou_debout
+test_SW_finalistes_genou_debout <- shapiro.test(data_finalistes_genou_debout[,2])
+test_SW_finalistes_genou_debout
+
+# Test t 
+test_t_finalistes_genou_debout <- t.test(finalistes$genou, finalistes$debout, paired = TRUE)
+test_t_finalistes_genou_debout
+
+# Test de normalité des différences 
+diff_non_finalistes_couche_genou <- non_finalistes$couche-non_finalistes$genou
+num <- 1:212
+data_non_finalistes_couche_genou <- data.frame(num,diff_non_finalistes_couche_genou)
+test_KS_non_finalistes_couche_genou <- ks.test(data_non_finalistes_couche_genou[,2],"pnorm")
+test_KS_non_finalistes_couche_genou
+test_SW_non_finalistes_couche_genou <- shapiro.test(data_non_finalistes_couche_genou[,2])
+test_SW_non_finalistes_couche_genou
+
+# Test t
+test_t_non_finalistes_couche_genou <- t.test(non_finalistes$couche, non_finalistes$genou, paired = TRUE)
+test_t_non_finalistes_couche_genou
+
+# Test de normalité des différences 
+diff_non_finalistes_couche_debout <- non_finalistes$couche-non_finalistes$debout
+num <- 1:212
+data_non_finalistes_couche_debout <- data.frame(num,diff_non_finalistes_couche_debout)
+test_KS_non_finalistes_couche_debout <- ks.test(data_non_finalistes_couche_debout[,2],"pnorm")
+test_KS_non_finalistes_couche_debout
+test_SW_non_finalistes_couche_debout <- shapiro.test(data_non_finalistes_couche_debout[,2])
+test_SW_non_finalistes_couche_debout
+
+# Test t
+test_t_non_finalistes_couche_debout <- t.test(non_finalistes$couche, non_finalistes$debout, paired = TRUE)
+test_t_non_finalistes_couche_debout
+
+# Test de normalité des différences 
+diff_non_finalistes_genou_debout <- non_finalistes$genou-non_finalistes$debout
+num <- 1:212
+data_non_finalistes_genou_debout <- data.frame(num,diff_non_finalistes_genou_debout)
+test_KS_non_finalistes_genou_debout <- ks.test(data_non_finalistes_genou_debout[,2],"pnorm")
+test_KS_non_finalistes_genou_debout
+test_SW_non_finalistes_genou_debout <- shapiro.test(data_non_finalistes_genou_debout[,2])
+test_SW_non_finalistes_genou_debout
+
+# Test t
+test_t_non_finalistes_genou_debout <- t.test(non_finalistes$genou, non_finalistes$debout, paired = TRUE)
+test_t_non_finalistes_genou_debout
+
+
+###############################################################################################################################
+## Test de Wilcoxon-Mann-Whitney sur échantillons appariés sur chaque accès pour comparer deux à deux les positions : scores ##
+###############################################################################################################################
+
+finalistes <- tir_para_R7_qualif_finale %>% filter(Rank_global == 1) 
+non_finalistes <- tir_para_R7_qualif_finale %>% filter(Rank_global == 2) 
+
+test_wilcoxon_finalistes_couche_genou <- wilcox.test(finalistes$couche, finalistes$genou, paired = TRUE)
+test_wilcoxon_finalistes_couche_genou
+test_wilcoxon_finalistes_couche_debout <- wilcox.test(finalistes$couche, finalistes$debout, paired = TRUE)
+test_wilcoxon_finalistes_couche_debout
+test_wilcoxon_finalistes_genou_debout <- wilcox.test(finalistes$genou, finalistes$debout, paired = TRUE)
+test_wilcoxon_finalistes_genou_debout
+
+test_wilcoxon_non_finalistes_couche_genou <- wilcox.test(non_finalistes$couche, non_finalistes$genou, paired = TRUE)
+test_wilcoxon_non_finalistes_couche_genou
+test_wilcoxon_non_finalistes_couche_debout <- wilcox.test(non_finalistes$couche, non_finalistes$debout, paired = TRUE)
+test_wilcoxon_non_finalistes_couche_debout
+test_wilcoxon_non_finalistes_genou_debout <- wilcox.test(non_finalistes$genou, non_finalistes$debout, paired = TRUE)
+test_wilcoxon_non_finalistes_genou_debout
+
+
+##################################################################################################################################################
+## Test de Wilcoxon-Mann-Whitney sur échantillons non appariés sur chaque position pour comparer les deux accès : finale vs non finale - scores ##
+##################################################################################################################################################
+
+finalistes_vs_non_finalistes_couche <- result_all_score %>% filter(position == "Couché")
+test_wilcoxon_finalistes_vs_non_finalistes_couche <- wilcox.test(score ~ acces, data = finalistes_vs_non_finalistes_couche)
+test_wilcoxon_finalistes_vs_non_finalistes_couche
+
+finalistes_vs_non_finalistes_genou <- result_all_score %>% filter(position == "Genou")
+test_wilcoxon_finalistes_vs_non_finalistes_genou <- wilcox.test(score ~ acces, data = finalistes_vs_non_finalistes_genou)
+test_wilcoxon_finalistes_vs_non_finalistes_genou
+
+finalistes_vs_non_finalistes_debout <- result_all_score %>% filter(position == "Debout")
+test_wilcoxon_finalistes_vs_non_finalistes_debout <- wilcox.test(score ~ acces, data = finalistes_vs_non_finalistes_debout)
+test_wilcoxon_finalistes_vs_non_finalistes_debout
+
+
+###########################################################################################################################
+## Test t sur échantillons non appariés sur chaque position pour comparer les deux accès : finale vs non finale - scores ##
+###########################################################################################################################
+
+finalistes_vs_non_finalistes_couche <- result_all_score %>% filter(position == "Couché")
+test_t_finalistes_vs_non_finalistes_couche <- t.test(score ~ acces, data = finalistes_vs_non_finalistes_couche)
+test_t_finalistes_vs_non_finalistes_couche
+
+finalistes_vs_non_finalistes_genou <- result_all_score %>% filter(position == "Genou")
+test_t_finalistes_vs_non_finalistes_genou <- t.test(score ~ acces, data = finalistes_vs_non_finalistes_genou)
+test_t_finalistes_vs_non_finalistes_genou
+
+finalistes_vs_non_finalistes_debout <- result_all_score %>% filter(position == "Debout")
+test_t_finalistes_vs_non_finalistes_debout <- t.test(score ~ acces, data = finalistes_vs_non_finalistes_debout)
+test_t_finalistes_vs_non_finalistes_debout
+
+
+################################################################################################################
+## Approches pour modéliser la survenance en phase finale à l'aide des résultats de la phase de qualification ##
+################################################################################################################
+
+#####################
+# Segmentation CART #
+#####################
+
+## Fichier complet avec les scores des trois positions et l'accès en finale ##
+file_train <- tir_para_R7_qualif_finale %>% select(res_qualif_ter,genou,couche,debout)
+
+# Utilisation de la fonction rpart dans base
+model <- rpart(res_qualif_ter ~ ., data = file_train,method="class",control=rpart.control(minsplit = 10,cp=0.005,x=TRUE))
+summary(model)
+
+# Importance des variables
+variable_importance_pct <- round(100*model$variable.importance/sum(model$variable.importance),1)
+rpart.plot(model)
+
+# Qualité de l'arbre sur l'échantillon complet
+n_train <- nrow(file_train)
+pred_train <- predict(model)
+result <- data.frame(file_train,pred_train)
+result$pred <- (result$Finale >= 0.5)*1
+tab_conting <- table(result$res_qualif_ter,result$pred)
+tab_conting <- data.frame(tab_conting)
+table(result$res_qualif_ter,result$pred)
+
+
+## Construction table de résultats contenant pour chaque individu, sa feuille dans l'arbre ##
+
+# Construction du lift
+tab <- model$frame
+s <- rownames(tab)
+tab <- data.frame(s,tab)
+root <- tab[1,]
+p_y <- as.matrix(root[10])[4]
+leaf <- tab %>% filter(var == "<leaf>")
+list_leaf <- as.numeric(str_split(leaf[,10], " ", simplify = TRUE))
+S <- nrow(leaf)
+deb <- 3*S+1
+fin <- 4*S
+p_y_s <- list_leaf[deb:fin]
+s <- leaf$s
+y <- leaf$yval
+n <- leaf$n
+lift <- p_y_s/p_y
+lift <- data.frame(s,y,p_y_s,lift,n)
+lift <- lift %>% arrange(p_y_s)
+
+# Récupération des prédictions
+num <- 1:nrow(file_train)
+pred <- predict(model)
+pred <- data.frame(num,file_train,pred)
+pred <- pred %>% arrange(Finale)
+
+for (k in 1:nrow(lift))
+    {if (k == 1) {deb <- 1
+                  n_s <- lift$n[1]
+                  s <- lift$s[1]
+                  fin <- deb+n_s-1
+                  target <- matrix(s,nrow=n_s)
+                  leaf <- target
+                 }
+     if (k > 1) {deb <- n_s+1
+                 n_s <- lift$n[k]
+                 s <- lift$s[k]
+                 fin <- deb+n_s-1
+                 target <- matrix(s,nrow=n_s)
+                 leaf <- rbind(leaf,target)
+                }
+     }
+
+# Fusion des deux tables contenant les lifts et les prédictions
+result <- data.frame(pred,leaf)
+
+# Calcul des bornes de chacune des trois positions par feuille 
+stat <- result %>% group_by(leaf) %>% summarise(min_debout=min(debout),max_debout=max(debout),min_genou=min(genou),max_genou=max(genou),min_couche=min(couche),max_couche=max(couche),Finale=mean(Finale),n_s=n())
+stat <- data.frame(stat)
+stat <- stat %>% arrange(desc(Finale))
+
+# Cartographie de la structure de l'arbre de classification CART
+par(oma=c(8,0,8,0)+1,bg="white")
+z <- as.matrix(-stat[,2:7])
+rownames(z) <- stat$leaf
+colnames(z) <- c('[deb','deb]','[gen','gen]','[cou','cou]')
+y <- seq(1,6,length.out=6)
+x <- seq(1,15,length.out=15)
+image(x,y,z,zlim=c(-400,-290),xlab="Feuilles",ylab="Intervalles des 3 positions",main="Structure de l'arbre de classification CART",axes=FALSE,col=hcl.colors(12,palette = "mako"))
+axis(1, at = x,labels = rownames(z),las=1,cex.axis=1.2)
+axis(2, at = y,labels = colnames(z),las=2,cex.axis=1)
+
+carto <- matrix(1,nrow=318,ncol=15)
+for (j in 1:15)
+    {deb <- stat$min_debout[j]-293
+     fin <- stat$max_debout[j]-293
+     carto[deb:fin,j] <- 0
+     deb <- 106+(stat$min_genou[j]-293)
+     fin <- 106+(stat$max_genou[j]-293)
+     carto[deb:fin,j] <- 0
+     deb <- 212+(stat$min_couche[j]-293)
+     fin <- 212+(stat$max_couche[j]-293)
+     carto[deb:fin,j] <- 0
+    }
+rownames(carto) <- c(294:399,294:399,294:399)
+colnames(carto) <- stat$leaf
+
+# Cartographie de la structure de l'arbre de classification CART pour les trois positions
+par(oma=c(6,0,6,0)+1,bg="white")
+z <- as.matrix(carto)
+rownames(z) <- rownames(carto)
+colnames(z) <- stat$leaf
+y <- seq(1,15,length.out=15)
+x <- seq(1,318,length.out=318)
+image(x,y,z,xlab="Intervalles des trois positions",ylab="Feuilles",main="Structure de l'arbre de classification CART : debout - genou - couché",axes=FALSE,col=hcl.colors(12,palette = "mako"))
+axis(1, at = x,labels = rownames(z),las=1,cex.axis=1.2)
+axis(2, at = y,labels = colnames(z),las=2,cex.axis=1)
+
+# Cartographie de la structure de l'arbre de classification CART pour la position debout
+par(oma=c(2,12,2,12)+1,bg="white")
+z <- as.matrix(carto[1:106,])
+rownames(z) <- rownames(carto)[1:106]
+colnames(z) <- stat$leaf
+y <- seq(1,15,length.out=15)
+x <- seq(1,106,length.out=106)
+image(x,y,z,xlab="Intervalles de la position DEBOUT",ylab="Feuilles",main="Structure de l'arbre de classification CART pour la position DEBOUT",axes=FALSE,col=hcl.colors(12,palette = "mako"))
+axis(1, at = x,labels = rownames(z),las=1,cex.axis=1.2)
+axis(2, at = y,labels = colnames(z),las=2,cex.axis=1)
+
+# Cartographie de la structure de l'arbre de classification CART pour la position genou
+par(oma=c(2,12,2,12)+1,bg="white")
+z <- as.matrix(carto[107:212,])
+rownames(z) <- rownames(carto)[107:212]
+colnames(z) <- stat$leaf
+y <- seq(1,15,length.out=15)
+x <- seq(1,106,length.out=106)
+image(x,y,z,,xlab="Intervalles de la position GENOU",ylab="Feuilles",main="Structure de l'arbre de classification CART pour la position GENOU",axes=FALSE,col=hcl.colors(12,palette = "mako"))
+axis(1, at = x,labels = rownames(z),las=1,cex.axis=1.2)
+axis(2, at = y,labels = colnames(z),las=2,cex.axis=1)
+
+# Cartographie de la structure de l'arbre de classification CART pour la position couchée
+par(oma=c(2,12,2,12)+1,bg="white")
+z <- as.matrix(carto[213:318,])
+rownames(z) <- rownames(carto)[213:318]
+colnames(z) <- stat$leaf
+y <- seq(1,15,length.out=15)
+x <- seq(1,106,length.out=106)
+image(x,y,z,xlab="Intervalles de la position COUCHE",ylab="Feuilles",main="Structure de l'arbre de classification CART pour la position COUCHE",axes=FALSE,col=hcl.colors(12,palette = "mako"))
+axis(1, at = x,labels = rownames(z),las=1,cex.axis=1.2)
+axis(2, at = y,labels = colnames(z),las=2,cex.axis=1)
+
+# Caractérisation la cible à l'aide des feuilles de CART
+result$leaf_cat <- as.character(result$leaf)
+par(oma=c(0,0,0,0)+1,bg="white")
+cat_finale <- catdes(result[,c('res_qualif_ter','leaf_cat')],num.var=1,prob=0.01)
+plot(cat_finale,barplot=TRUE)
+
+# Cartographie des lifts
+par(oma=c(10,0,10,0)+1,bg="white")
+z <- as.matrix(-lift[,4])
+rownames(z) <- lift$s
+colnames(z) <- c(' ')
+y <- seq(1,1,length.out=1)
+x <- seq(1,15,length.out=15)
+image(x,y,z,xlab="Feuilles",ylab="Lift",main="Cartographie des lifts par feuille de l'arbre de classification",axes=FALSE,col=hcl.colors(12,palette = "mako"))
+axis(1, at = x,labels = rownames(z),las=1,cex.axis=1.2)
+axis(2, at = y,labels = colnames(z),las=2,cex.axis=1)
+
+# Constitution des fichier d'apprentissage et test avec les scores des trois positions et l'accès en finale
+n <- 397
+tirage <- runif(397)
+tir_01 <- (tirage >= 0.8)*1
+table(tir_01)
+file_train_test <- data.frame(file_train,tir_01)
+file_train_new <- file_train_test %>% filter(tir_01 == 0)
+file_test_new <- file_train_test %>% filter(tir_01 == 1)
+
+# Utilisation de la fonction rpart dans base sur le fichier d'apprentissage
+model <- rpart(res_qualif_ter ~ ., data = file_train_new,method="class",control=rpart.control(minsplit = 10,cp=0.005))
+summary(model)
+par(oma=c(0,0,0,0)+1,bg="white")
+rpart.plot(model)
+
+# Qualité de l'arbre sur l'échantillon d'apprentissage
+n_train <- nrow(file_train_new)
+pred_train_new <- predict(model)
+result <- data.frame(file_train_new,pred_train_new)
+result$pred <- (result$Finale >= 0.5)*1
+tab_conting <- table(result$res_qualif_ter,result$pred)
+tab_conting <- data.frame(tab_conting)
+pct_bcl <- round(100*((tab_conting$Freq[2]+tab_conting$Freq[3])/sum(tab_conting$Freq)),2)
+pct_max <- round(100*((tab_conting$Freq[2]+tab_conting$Freq[4])/sum(tab_conting$Freq)),2)
+p_max <- pct_max/100
+binf <- round(100*(p_max-1.96*sqrt(p_max*(1-p_max)/n_train)),2)
+bsup <- round(100*(p_max+1.96*sqrt(p_max*(1-p_max)/n_train)),2)
+pct_bcl
+binf
+bsup
+
+# Qualité de l'arbre sur l'échantillon test
+n_test <- nrow(file_test_new)
+pred_test_new <- predict(model,newdata=file_test_new,type="class")
+pred_test_new <- data.frame(pred_test_new)
+result <- data.frame(file_test_new,pred_test_new)
+tab_conting <- table(result$res_qualif_ter,result$pred_test_new)
+tab_conting <- data.frame(tab_conting)
+pct_bcl <- round(100*((tab_conting$Freq[1]+tab_conting$Freq[4])/sum(tab_conting$Freq)),2)
+pct_max <- round(100*((tab_conting$Freq[2]+tab_conting$Freq[4])/sum(tab_conting$Freq)),2)
+p_max <- pct_max/100
+p_bcl <- pct_bcl/100
+binf <- round(100*(p_max-1.96*sqrt(p_max*(1-p_max)/n_test)),2)
+bsup <- round(100*(p_max+1.96*sqrt(p_max*(1-p_max)/n_test)),2)
+pct_bcl
+binf
+bsup
+v_test <- (p_bcl-p_max)/sqrt(p_max*(1-p_max)/n_test)
+v_test
+
+
+## Fichier complet avec les scores des trois positions, la reproductibilité et l'accès en finale ##
+file_train <- tir_para_R7_qualif_finale %>% select(res_qualif_ter,genou,couche,debout,disp_std)
+
+# Utilisation de la fonction rpart dans base
+model <- rpart(res_qualif_ter ~ ., data = file_train,method="class",control=rpart.control(minsplit = 10,cp=0.005))
+summary(model)
+
+# Importance des variables
+variable_importance_pct <- round(100*model$variable.importance/sum(model$variable.importance),1)
+rpart.plot(model)
+
+# Qualité de l'arbre sur l'échantillon complet
+n_train <- nrow(file_train)
+pred_train <- predict(model)
+result <- data.frame(file_train,pred_train)
+result$pred <- (result$Finale >= 0.5)*1
+tab_conting <- table(result$res_qualif_ter,result$pred)
+tab_conting <- data.frame(tab_conting)
+table(result$res_qualif_ter,result$pred)
+
+# Constitution des fichier d'apprentissage et test avec les scores des trois positions et l'accès en finale
+n <- 397
+tirage <- runif(397)
+tir_01 <- (tirage >= 0.8)*1
+table(tir_01)
+file_train_test <- data.frame(file_train,tir_01)
+file_train_new <- file_train_test %>% filter(tir_01 == 0)
+file_test_new <- file_train_test %>% filter(tir_01 == 1)
+
+# Utilisation de la fonction rpart dans base sur le fichier d'apprentissage
+model <- rpart(res_qualif_ter ~ ., data = file_train_new,method="class",control=rpart.control(minsplit = 10,cp=0.005))
+summary(model)
+rpart.plot(model)
+
+# Qualité de l'arbre sur l'échantillon d'apprentissage
+n_train <- nrow(file_train_new)
+pred_train_new <- predict(model)
+result <- data.frame(file_train_new,pred_train_new)
+result$pred <- (result$Finale >= 0.5)*1
+tab_conting <- table(result$res_qualif_ter,result$pred)
+tab_conting <- data.frame(tab_conting)
+pct_bcl <- round(100*((tab_conting$Freq[2]+tab_conting$Freq[3])/sum(tab_conting$Freq)),2)
+pct_max <- round(100*((tab_conting$Freq[2]+tab_conting$Freq[4])/sum(tab_conting$Freq)),2)
+p_max <- pct_max/100
+binf <- round(100*(p_max-1.96*sqrt(p_max*(1-p_max)/n_train)),2)
+bsup <- round(100*(p_max+1.96*sqrt(p_max*(1-p_max)/n_train)),2)
+pct_bcl
+binf
+bsup
+
+# Qualité de l'arbre sur l'échantillon test
+n_test <- nrow(file_test_new)
+pred_test_new <- predict(model,newdata=file_test_new,type="class")
+pred_test_new <- data.frame(pred_test_new)
+result <- data.frame(file_test_new,pred_test_new)
+tab_conting <- table(result$res_qualif_ter,result$pred_test_new)
+tab_conting <- data.frame(tab_conting)
+pct_bcl <- round(100*((tab_conting$Freq[1]+tab_conting$Freq[4])/sum(tab_conting$Freq)),2)
+pct_max <- round(100*((tab_conting$Freq[2]+tab_conting$Freq[4])/sum(tab_conting$Freq)),2)
+p_max <- pct_max/100
+p_bcl <- pct_bcl/100
+binf <- round(100*(p_max-1.96*sqrt(p_max*(1-p_max)/n_test)),2)
+bsup <- round(100*(p_max+1.96*sqrt(p_max*(1-p_max)/n_test)),2)
+pct_bcl
+binf
+bsup
+v_test <- (p_bcl-p_max)/sqrt(p_max*(1-p_max)/n_test)
+v_test
+
+
+###################
+## Random Forest ##
+###################
+
+## Fichier complet avec les scores des trois positions et l'accès en finale ##
+file_train <- tir_para_R7_qualif_finale %>% select(res_qualif_ter,genou,couche,debout)
+
+# Utilisation de la fonction randomForest du package randomForest
+model <- randomForest(res_qualif_ter ~ ., data = file_train, ntree = 500)
+
+# Importance des variables
+model$importance
+variable_importance_order <- model$importance[order(model$importance[,1],decreasing = TRUE),]
+variable_importance_order
+variable_importance_pct <- round(100*variable_importance_order/sum(variable_importance_order))
+variable_importance_pct
+varImpPlot(model,cex=2, pch=17)
+
+# Erreur OBB (Out Of Bag)
+plot(model$err.rate[,1],type="l",xlab="nombre d'arbres",ylab="erreur OBB")
+
+
+## Fichier complet avec les scores des trois positions, la reproductibilité et l'accès en finale ##
+file_train <- tir_para_R7_qualif_finale %>% select(res_qualif_ter,genou,couche,debout,disp_std)
+
+# Utilisation de la fonction randomForest du package randomForest
+model <- randomForest(res_qualif_ter ~ ., data = file_train, ntree = 500)
+
+# Importance des variables
+model$importance
+variable_importance_order <- model$importance[order(model$importance[,1],decreasing = TRUE),]
+variable_importance_order
+variable_importance_pct <- round(100*variable_importance_order/sum(variable_importance_order))
+variable_importance_pct
+varImpPlot(model,cex=2, pch=17)
+
+# Erreur OBB (Out Of Bag)
+plot(model$err.rate[,1],type="l",xlab="nombre d'arbres",ylab="erreur OBB")
+
+
+########################################
+## Régression logistique dichotomique ##
+########################################
+
+## Fichier complet avec les scores des trois positions et l'accès en finale ##
+file_train <- tir_para_R7_qualif_finale %>% select(res_qualif_ter,genou,couche,debout)
+file_train$acces_finale <- (file_train$res_qualif_ter == "Finale")*1
+
+# Visualiser avant tout !!!
+ggpairs(file_train[,1:4])
+plot(res_qualif_ter ~ debout, data = file_train)
+plot(res_qualif_ter ~ genou, data = file_train)
+plot(res_qualif_ter ~ couche, data = file_train)
+
+
+## Fichier complet avec les scores des trois positions, la reproductibilité et l'accès en finale ##
+file_train <- tir_para_R7_qualif_finale %>% select(res_qualif_ter,genou,couche,debout,disp_std)
+file_train$acces_finale <- (file_train$res_qualif_ter == "Finale")*1
+
+# Visualiser avant tout !!!
+ggpairs(file_train[,1:5])
+plot(res_qualif_ter ~ debout, data = file_train)
+plot(res_qualif_ter ~ genou, data = file_train)
+plot(res_qualif_ter ~ couche, data = file_train)
+plot(res_qualif_ter ~ disp_std, data = file_train)
+
+# Régression logistique simple avec la position couchée
+reg <- glm(acces_finale ~ couche, data = file_train, family = binomial(logit))
+beta_0 <- reg$coef[1]
+beta_1 <- reg$coef[2]
+coupure_couche <- -beta_0/beta_1
+summary(reg)
+file_train$pred_couche <- predict(reg)
+plot(file_train$couche,file_train$pred_couche, type="n", main="Accès en finale prédit vs score position couchée",xlab="Position couchée",ylab="Accès en finale estimé")
+text(file_train$couche,file_train$pred_couche,rownames(file_train),col=c("green","red")[file_train$res_qualif_ter],cex=1)
+abline(h=0,v=coupure_couche)
+
+# Régression logistique simple avec la position genou
+reg <- glm(acces_finale ~ genou, data = file_train, family = binomial(logit))
+beta_0 <- reg$coef[1]
+beta_1 <- reg$coef[2]
+coupure_genou <- -beta_0/beta_1
+summary(reg)
+file_train$pred_genou <- predict(reg)
+plot(file_train$genou,file_train$pred_genou, type="n", main="Accès en finale prédit vs score position genou",xlab="Position genou",ylab="Accès en finale estimé")
+text(file_train$genou,file_train$pred_genou,rownames(file_train),col=c("green","red")[file_train$res_qualif_ter],cex=1)
+abline(h=0,v=coupure_genou)
+
+# Régression logistique simple avec la position debout
+reg <- glm(acces_finale ~ debout, data = file_train, family = binomial(logit))
+beta_0 <- reg$coef[1]
+beta_1 <- reg$coef[2]
+coupure_debout <- -beta_0/beta_1
+summary(reg)
+file_train$pred_debout <- predict(reg)
+plot(file_train$debout,file_train$pred_debout, type="n", main="Accès en finale prédit vs score position debout",xlab="Position debout",ylab="Accès en finale estimé")
+text(file_train$debout,file_train$pred_debout,col=c("green","red")[file_train$res_qualif_ter],cex=1)
+abline(h=0,v=coupure_debout)
+
+# Régression logistique simple avec la reproductibilité
+reg <- glm(acces_finale ~ disp_std, data = file_train, family = binomial(logit))
+beta_0 <- reg$coef[1]
+beta_1 <- reg$coef[2]
+coupure_disp_std <- -beta_0/beta_1
+summary(reg)
+file_train$pred_disp_std <- predict(reg)
+plot(file_train$disp_std,file_train$pred_disp_std, type="n", main="Accès en finale prédit vs reproductibilité",xlab="Ecart-type",ylab="Accès en finale estimé")
+text(file_train$disp_std,file_train$pred_disp_std,col=c("green","red")[file_train$res_qualif_ter],cex=1)
+abline(h=0,v=coupure_disp_std)
+
+# Régression logistique multiple avec les trois positions
+reg <- glm(acces_finale ~ genou+couche+debout, data = file_train, family = binomial(logit))
+summary(reg)
+file_train$pred_all <- predict(reg)
+
+# Régression logistique multiple avec les trois positions et la reproductibilité
+reg <- glm(acces_finale ~ genou+couche+debout+disp_std, data = file_train, family = binomial(logit))
+summary(reg)
+file_train$pred_all <- predict(reg)
+
+
+## Qualité du modèle logit sur l'échantillon total ##
+n <- 397
+pred_acces_finale <- matrix(0,nrow=n)
+for (i in 1:n)
+    {if (file_train$pred_all[i] >= 0) {pred_acces_finale[i] <- "Finale"}
+        else {pred_acces_finale[i] <- "Pas finale"}
+    }
+file_train$pred_acces_finale <- pred_acces_finale
+tab_conting <- table(file_train$res_qualif_ter,file_train$pred_acces_finale)
+tab_conting <- data.frame(tab_conting)
+pct_bcl <- round(100*((tab_conting$Freq[1]+tab_conting$Freq[4])/sum(tab_conting$Freq)),2)
+pct_max <- round(100*((tab_conting$Freq[2]+tab_conting$Freq[4])/sum(tab_conting$Freq)),2)
+p_max <- pct_max/100
+binf <- round(100*(p_max-1.96*sqrt(p_max*(1-p_max)/n)),2)
+bsup <- round(100*(p_max+1.96*sqrt(p_max*(1-p_max)/n)),2)
+pct_bcl
+binf
+bsup
+
+
+## Qualité du modèle logit binaire sur les échantillons d'apprentissage et test ##
+
+file_train <- tir_para_R7_qualif_finale %>% select(res_qualif_ter,genou,couche,debout,disp_max_std_norm_0_1)
+file_train$acces_finale <- (file_train$res_qualif_ter == "Finale")*1
+
+n <- 397
+tirage <- runif(397)
+tir_01 <- (tirage >= 0.8)*1
+table(tir_01)
+file_train_test <- data.frame(file_train,tir_01)
+file_train_new <- file_train_test %>% filter(tir_01 == 0)
+file_test_new <- file_train_test %>% filter(tir_01 == 1)
+reg <- glm(acces_finale ~ genou+couche+debout, data = file_train_new, family = binomial(logit))
+reg <- glm(acces_finale ~ genou+couche+debout+disp_std, data = file_train_new, family = binomial(logit))
+summary(reg)
+
+n_train <- nrow(file_train_new)
+pred_train_new <- predict(reg)
+result <- data.frame(file_train_new,pred_train_new)
+result$pred <- (result$pred_train_new >= 0)*1
+tab_conting <- table(result$res_qualif_ter,result$pred)
+tab_conting <- data.frame(tab_conting)
+pct_bcl <- round(100*((tab_conting$Freq[2]+tab_conting$Freq[3])/sum(tab_conting$Freq)),2)
+pct_max <- round(100*((tab_conting$Freq[2]+tab_conting$Freq[4])/sum(tab_conting$Freq)),2)
+p_max <- pct_max/100
+binf <- round(100*(p_max-1.96*sqrt(p_max*(1-p_max)/n_train)),2)
+bsup <- round(100*(p_max+1.96*sqrt(p_max*(1-p_max)/n_train)),2)
+pct_bcl
+binf
+bsup
+
+n <- nrow(file_test_new)
+n_test <- nrow(file_test_new)
+pred_test_new <- predict(reg,newdata=file_test_new)
+pred_test_new <- data.frame(pred_test_new)
+result <- data.frame(file_test_new,pred_test_new)
+result$pred_all <- (result$pred_test_new >= 0)*1
+pred_acces_finale <- matrix(0,nrow=n)
+for (i in 1:n)
+    {if (result$pred_all[i] == 1) {pred_acces_finale[i] <- "Finale"}
+        else {pred_acces_finale[i] <- "Pas finale"}
+    }
+result$pred_acces_finale <- pred_acces_finale
+
+tab_conting <- table(result$res_qualif_ter,result$pred_acces_finale)
+tab_conting <- data.frame(tab_conting)
+pct_bcl <- round(100*((tab_conting$Freq[1]+tab_conting$Freq[4])/sum(tab_conting$Freq)),2)
+pct_max <- round(100*((tab_conting$Freq[2]+tab_conting$Freq[4])/sum(tab_conting$Freq)),2)
+p_max <- pct_max/100
+p_bcl <- pct_bcl/100
+binf <- round(100*(p_max-1.96*sqrt(p_max*(1-p_max)/n_test)),2)
+bsup <- round(100*(p_max+1.96*sqrt(p_max*(1-p_max)/n_test)),2)
+pct_bcl
+binf
+bsup
+v_test <- (p_bcl-p_max)/sqrt(p_max*(1-p_max)/n_test)
+v_test
+
+
+#########################################
+## Régression logistique booléenne PLS ##
+#########################################
+
+X_finale <- file_train[,2:5]
+y_finale <- file_train$acces_finale
+modpls <- plsRglm(y_finale,X_finale,4,modele="pls-glm-logistic",pvals.expli=TRUE)
+modpls
+modpls$wwetoile
+
+# Choix de la première composante
+modpls <- plsRglm(y_finale,X_finale,2,modele="pls-glm-logistic",pvals.expli=TRUE)
+modpls
+w_etoile <- modpls$wwetoile
+modpls$Std.Coeffs
+modpls$pp
+modpls$tt
+
+## Calcul de probabilité estimées pour finale vs non finale ##
+prob <- matrix(0,nrow=nrow(file_train),ncol=2)
+score <- matrix(0,nrow=nrow(file_train),ncol=1)
+for (i in 1:nrow(file_train))
+    {score[i] <- modpls$Coeffs[1]+modpls$Coeffs[2]*file_train$genou[i]+modpls$Coeffs[3]*file_train$couche[i]+modpls$Coeffs[4]*file_train$debout[i]+modpls$Coeffs[5]*file_train$disp_std[i]
+     prob[i,1] <- exp(score[i])/(1+exp(score[i]))
+     prob[i,2] <- 1-prob[i,1]
+    }
+colnames(prob) <- c('pi_1','pi_2')
+res_3_pos <- data.frame(file_train,prob)
+
+table(res_3_pos$res_qualif_ter,res_3_pos$pred_acces_finale)
+
+# Calcul des VIP adaptés (importance des variables)
+p <- 4
+vip <- round(sqrt((p*modpls$wwetoile^2%*%as.matrix(modpls$R2))/modpls$R2[1]),4)
+num <- 1:4
+plot(num, vip,type = "n",xlab="",ylab="VIP",main="Représentation des VIP")
+text(num,vip, rownames(vip),col='blue',cex=1.3)
+abline(h=1)
+
+# Représentation des poids des variables sur le plan (1,2)
+par(oma=c(0,0,0,0),bg="white")
+plot(w_etoile[,1], w_etoile[,2],type = "n",xlab="w1",ylab="w2",main="Premier plan des poids variables (t1,t2)")
+text(w_etoile[,1], w_etoile[,2], rownames(w_etoile),col='blue',cex=1.2)
+abline(h=0)
+abline(v=0)
+
+## Validation croisée sur les coefficients du modèle logistique dichotomique PLS #
+Trois_pos.bootYX <- bootplsglm(modpls,sim="balanced",R=1000,typeboot="plsmodel",statistic=coefs.plsRglm,verbose=FALSE)
+boxplots.bootpls(Trois_pos.bootYX)
+
+
+## Echantillon d'apprentissage et échantillon test ##
+
+# Echantillon d'apprentissage #
+X_finale <- file_train_new[,2:5]
+y_finale <- file_train_new$acces_finale
+
+# Choix de deux composantes PLS
+modpls <- plsRglm(y_finale,X_finale,2,modele="pls-glm-logistic",pvals.expli=TRUE)
+modpls
+w_etoile <- modpls$wwetoile
+modpls$Std.Coeffs
+modpls$pp
+modpls$tt
+
+## Calcul de probabilité estimées pour finale vs non finale sur l'échantillon d'apprentissage ##
+prob <- matrix(0,nrow=nrow(file_train_new),ncol=2)
+score <- matrix(0,nrow=nrow(file_train_new),ncol=1)
+for (i in 1:nrow(file_train_new))
+    {score[i] <- modpls$Coeffs[1]+modpls$Coeffs[2]*file_train_new$genou[i]+modpls$Coeffs[3]*file_train_new$couche[i]+modpls$Coeffs[4]*file_train_new$debout[i]+modpls$Coeffs[5]*file_train_new$disp_std[i]
+     prob[i,1] <- exp(score[i])/(1+exp(score[i]))
+     prob[i,2] <- 1-prob[i,1]
+    }
+colnames(prob) <- c('pi_1','pi_2')
+res_3_pos <- data.frame(file_train_new,prob)
+
+tab_conting <- table(res_3_pos$res_qualif_ter,res_3_pos$pred_acces_finale)
+tab_conting <- data.frame(tab_conting)
+pct_bcl <- round(100*((tab_conting$Freq[1]+tab_conting$Freq[4])/sum(tab_conting$Freq)),2)
+pct_max <- round(100*((tab_conting$Freq[2]+tab_conting$Freq[4])/sum(tab_conting$Freq)),2)
+p_max <- pct_max/100
+binf <- round(100*(p_max-1.96*sqrt(p_max*(1-p_max)/n_train)),2)
+bsup <- round(100*(p_max+1.96*sqrt(p_max*(1-p_max)/n_train)),2)
+pct_bcl
+binf
+bsup
+
+## Calcul de probabilité estimées pour finale vs non finale sur l'échantillon test ##
+prob <- matrix(0,nrow=nrow(file_test_new),ncol=2)
+score <- matrix(0,nrow=nrow(file_test_new),ncol=1)
+for (i in 1:nrow(file_test_new))
+    {score[i] <- modpls$Coeffs[1]+modpls$Coeffs[2]*file_test_new$genou[i]+modpls$Coeffs[3]*file_test_new$couche[i]+modpls$Coeffs[4]*file_test_new$debout[i]+modpls$Coeffs[5]*file_test_new$disp_std[i]
+     prob[i,1] <- exp(score[i])/(1+exp(score[i]))
+     prob[i,2] <- 1-prob[i,1]
+    }
+colnames(prob) <- c('pi_1','pi_2')
+res_3_pos <- data.frame(file_test_new,prob)
+
+tab_conting <- table(res_3_pos$res_qualif_ter,res_3_pos$pred_acces_finale)
+tab_conting <- data.frame(tab_conting)
+pct_bcl <- round(100*((tab_conting$Freq[1]+tab_conting$Freq[4])/sum(tab_conting$Freq)),2)
+pct_max <- round(100*((tab_conting$Freq[2]+tab_conting$Freq[4])/sum(tab_conting$Freq)),2)
+p_max <- pct_max/100
+p_bcl <- pct_bcl/100
+binf <- round(100*(p_max-1.96*sqrt(p_max*(1-p_max)/n_test)),2)
+bsup <- round(100*(p_max+1.96*sqrt(p_max*(1-p_max)/n_test)),2)
+pct_bcl
+binf
+bsup
+v_test <- (p_bcl-p_max)/sqrt(p_max*(1-p_max)/n_test)
+v_test
+
+
