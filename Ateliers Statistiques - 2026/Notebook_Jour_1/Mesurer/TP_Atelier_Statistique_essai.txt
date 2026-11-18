@@ -1,0 +1,261 @@
+﻿################################################################
+# Lecture des données et éventuelle sélection d'une discipline #
+################################################################
+
+link <- str_c("C:/Users/chris/Documents/Portable EDF (14-11-2022)/Groupe Stat et Sport - SFdS/Atelier Stat et Sport/Session 2/Matin - 1/Matériel à fournir aux participants/","tir_para_sans_R7_R8.csv")
+
+tir_para <- read_delim(file=link,na="NA",col_names=TRUE,delim=",")
+tir_para <- data.frame(tir_para)
+
+# Sélection d'une discipline : P1
+tir_para_P1 <- tir_para %>% filter(Type == "P1")
+
+
+############################
+# Petites fonctions utiles #
+############################
+ 
+fun_min <- function(x){
+ y <- min(x,na.rm=TRUE)
+ return(y)
+}
+ 
+fun_max <- function(x){
+ y <- max(x,na.rm=TRUE)
+ return(y)
+}
+
+fun_sum <- function(x){
+ y <- sum(x,na.rm=TRUE)
+ return(y)
+}
+
+fun_mean <- function(x){
+ y <- mean(x,na.rm=TRUE)
+ return(y)
+}
+ 
+fun_std <- function(x){
+ y <- sd(x,na.rm=TRUE)
+ return(y)
+}
+
+
+###############################################################
+# Calcul des indicateurs de performance sportive individuelle #
+###############################################################
+
+tir_para_P1$performance <- tir_para_P1$Total/tir_para_P1$total_max_poss
+s <- c(0,0,0,109,109,109)
+series_1_6 <- tir_para_P1 %>% select(Serie_1,Serie_2,Serie_3,Serie_4,Serie_5,Serie_6)
+tir_para_P1$reproductibilite <- apply(series_1_6,1,fun_std)/sd(s)
+tir_para_P1$dif_1 <- (tir_para_P1$Serie_2-tir_para_P1$Serie_1)/tir_para_P1$Serie_1
+tir_para_P1$dif_2 <- (tir_para_P1$Serie_3-tir_para_P1$Serie_2)/tir_para_P1$Serie_2
+tir_para_P1$dif_3 <- (tir_para_P1$Serie_4-tir_para_P1$Serie_3)/tir_para_P1$Serie_3
+tir_para_P1$dif_4 <- (tir_para_P1$Serie_5-tir_para_P1$Serie_4)/tir_para_P1$Serie_4
+tir_para_P1$dif_5 <- (tir_para_P1$Serie_6-tir_para_P1$Serie_5)/tir_para_P1$Serie_5
+tir_para_P1$dif_1_sign <- (tir_para_P1$dif_1 < 0)*(-1)+(tir_para_P1$dif_1 > 0)*1+(tir_para_P1$dif_1 == 0)*0
+tir_para_P1$dif_2_sign <- (tir_para_P1$dif_2 < 0)*(-1)+(tir_para_P1$dif_2 > 0)*1+(tir_para_P1$dif_2 == 0)*0
+tir_para_P1$dif_3_sign <- (tir_para_P1$dif_3 < 0)*(-1)+(tir_para_P1$dif_3 > 0)*1+(tir_para_P1$dif_3 == 0)*0
+tir_para_P1$dif_4_sign <- (tir_para_P1$dif_4 < 0)*(-1)+(tir_para_P1$dif_4 > 0)*1+(tir_para_P1$dif_4 == 0)*0
+tir_para_P1$dif_5_sign <- (tir_para_P1$dif_5 < 0)*(-1)+(tir_para_P1$dif_5 > 0)*1+(tir_para_P1$dif_5 == 0)*0
+
+# Sélection des perfects non manquants 
+tir_para_P1$miss_perfect <- is.na(tir_para_P1$Perfect)*1
+tir_para_P1$Id_compet <- str_c(tir_para_P1$Lieu,'_',tir_para_P1$Pays,'_',tir_para_P1$Annee,'_',tir_para_P1$Competition)
+sel_qualif_perfect <- tir_para_P1 %>% filter(Phase == "Qualification" & Id_compet != "Fort Benning_USA_2014_Coupe du monde" & Id_compet != "Stoke Mandeville_GBR_2014_Coupe du monde" & Id_compet != "Suhl_GER_2014_Championnat du monde" & Id_compet != "Szczecin_POL_2014_Coupe du monde")
+
+
+qualif <- tir_para_P1 %>% filter(Phase == "Qualification")
+ggpairs(qualif[,c("dif_1","dif_2","dif_3","dif_4","dif_5")])
+qualif_bis <- qualif %>% filter((dif_1 > -0.3 & dif_1 < 0.3) & (dif_2 > -0.3 & dif_2 < 0.3) & (dif_3 > -0.3 & dif_3 < 0.3) & (dif_4 > -0.3 & dif_4 < 0.3) & (dif_5 > -0.3 & dif_5 < 0.3))
+ggpairs(qualif_bis[,c("dif_1","dif_2","dif_3","dif_4","dif_5")])
+qualif_bis$finale <- (qualif_bis$Rank <= 8)*1
+qualif_bis$finale <- as.character(qualif_bis$finale)
+ggpairs(qualif_bis[,c("dif_1","dif_2","dif_3","dif_4","dif_5","finale")])
+
+tir_para_P1$Id_compet <- str_c(tir_para_P1$Lieu,'_',tir_para_P1$Pays,'_',tir_para_P1$Annee,'_',tir_para_P1$Competition)
+
+tab_compet <- data.frame(table(tir_para_P1$Id_compet))
+num_comp <- 1:nrow(tab_compet)
+tab_compet <- data.frame(num_comp,tab_compet)
+tab_compet <- tab_compet[,-3]
+colnames(tab_compet) <- c('num_compet','Id_compet')
+
+tir_para_P1 <- inner_join(tir_para_P1,tab_compet,by=c('Id_compet'))
+
+for (k in 1:max (tab_compet$num_comp))
+    {sel_compet <- tir_para_P1 %>% filter(num_compet == k)
+     phase_qualif <- sel_compet %>% filter(Phase == "Qualification" & Rank <= 8) %>% select(Id_compet,Ident,Rank)
+     phase_finale <- sel_compet %>% filter(Phase == "Final") %>% select(Ident,Rank)
+     deux_phases <- inner_join(phase_qualif,phase_finale,by=c('Ident'))
+     deux_phases$I_rang <- (as.numeric(deux_phases$Rank.x)-as.numeric(deux_phases$Rank.y)+7)/14
+     deux_phases <- deux_phases %>% select(Id_compet,Ident,I_rang)
+     if (k == 1) {deux_phases_all <- deux_phases}
+        else {deux_phases_all <- rbind(deux_phases_all,deux_phases)}
+    }
+
+tir_para_P1 <- full_join(tir_para_P1,deux_phases_all,by=c("Id_compet","Ident"))
+ 
+tir_para_P1 <- tir_para_P1[,-c(40,41)]
+
+tir_para_P1$I_CV <- tir_para_P1$reproductibilite/tir_para_P1$performance
+
+
+#######################
+# Toutes les épreuves #
+#######################
+
+###############################################################
+# Calcul des indicateurs de performance sportive individuelle #
+###############################################################
+
+tir_para$performance <- tir_para$Total/tir_para$total_max_poss
+s <- c(0,0,0,109,109,109)
+series_1_6 <- tir_para %>% select(Serie_1,Serie_2,Serie_3,Serie_4,Serie_5,Serie_6)
+tir_para$reproductibilite <- apply(series_1_6,1,fun_std)/sd(s)
+tir_para$dif_1 <- (tir_para$Serie_2-tir_para$Serie_1)/tir_para$Serie_1
+tir_para$dif_2 <- (tir_para$Serie_3-tir_para$Serie_2)/tir_para$Serie_2
+tir_para$dif_3 <- (tir_para$Serie_4-tir_para$Serie_3)/tir_para$Serie_3
+tir_para$dif_4 <- (tir_para$Serie_5-tir_para$Serie_4)/tir_para$Serie_4
+tir_para$dif_5 <- (tir_para$Serie_6-tir_para$Serie_5)/tir_para$Serie_5
+tir_para$dif_1_sign <- (tir_para$dif_1 < 0)*(-1)+(tir_para$dif_1 > 0)*1+(tir_para$dif_1 == 0)*0
+tir_para$dif_2_sign <- (tir_para$dif_2 < 0)*(-1)+(tir_para$dif_2 > 0)*1+(tir_para$dif_2 == 0)*0
+tir_para$dif_3_sign <- (tir_para$dif_3 < 0)*(-1)+(tir_para$dif_3 > 0)*1+(tir_para$dif_3 == 0)*0
+tir_para$dif_4_sign <- (tir_para$dif_4 < 0)*(-1)+(tir_para$dif_4 > 0)*1+(tir_para$dif_4 == 0)*0
+tir_para$dif_5_sign <- (tir_para$dif_5 < 0)*(-1)+(tir_para$dif_5 > 0)*1+(tir_para$dif_5 == 0)*0
+
+qualif <- tir_para_P1 %>% filter(Phase == "Qualification")
+ggpairs(qualif[,c("dif_1","dif_2","dif_3","dif_4","dif_5")])
+qualif_bis <- qualif %>% filter((dif_1 > -0.3 & dif_1 < 0.3) & (dif_2 > -0.3 & dif_2 < 0.3) & (dif_3 > -0.3 & dif_3 < 0.3) & (dif_4 > -0.3 & dif_4 < 0.3) & (dif_5 > -0.3 & dif_5 < 0.3))
+ggpairs(qualif_bis[,c("dif_1","dif_2","dif_3","dif_4","dif_5")])
+qualif_bis$finale <- (qualif_bis$Rank <= 8)*1
+qualif_bis$finale <- as.character(qualif_bis$finale)
+ggpairs(qualif_bis[,c("dif_1","dif_2","dif_3","dif_4","dif_5","finale")])
+
+tir_para$Id_compet <- str_c(tir_para$Lieu,'_',tir_para$Pays,'_',tir_para$Annee,'_',tir_para$Competition,'_',tir_para$Type)
+
+tab_compet <- data.frame(table(tir_para$Id_compet))
+num_comp <- 1:nrow(tab_compet)
+tab_compet <- data.frame(num_comp,tab_compet)
+tab_compet <- tab_compet[,-3]
+colnames(tab_compet) <- c('num_compet','Id_compet')
+
+tir_para <- inner_join(tir_para,tab_compet,by=c('Id_compet'))
+
+for (k in 1:max (tab_compet$num_comp))
+    {sel_compet <- tir_para %>% filter(num_compet == k)
+     phase_qualif <- sel_compet %>% filter(Phase == "Qualification" & Rank <= 8) %>% select(Id_compet,Ident,Rank)
+     phase_finale <- sel_compet %>% filter(Phase == "Final") %>% select(Ident,Rank)
+     deux_phases <- inner_join(phase_qualif,phase_finale,by=c('Ident'))
+     deux_phases$I_rang <- (as.numeric(deux_phases$Rank.x)-as.numeric(deux_phases$Rank.y)+7)/14
+     deux_phases <- deux_phases %>% select(Id_compet,Ident,I_rang)
+     if (k == 1) {deux_phases_all <- deux_phases}
+        else {deux_phases_all <- rbind(deux_phases_all,deux_phases)}
+    }
+
+tir_para <- full_join(tir_para,deux_phases_all,by=c("Id_compet","Ident"))
+ 
+tir_para <- tir_para[,-c(45,46)]
+
+tir_para$I_CV <- tir_para$reproductibilite/tir_para$performance
+
+qualif <- tir_para %>% filter(Phase == "Qualification")
+
+round(table(qualif$dif_1_sign)*100/sum(table(qualif$dif_1_sign),2))
+round(table(qualif$dif_2_sign)*100/sum(table(qualif$dif_2_sign),2))
+round(table(qualif$dif_3_sign)*100/sum(table(qualif$dif_3_sign),2))
+round(table(qualif$dif_4_sign)*100/sum(table(qualif$dif_4_sign),2))
+round(table(qualif$dif_5_sign)*100/sum(table(qualif$dif_5_sign),2))
+
+freq_1 <- table(qualif$dif_1_sign,qualif$Type)
+for (i in 1:11)
+    {som_Type <- sum(freq_1[,i])
+     for (j in 1:3)
+         {freq_1[j,i] <- freq_1[j,i]/som_Type}
+    }
+
+z <- t(freq_1)
+rownames(z) <- c("R1","R2","R3","R4","R5","R6","R9","P1","P2","P3","P4")
+colnames(z) <- c("-1","0","+1")
+y <- seq(1,3,length.out=3)
+x <- seq(1,11,length.out=11)
+image(x,y,z,zlim=c(0,1),xlab="Epreuves",ylab="Signe des différences",main="Répartition des signes des différences 2 vs 1",axes=FALSE)
+axis(1, at = x,labels = rownames(z),las=1,cex.axis=1.2)
+axis(2, at = y,labels = colnames(z),las=2,cex.axis=1.2)
+
+freq_2 <- table(qualif$dif_2_sign,qualif$Type)
+for (i in 1:11)
+    {som_Type <- sum(freq_2[,i])
+     for (j in 1:3)
+         {freq_2[j,i] <- freq_2[j,i]/som_Type}
+    }
+
+z <- t(freq_2)
+rownames(z) <- c("R1","R2","R3","R4","R5","R6","R9","P1","P2","P3","P4")
+colnames(z) <- c("-1","0","+1")
+y <- seq(1,3,length.out=3)
+x <- seq(1,11,length.out=11)
+image(x,y,z,zlim=c(0,1),xlab="Epreuves",ylab="Signe des différences",main="Répartition des signes des différences 3 vs 2",axes=FALSE)
+axis(1, at = x,labels = rownames(z),las=1,cex.axis=1.2)
+axis(2, at = y,labels = colnames(z),las=2,cex.axis=1.2)
+
+freq_3 <- table(qualif$dif_3_sign,qualif$Type)
+for (i in 1:11)
+    {som_Type <- sum(freq_3[,i])
+     for (j in 1:3)
+         {freq_3[j,i] <- freq_3[j,i]/som_Type}
+    }
+
+z <- t(freq_3)
+rownames(z) <- c("R1","R2","R3","R4","R5","R6","R9","P1","P2","P3","P4")
+colnames(z) <- c("-1","0","+1")
+y <- seq(1,3,length.out=3)
+x <- seq(1,11,length.out=11)
+image(x,y,z,zlim=c(0,1),xlab="Epreuves",ylab="Signe des différences",main="Répartition des signes des différences 4 vs 3",axes=FALSE)
+axis(1, at = x,labels = rownames(z),las=1,cex.axis=1.2)
+axis(2, at = y,labels = colnames(z),las=2,cex.axis=1.2)
+
+freq_4 <- table(qualif$dif_4_sign,qualif$Type)
+for (i in 1:11)
+    {som_Type <- sum(freq_4[,i])
+     for (j in 1:3)
+         {freq_4[j,i] <- freq_4[j,i]/som_Type}
+    }
+
+z <- t(freq_5)
+rownames(z) <- c("R1","R2","R3","R4","R5","R6","R9","P1","P2","P3","P4")
+colnames(z) <- c("-1","0","+1")
+y <- seq(1,3,length.out=3)
+x <- seq(1,11,length.out=11)
+image(x,y,z,zlim=c(0,1),xlab="Epreuves",ylab="Signe des différences",main="Répartition des signes des différences 5 vs 4",axes=FALSE)
+axis(1, at = x,labels = rownames(z),las=1,cex.axis=1.2)
+axis(2, at = y,labels = colnames(z),las=2,cex.axis=1.2)
+
+freq_5 <- table(qualif$dif_5_sign,qualif$Type)
+for (i in 1:11)
+    {som_Type <- sum(freq_5[,i])
+     for (j in 1:3)
+         {freq_5[j,i] <- freq_5[j,i]/som_Type}
+    }
+
+z <- t(freq_5)
+rownames(z) <- c("R1","R2","R3","R4","R5","R6","R9","P1","P2","P3","P4")
+colnames(z) <- c("-1","0","+1")
+y <- seq(1,3,length.out=3)
+x <- seq(1,11,length.out=11)
+image(x,y,z,zlim=c(0,1),xlab="Epreuves",ylab="Signe des différences",main="Répartition des signes des différences 6 vs 5",axes=FALSE)
+axis(1, at = x,labels = rownames(z),las=1,cex.axis=1.2)
+axis(2, at = y,labels = colnames(z),las=2,cex.axis=1.2)
+
+freq_1_2_3_4_5 <- rbind(freq_1,freq_2,freq_3,freq_4,freq_5)
+
+z <- t(freq_1_2_3_4_5)
+rownames(z) <- c("R1","R2","R3","R4","R5","R6","R9","P1","P2","P3","P4")
+colnames(z) <- c("-1","0","+1","-1","0","+1","-1","0","+1","-1","0","+1","-1","0","+1")
+y <- seq(1,15,length.out=15)
+x <- seq(1,11,length.out=11)
+image(x,y,z,zlim=c(0,1),xlab="Epreuves",ylab="Signe des différences",main="Répartition des signes de de toutes les différences",axes=FALSE)
+axis(1, at = x,labels = rownames(z),las=1,cex.axis=1.2)
+axis(2, at = y,labels = colnames(z),las=2,cex.axis=1.2)
+
