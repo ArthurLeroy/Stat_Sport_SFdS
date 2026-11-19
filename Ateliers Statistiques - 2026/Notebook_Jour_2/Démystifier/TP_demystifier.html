@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Groupe Statistique &amp; Sport de la SFdS">
+
+<title>Démystifier la performance : pièges, biais, et illusions statistiques</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="TP_demystifier_files/libs/clipboard/clipboard.min.js"></script>
+<script src="TP_demystifier_files/libs/quarto-html/quarto.js"></script>
+<script src="TP_demystifier_files/libs/quarto-html/popper.min.js"></script>
+<script src="TP_demystifier_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="TP_demystifier_files/libs/quarto-html/anchor.min.js"></script>
+<link href="TP_demystifier_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="TP_demystifier_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="TP_demystifier_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="TP_demystifier_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="TP_demystifier_files/libs/bootstrap/bootstrap-245538a10855fb410080274ff63713fa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-full toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#i-les-index-cumulés-illustration-et-limites" id="toc-i-les-index-cumulés-illustration-et-limites" class="nav-link active" data-scroll-target="#i-les-index-cumulés-illustration-et-limites">I) Les index cumulés : illustration et limites</a></li>
+  <li><a href="#ii-premiers-pas-avec-linférence-bayésienne" id="toc-ii-premiers-pas-avec-linférence-bayésienne" class="nav-link" data-scroll-target="#ii-premiers-pas-avec-linférence-bayésienne">II) Premiers pas avec l’inférence Bayésienne</a>
+  <ul class="collapse">
+  <li><a href="#distribution-a-posteriori-pour-le-modèle-conjugué-beta-binomial" id="toc-distribution-a-posteriori-pour-le-modèle-conjugué-beta-binomial" class="nav-link" data-scroll-target="#distribution-a-posteriori-pour-le-modèle-conjugué-beta-binomial">Distribution a posteriori pour le modèle conjugué Beta-Binomial</a></li>
+  <li><a href="#exercice-1" id="toc-exercice-1" class="nav-link" data-scroll-target="#exercice-1">Exercice 1</a></li>
+  <li><a href="#exercice-2" id="toc-exercice-2" class="nav-link" data-scroll-target="#exercice-2">Exercice 2</a></li>
+  <li><a href="#exercice-3" id="toc-exercice-3" class="nav-link" data-scroll-target="#exercice-3">Exercice 3</a></li>
+  </ul></li>
+  <li><a href="#iii-inférence-a-posteriori-et-alternatives-aux-tests-statistiques" id="toc-iii-inférence-a-posteriori-et-alternatives-aux-tests-statistiques" class="nav-link" data-scroll-target="#iii-inférence-a-posteriori-et-alternatives-aux-tests-statistiques">III) Inférence a posteriori et alternatives aux tests statistiques</a>
+  <ul class="collapse">
+  <li><a href="#pourquoi-chercher-une-alternative-aux-tests-dhypothèses" id="toc-pourquoi-chercher-une-alternative-aux-tests-dhypothèses" class="nav-link" data-scroll-target="#pourquoi-chercher-une-alternative-aux-tests-dhypothèses">Pourquoi chercher une alternative aux tests d’hypothèses ?</a></li>
+  <li><a href="#les-données-morphologie-et-performances-en-natation" id="toc-les-données-morphologie-et-performances-en-natation" class="nav-link" data-scroll-target="#les-données-morphologie-et-performances-en-natation">Les données : morphologie et performances en natation</a></li>
+  <li><a href="#exercice-1-estimer-la-différence-de-vitesse-hommes-femmes" id="toc-exercice-1-estimer-la-différence-de-vitesse-hommes-femmes" class="nav-link" data-scroll-target="#exercice-1-estimer-la-différence-de-vitesse-hommes-femmes">Exercice 1 — Estimer la différence de vitesse Hommes / Femmes</a></li>
+  <li><a href="#exercice-2-décider-avec-la-pd-et-la-rope-significatif-nest-pas-important" id="toc-exercice-2-décider-avec-la-pd-et-la-rope-significatif-nest-pas-important" class="nav-link" data-scroll-target="#exercice-2-décider-avec-la-pd-et-la-rope-significatif-nest-pas-important">Exercice 2 — Décider avec la pd et la ROPE : « significatif » n’est pas « important »</a></li>
+  <li><a href="#exercice-3-la-différence-dimc-hommes-femmes" id="toc-exercice-3-la-différence-dimc-hommes-femmes" class="nav-link" data-scroll-target="#exercice-3-la-différence-dimc-hommes-femmes">Exercice 3 — La différence d’IMC Hommes / Femmes</a></li>
+  <li><a href="#exercice-4-prouver-une-absence-deffet-limc-influence-t-il-la-vitesse" id="toc-exercice-4-prouver-une-absence-deffet-limc-influence-t-il-la-vitesse" class="nav-link" data-scroll-target="#exercice-4-prouver-une-absence-deffet-limc-influence-t-il-la-vitesse">Exercice 4 — Prouver une <em>absence</em> d’effet : l’IMC influence-t-il la vitesse ?</a></li>
+  <li><a href="#exercice-5-piège-découper-limc-en-classes-bas-moyen-haut" id="toc-exercice-5-piège-découper-limc-en-classes-bas-moyen-haut" class="nav-link" data-scroll-target="#exercice-5-piège-découper-limc-en-classes-bas-moyen-haut">Exercice 5 — Piège : découper l’IMC en classes « bas / moyen / haut »</a></li>
+  <li><a href="#exercice-6-un-piège-des-performances-qui-ne-sont-pas-indépendantes" id="toc-exercice-6-un-piège-des-performances-qui-ne-sont-pas-indépendantes" class="nav-link" data-scroll-target="#exercice-6-un-piège-des-performances-qui-ne-sont-pas-indépendantes">Exercice 6 — Un piège : des performances qui ne sont pas indépendantes</a></li>
+  <li><a href="#à-retenir" id="toc-à-retenir" class="nav-link" data-scroll-target="#à-retenir">À retenir</a></li>
+  </ul></li>
+  <li><a href="#iv-modélisation-hiérarchique-conjuguée-et-échantillonneur-de-gibbs" id="toc-iv-modélisation-hiérarchique-conjuguée-et-échantillonneur-de-gibbs" class="nav-link" data-scroll-target="#iv-modélisation-hiérarchique-conjuguée-et-échantillonneur-de-gibbs">IV) Modélisation hiérarchique conjuguée et échantillonneur de Gibbs</a>
+  <ul class="collapse">
+  <li><a href="#modèle-et-rappels" id="toc-modèle-et-rappels" class="nav-link" data-scroll-target="#modèle-et-rappels">Modèle et rappels</a>
+  <ul class="collapse">
+  <li><a href="#formules-analytiques-du-postérieur" id="toc-formules-analytiques-du-postérieur" class="nav-link" data-scroll-target="#formules-analytiques-du-postérieur">Formules analytiques du postérieur</a></li>
+  </ul></li>
+  <li><a href="#exercice-1-simulation-de-données-et-calcul-analytique-des-postérieurs" id="toc-exercice-1-simulation-de-données-et-calcul-analytique-des-postérieurs" class="nav-link" data-scroll-target="#exercice-1-simulation-de-données-et-calcul-analytique-des-postérieurs">Exercice 1 — Simulation de données et calcul analytique des postérieurs</a></li>
+  <li><a href="#exercice-2-implémenter-une-mise-à-jour" id="toc-exercice-2-implémenter-une-mise-à-jour" class="nav-link" data-scroll-target="#exercice-2-implémenter-une-mise-à-jour">Exercice 2 — Implémenter une mise à jour</a></li>
+  <li><a href="#exercice-3-implémenter-la-boucle-gibbs-complète" id="toc-exercice-3-implémenter-la-boucle-gibbs-complète" class="nav-link" data-scroll-target="#exercice-3-implémenter-la-boucle-gibbs-complète">Exercice 3 — Implémenter la boucle Gibbs complète</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+</div>
+<main class="content column-page-right" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Démystifier la performance : pièges, biais, et illusions statistiques</h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-page-right">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Groupe Statistique &amp; Sport de la SFdS </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstanarm)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bayestestR)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(see)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(REDI)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="i-les-index-cumulés-illustration-et-limites" class="level1">
+<h1>I) Les index cumulés : illustration et limites</h1>
+<p>Calculer la charge d’entrainement cumulé avec le Robust Exponential Decreasing Index (REDI) et visualiser les résultats.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Questions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Conseils</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Solutions</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<ol type="1">
+<li><p>Importer et convertir le jeu de données dans le format attendu (un tibble/dataframe avec une colonne <code>Input</code> pour la date, et <code>Output</code> pour la charge d’entrainement).</p></li>
+<li><p>Calculer la valeur de charge d’entrainement cumulée à la dernière date présente dans le jeu de données.</p></li>
+<li><p>Utiliser la fonction wrapprer redi() pour calculer le REDI pour différentes coefficients de décroissance <span class="math inline">\(\lambda\)</span> et afficher les résultats. Analyser les résultats obtenus et proposer un critère de choix de ce coefficient dans un contexte sportif.</p></li>
+</ol>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>Vous pouvez utiliser les fonctions suivantes :</p>
+<ol type="1">
+<li><code>format_data()</code><br>
+</li>
+<li><code>compute_redi()</code><br>
+</li>
+<li><code>redi()</code></li>
+</ol>
+<p>Assurez-vous de bien comprendre les arguments de chaque fonction en consultant la documentation si nécessaire : <a href="https://grenouil.github.io/REDI/" class="uri">https://grenouil.github.io/REDI/</a></p>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ## Import dataset and convert the dataset to the correct format</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data_workload <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/data_workload_fm.csv"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>db_workload <span class="ot">&lt;-</span> <span class="fu">format_data</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> data_workload,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">input =</span> <span class="st">'Date'</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">output =</span> <span class="st">'Training load'</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 ## Compute REDI for the last date in the dataset</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">compute_redi</span>(db_workload)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 176.2764</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 ## Apply redi() on data using a vector of coefficients and display results</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>db_full_redi <span class="ot">&lt;-</span> <span class="fu">redi</span>(<span class="at">data =</span> db_workload, <span class="at">coef =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="fl">0.5</span>), <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/Solutions%20partie%20I-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>On remarque que ce type d’index fournit une visualisation intuitive (ici de la charge cumulée d’entrainement). Cependant, en pratique, ils aggrègent souvent de nombreuses données en un nombre unique, pouvant entrainer une perte d’information. De plus, il peut être compliqué d’estimer l’influence de tels indicateurs sur des quantités d’intérêt pratique, telles que la performance ou le risque de blessure. Les articles scientifiques présentent parfois de simples corrélations ou associations entre une haute (ou basse) valeur d’un index avec la performance ou la blessure. Ce type de résultats est à prendre avec beaucoup de prudence, car l’information est largement altérée. Généralement, un modèle de regréssion prenant en entrée les données brutes (ici la série temporelle de la charge d’entrainement) et en sortie la mesure d’intérêt (perf/blessure) sera bien plus adapté et informatif pour tirer des conclusions sur l’effet directe d’une variable sur une autre.</p>
+</section>
+<section id="ii-premiers-pas-avec-linférence-bayésienne" class="level1">
+<h1>II) Premiers pas avec l’inférence Bayésienne</h1>
+<section id="distribution-a-posteriori-pour-le-modèle-conjugué-beta-binomial" class="level2">
+<h2 class="anchored" data-anchor-id="distribution-a-posteriori-pour-le-modèle-conjugué-beta-binomial">Distribution a posteriori pour le modèle conjugué Beta-Binomial</h2>
+<p>On rappelle le modèle Beta-Binomial :</p>
+<ul>
+<li><span class="math inline">\(p \sim \mathcal{B}e(\alpha, \beta)\)</span></li>
+<li><span class="math inline">\(x \mid p \sim \mathcal{B}(N, p)\)</span></li>
+</ul>
+<p>On souhaite calculer et visualiser la loi a posteriori du paramètre de proportion <span class="math inline">\(p\)</span> sachant <span class="math inline">\(x\)</span>. Ce modèle peut classiquement s’interpréter comme le modèle d’observation de <span class="math inline">\(N\)</span> pièces de monnaie identiques, où <span class="math inline">\(p\)</span> est la probabilité d’obtenir face.</p>
+<p>D’après le théorème de Bayes, on sait que : <span id="eq-posterior-beta-binomial"><span class="math display">\[
+p \mid x \sim \mathcal{B}e(\alpha + x, \beta + N - x)
+\tag{1}\]</span></span></p>
+<p>On fixe les valeurs de paramètres suivantes, mais votre code doit pouvoir se généraliser facilement.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">=</span> <span class="dv">10</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">=</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercice-1" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-1">Exercice 1</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Indice</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">Réponse</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<p>Coder une fonction <code>simu_binom(N, p)</code> qui simule un modèle binomial avec paramètre <span class="math inline">\(N\)</span> et <span class="math inline">\(p\)</span>.</p>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<p>Consulter l’aide <code>?rbinom</code></p>
+</div>
+<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>simu_binom <span class="ot">=</span> <span class="cf">function</span>(N, p) {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> <span class="fu">rbinom</span>(<span class="at">n=</span><span class="dv">1</span>, <span class="at">size =</span> N, <span class="at">prob =</span> p)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(x)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercice-2" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-2">Exercice 2</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Indice</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false" href="">Réponse</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<p>Soit la simulation suivante:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>simu <span class="ot">=</span> <span class="fu">simu_binom</span>(<span class="at">N=</span><span class="dv">10</span>, <span class="at">p=</span><span class="fl">0.7</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>simu</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8</code></pre>
+</div>
+</div>
+<p>Ici nous avons généré une observation <span class="math inline">\(x\)</span>, telle que <span class="math inline">\(x = 8\)</span>. Coder la loi a posteriori de <span class="math inline">\(p \mid x\)</span> et tracer la densité de cette loi a posteriori. Tracer sur le même graphique la loi a priori pour comparaison.</p>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<p>Voir le rappel de la loi a posteriori : <a href="#eq-posterior-beta-binomial" class="quarto-xref">Equation&nbsp;1</a>. Vous pouvez utiliser la fonction <code>dbeta</code> pour calculer la densité de la loi bêta.</p>
+</div>
+<div id="tabset-3-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> simu</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>posterior_alpha <span class="ot">=</span> alpha <span class="sc">+</span> x</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>posterior_beta <span class="ot">=</span> beta <span class="sc">+</span> N <span class="sc">-</span> x</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>p_seq <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">length.out =</span> <span class="dv">100</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>posterior_density <span class="ot">=</span> <span class="fu">dbeta</span>(p_seq, <span class="at">shape1 =</span> posterior_alpha, <span class="at">shape2 =</span> posterior_beta)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>prior_density <span class="ot">=</span> <span class="fu">dbeta</span>(p_seq, <span class="at">shape1 =</span> alpha, <span class="at">shape2 =</span> beta)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">p =</span> p_seq, <span class="at">density =</span> posterior_density, <span class="at">type =</span> <span class="st">"Posterior"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="fu">tibble</span>(<span class="at">p =</span> p_seq, <span class="at">density =</span> prior_density, <span class="at">type =</span> <span class="st">"Prior"</span>))</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df) <span class="sc">+</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> p, <span class="at">y =</span> density, <span class="at">col =</span> type, <span class="at">linetype =</span> type)) <span class="sc">+</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="fu">paste</span>(<span class="st">"Loi a priori/posteriori de p avec x ="</span>, x)) <span class="sc">+</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"p"</span>) <span class="sc">+</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Densité"</span>) <span class="sc">+</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/plot-posterior-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercice-3" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-3">Exercice 3</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">Indice</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-3" role="tab" aria-controls="tabset-4-3" aria-selected="false" href="">Réponse</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<p>Répéter l’expérience de l’exercice 2 pour différentes valeurs de <span class="math inline">\(x\)</span> dans <span class="math inline">\(\{0, 1, \ldots, N\}\)</span> et tracer les différentes densités sur le même graphique.</p>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<p>Vous pouvez utiliser une boucle pour calculer les densités pour chaque valeur de <span class="math inline">\(x\)</span> et stocker les résultats dans un data frame. Ensuite, utilisez <code>ggplot2</code> pour tracer toutes les densités sur le même graphique en utilisant <code>geom_line()</code>.</p>
+</div>
+<div id="tabset-4-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df_all <span class="ot">=</span> <span class="fu">tibble</span>()</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (x <span class="cf">in</span> <span class="dv">0</span><span class="sc">:</span>N) {</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  posterior_alpha <span class="ot">=</span> alpha <span class="sc">+</span> x</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  posterior_beta <span class="ot">=</span> beta <span class="sc">+</span> N <span class="sc">-</span> x</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  posterior_density <span class="ot">=</span> <span class="fu">dbeta</span>(p_seq, <span class="at">shape1 =</span> posterior_alpha, <span class="at">shape2 =</span> posterior_beta)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  df_temp <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">p =</span> p_seq, <span class="at">density =</span> posterior_density, <span class="at">x =</span> <span class="fu">as.factor</span>(x))</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  df_all <span class="ot">=</span> <span class="fu">bind_rows</span>(df_all, df_temp)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_all) <span class="sc">+</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> p, <span class="at">y =</span> density, <span class="at">color =</span> x)) <span class="sc">+</span> </span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Lois a posteriori p | x pour différentes valeurs de x"</span>) <span class="sc">+</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"p"</span>) <span class="sc">+</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Densité"</span>) <span class="sc">+</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">"x"</span>) <span class="sc">+</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/plot-multiple-posteriors-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="iii-inférence-a-posteriori-et-alternatives-aux-tests-statistiques" class="level1">
+<h1>III) Inférence a posteriori et alternatives aux tests statistiques</h1>
+<section id="pourquoi-chercher-une-alternative-aux-tests-dhypothèses" class="level2">
+<h2 class="anchored" data-anchor-id="pourquoi-chercher-une-alternative-aux-tests-dhypothèses">Pourquoi chercher une alternative aux tests d’hypothèses ?</h2>
+<p>Un test d’hypothèse classique répond à une question assez particulière : <em>« si l’effet était exactement nul, à quel point mes données seraient-elles surprenantes ? »</em> (c’est la <span class="math inline">\(p\)</span>-valeur). Cela conduit à des pièges bien connus, particulièrement en sciences du sport où les échantillons sont soit très petits, soit (avec les données de compétition) très nombreux :</p>
+<ul>
+<li>la <span class="math inline">\(p\)</span>-valeur n’est <strong>pas</strong> la probabilité que l’hypothèse soit vraie ;</li>
+<li>un résultat « non significatif » ne prouve <strong>pas</strong> l’absence d’effet ;</li>
+<li>avec assez de données, un effet ridiculement petit devient « significatif » ;</li>
+<li>le seuil à 0,05 impose une décision binaire qui masque l’incertitude.</li>
+</ul>
+<p>L’approche bayésienne (cf.&nbsp;partie II) change de point de vue : on calcule directement la <strong>loi a posteriori</strong> de l’effet qui nous intéresse, puis on la <em>résume</em>. Deux packages font tout le travail :</p>
+<ul>
+<li><code>rstanarm</code> : ajuste un modèle bayésien avec la <strong>même syntaxe de formule que <code>lm()</code></strong> (<code>stan_glm()</code>). Les modèles sont précompilés : aucun compilateur n’est nécessaire ;</li>
+<li><code>bayestestR</code> : résume et visualise la loi a posteriori avec quelques fonctions très simples.</li>
+</ul>
+<p>Trois outils de lecture suffisent pour remplacer l’essentiel des tests classiques :</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 34%">
+<col style="width: 25%">
+<col style="width: 40%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Question posée</th>
+<th style="text-align: left;">Approche classique</th>
+<th style="text-align: left;">Alternative bayésienne</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Quelles valeurs de l’effet sont plausibles ?</td>
+<td style="text-align: left;">estimation + IC à 95 %</td>
+<td style="text-align: left;"><strong>HDI</strong> : intervalle de crédibilité à 95 % (zone où se concentre la loi a posteriori)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">L’effet va-t-il dans un sens précis ?</td>
+<td style="text-align: left;"><span class="math inline">\(p\)</span>-valeur</td>
+<td style="text-align: left;"><strong>pd</strong> (<em>probabilité de direction</em>) : probabilité que l’effet soit positif (ou négatif)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">L’effet est-il négligeable en pratique ?</td>
+<td style="text-align: left;">test d’équivalence (TOST)</td>
+<td style="text-align: left;"><strong>ROPE</strong> (<em>region of practical equivalence</em>) : part de la loi a posteriori dans une zone de valeurs « équivalentes à zéro »</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Comment lire la ROPE ?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>On définit <strong>avant de regarder les résultats</strong> un intervalle de valeurs si petites qu’elles n’ont aucun intérêt pratique (par exemple : une différence de 0,1 s sur un 100 m). Ensuite :</p>
+<ul>
+<li>HDI 95 % <strong>entièrement hors</strong> de la ROPE : l’effet est réel <em>et</em> important ;</li>
+<li>HDI 95 % <strong>entièrement dans</strong> la ROPE : l’effet est négligeable (on peut conclure à l’absence d’effet utile, ce qu’une <span class="math inline">\(p\)</span>-valeur ne permet jamais) ;</li>
+<li>sinon : les données ne permettent pas de trancher.</li>
+</ul>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstanarm)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bayestestR)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(see)   <span class="co"># nécessaire pour les graphiques de bayestestR</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pour aller plus loin, le package <code>brms</code> utilise exactement la même logique (<code>brm()</code> au lieu de <code>stan_glm()</code>) avec beaucoup plus de modèles possibles, mais il demande un compilateur C++ (Rtools sous Windows). Tout ce qui suit s’y transpose directement.</p>
+</div>
+</div>
+</section>
+<section id="les-données-morphologie-et-performances-en-natation" class="level2">
+<h2 class="anchored" data-anchor-id="les-données-morphologie-et-performances-en-natation">Les données : morphologie et performances en natation</h2>
+<p>Le jeu de données <code>data_morpho_natation.csv</code> contient des performances de nageurs et nageuses de haut niveau (2000-2014). <strong>Une ligne = une performance</strong> (un nageur, une distance, une année). Colonnes utiles : <code>Sexe</code>, <code>Distance</code> (m), <code>Temps</code> (s), <code>Vitesse</code> (<strong>km/h</strong>), <code>Taille</code> (cm), <code>Poids</code> (kg), <code>IMC</code> (kg/m²).</p>
+<p>Deux précautions avant de comparer :</p>
+<ul>
+<li>la vitesse dépend énormément de la distance (un 50 m est bien plus rapide qu’un 1500 m) : on se restreint donc au <strong>100 m</strong> pour comparer des choses comparables ;</li>
+<li>certains IMC sont manquants : on retire ces lignes.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>nat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Data/data_morpho_natation.csv"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Distance <span class="sc">==</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(IMC) <span class="sc">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Sexe =</span> <span class="fu">factor</span>(Sexe, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Femme"</span>, <span class="st">"Homme"</span>)))   <span class="co"># Femme = référence</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 1704 Columns: 10
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (3): Nom, Pays, Sexe
+dbl (7): Distance, Taille, Poids, IMC, Temps, Vitesse, AnneePerf
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>nat <span class="sc">%&gt;%</span> <span class="fu">count</span>(Sexe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  Sexe      n
+  &lt;fct&gt; &lt;int&gt;
+1 Femme   140
+2 Homme   144</code></pre>
+</div>
+</div>
+</section>
+<section id="exercice-1-estimer-la-différence-de-vitesse-hommes-femmes" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-1-estimer-la-différence-de-vitesse-hommes-femmes">Exercice 1 — Estimer la différence de vitesse Hommes / Femmes</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href="">Indice</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" role="tab" aria-controls="tabset-5-3" aria-selected="false" href="">Réponse</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<ol type="1">
+<li>Visualiser la distribution de la vitesse selon le sexe.</li>
+<li>Ajuster avec <code>stan_glm()</code> le modèle <code>Vitesse ~ Sexe</code>. Le coefficient <code>SexeHomme</code> est la <strong>différence de vitesse moyenne Hommes − Femmes</strong>.</li>
+<li>Résumer la loi a posteriori de cette différence (médiane et HDI à 95 %) et la visualiser.</li>
+<li>Comparer avec le résultat d’un test <span class="math inline">\(t\)</span> classique.</li>
+</ol>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<ul>
+<li>La syntaxe de <code>stan_glm()</code> est celle de <code>lm()</code> : <code>stan_glm(y ~ x, data = ...)</code>. Ajoutez <code>refresh = 0</code> pour masquer le détail de l’échantillonnage et <code>seed = 2025</code> pour la reproductibilité.</li>
+<li><code>describe_posterior(modele, parameters = "SexeHomme")</code> donne un résumé en un tableau ; <code>hdi()</code> calcule l’intervalle de crédibilité et peut être passé à <code>plot()</code>.</li>
+<li><code>t.test(y ~ groupe, data = ...)</code>.</li>
+</ul>
+</div>
+<div id="tabset-5-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ## Toujours regarder les données d'abord</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nat, <span class="fu">aes</span>(<span class="at">x =</span> Sexe, <span class="at">y =</span> Vitesse, <span class="at">fill =</span> Sexe)) <span class="sc">+</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/ex1-vitesse-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 ## Modèle bayésien (équivalent bayésien du test t)</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>m_vitesse <span class="ot">&lt;-</span> <span class="fu">stan_glm</span>(Vitesse <span class="sc">~</span> Sexe, <span class="at">data =</span> nat, <span class="at">refresh =</span> <span class="dv">0</span>, <span class="at">seed =</span> <span class="dv">2025</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 ## Résumé et loi a posteriori de la différence H - F</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">describe_posterior</span>(m_vitesse, <span class="at">ci =</span> <span class="fl">0.95</span>, <span class="at">test =</span> <span class="cn">NULL</span>, <span class="at">parameters =</span> <span class="st">"SexeHomme"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Summary of Posterior Distribution
+
+Parameter | Median |       95% CI |  Rhat | ESS (tail)
+------------------------------------------------------
+SexeHomme |   0.78 | [0.77, 0.80] | 0.999 |       2388</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">hdi</span>(m_vitesse, <span class="at">ci =</span> <span class="fl">0.95</span>, <span class="at">parameters =</span> <span class="st">"SexeHomme"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/ex1-vitesse-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 ## Comparaison avec l'approche classique</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(Vitesse <span class="sc">~</span> Sexe, <span class="at">data =</span> nat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  Vitesse by Sexe
+t = -117.87, df = 279.79, p-value &lt; 2.2e-16
+alternative hypothesis: true difference in means between group Femme and group Homme is not equal to 0
+95 percent confidence interval:
+ -0.7970323 -0.7708478
+sample estimates:
+mean in group Femme mean in group Homme 
+           6.700584            7.484524 </code></pre>
+</div>
+</div>
+<p><strong>Lecture.</strong> Les hommes sont plus rapides que les femmes d’environ 0,8 km/h sur 100 m, avec une incertitude très faible. Le test <span class="math inline">\(t\)</span> et le HDI à 95 % donnent ici pratiquement la même information (estimation et intervalle) : la différence tient à l’<strong>interprétation</strong>. Le HDI se lit directement : <em>« avec 95 % de probabilité, la différence vraie est dans cet intervalle »</em>, alors qu’un intervalle de confiance classique ne s’interprète pas ainsi. Les priors par défaut de <code>rstanarm</code> sont faiblement informatifs (<code>prior_summary(m_vitesse)</code> les affiche) : face à 284 observations, ils pèsent très peu et les données « parlent d’elles-mêmes ».</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercice-2-décider-avec-la-pd-et-la-rope-significatif-nest-pas-important" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-2-décider-avec-la-pd-et-la-rope-significatif-nest-pas-important">Exercice 2 — Décider avec la pd et la ROPE : « significatif » n’est pas « important »</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false" href="">Indice</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-3" role="tab" aria-controls="tabset-6-3" aria-selected="false" href="">Réponse</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<p>Reprendre le modèle <code>m_vitesse</code>.</p>
+<ol type="1">
+<li>Calculer la <strong>probabilité de direction</strong> (pd) du coefficient <code>SexeHomme</code> et la représenter.</li>
+<li>On considère qu’une différence de vitesse inférieure à <strong>0,02 km/h</strong> (environ 0,3 % de la vitesse, soit environ 0,16 s sur un 100 m) est sans intérêt pratique. Calculer la proportion de la loi a posteriori dans la ROPE correspondante et la représenter.</li>
+<li>Que conclure sur l’effet du sexe sur la vitesse ?</li>
+</ol>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<p><code>p_direction()</code> et <code>rope()</code> (argument <code>range = c(borne_basse, borne_haute)</code> et <code>ci = 0.95</code>) acceptent le modèle et se passent à <code>plot()</code>. Pour tout résumer d’un coup : <code>describe_posterior(modele, test = c("p_direction", "rope"), rope_range = ...)</code>.</p>
+</div>
+<div id="tabset-6-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>rope_vitesse <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.02</span>, <span class="fl">0.02</span>)   <span class="co"># différence "négligeable" : moins de 0.02 km/h</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">p_direction</span>(m_vitesse, <span class="at">parameters =</span> <span class="st">"SexeHomme"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/ex2-pd-rope-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">rope</span>(m_vitesse, <span class="at">range =</span> rope_vitesse, <span class="at">ci =</span> <span class="fl">0.95</span>, <span class="at">parameters =</span> <span class="st">"SexeHomme"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/ex2-pd-rope-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tout en un tableau</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">describe_posterior</span>(m_vitesse, <span class="at">ci =</span> <span class="fl">0.95</span>, <span class="at">test =</span> <span class="fu">c</span>(<span class="st">"p_direction"</span>, <span class="st">"rope"</span>),</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">rope_range =</span> rope_vitesse, <span class="at">parameters =</span> <span class="st">"SexeHomme"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Summary of Posterior Distribution
+
+Parameter | Median |       95% CI |   pd |          ROPE | % in ROPE |  Rhat | ESS (tail)
+-----------------------------------------------------------------------------------------
+SexeHomme |   0.78 | [0.77, 0.80] | 100% | [-0.02, 0.02] |        0% | 0.999 |       2388</code></pre>
+</div>
+</div>
+<p><strong>Lecture.</strong> La pd est d’environ 100 % : on est certain que les hommes sont plus rapides. La ROPE contient 0 % de la loi a posteriori : la différence n’est pas seulement non nulle, elle est <strong>très au-delà</strong> du seuil d’intérêt pratique. Ce cas est simple ; l’exercice 4 montre un cas où la ROPE apporte vraiment quelque chose.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercice-3-la-différence-dimc-hommes-femmes" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-3-la-différence-dimc-hommes-femmes">Exercice 3 — La différence d’IMC Hommes / Femmes</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false" href="">Indice</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-3" role="tab" aria-controls="tabset-7-3" aria-selected="false" href="">Réponse</a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<p>En réutilisant la démarche des exercices 1 et 2, comparer l’<strong>IMC</strong> des hommes et des femmes de l’échantillon. On considère qu’une différence inférieure à <strong>0,5 kg/m²</strong> (environ 1,6 kg pour une personne de 1,80 m) est négligeable. Représenter le résultat.</p>
+</div>
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
+<p>Seul le modèle change : <code>IMC ~ Sexe</code>. Le reste (<code>describe_posterior()</code>, <code>plot()</code>) est identique.</p>
+</div>
+<div id="tabset-7-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>m_imc_sexe <span class="ot">&lt;-</span> <span class="fu">stan_glm</span>(IMC <span class="sc">~</span> Sexe, <span class="at">data =</span> nat, <span class="at">refresh =</span> <span class="dv">0</span>, <span class="at">seed =</span> <span class="dv">2025</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">describe_posterior</span>(m_imc_sexe, <span class="at">ci =</span> <span class="fl">0.95</span>, <span class="at">test =</span> <span class="fu">c</span>(<span class="st">"p_direction"</span>, <span class="st">"rope"</span>),</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">rope_range =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>), <span class="at">parameters =</span> <span class="st">"SexeHomme"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Summary of Posterior Distribution
+
+Parameter | Median |       95% CI |   pd |          ROPE | % in ROPE |  Rhat | ESS (tail)
+-----------------------------------------------------------------------------------------
+SexeHomme |   2.49 | [2.19, 2.80] | 100% | [-0.50, 0.50] |        0% | 1.001 |       2963</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">rope</span>(m_imc_sexe, <span class="at">range =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">0.5</span>), <span class="at">ci =</span> <span class="fl">0.95</span>, <span class="at">parameters =</span> <span class="st">"SexeHomme"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/ex3-imc-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Lecture.</strong> Les hommes ont un IMC supérieur d’environ 2,5 points : un effet clair et important (HDI hors de la ROPE). Cet écart reflète surtout la masse musculaire plus importante des nageurs, rappel utile : l’IMC ne distingue pas masse grasse et masse maigre.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercice-4-prouver-une-absence-deffet-limc-influence-t-il-la-vitesse" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-4-prouver-une-absence-deffet-limc-influence-t-il-la-vitesse">Exercice 4 — Prouver une <em>absence</em> d’effet : l’IMC influence-t-il la vitesse ?</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false" href="">Indice</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-3" role="tab" aria-controls="tabset-8-3" aria-selected="false" href="">Réponse</a></li></ul>
+<div class="tab-content">
+<div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
+<p>On se demande si, <strong>à sexe égal</strong>, les nageurs à IMC plus élevé nagent plus ou moins vite.</p>
+<ol type="1">
+<li>Représenter la vitesse en fonction de l’IMC pour chaque sexe, puis ajuster le modèle <code>Vitesse ~ IMC + Sexe</code>.</li>
+<li>Chaque point d’IMC change-t-il la vitesse de plus de 0,02 km/h ? Réaliser un <strong>test d’équivalence bayésien</strong> sur le coefficient de l’IMC.</li>
+<li>Quelle conclusion un test classique (<span class="math inline">\(p &gt; 0{,}05\)</span>) permettrait-il de tirer, et en quoi la conclusion bayésienne est-elle plus informative ?</li>
+</ol>
+</div>
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
+<p><code>equivalence_test(modele, range = ..., ci = 0.95, parameters = "IMC")</code> renvoie une décision (<em>Accepted</em>, <em>Rejected</em> ou <em>Undecided</em>) ; il se passe aussi à <code>plot()</code>.</p>
+</div>
+<div id="tabset-8-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ## Les droites sont presque plates</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nat, <span class="fu">aes</span>(<span class="at">x =</span> IMC, <span class="at">y =</span> Vitesse, <span class="at">color =</span> Sexe)) <span class="sc">+</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>) <span class="sc">+</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/ex4-imc-vitesse-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>m_imc <span class="ot">&lt;-</span> <span class="fu">stan_glm</span>(Vitesse <span class="sc">~</span> IMC <span class="sc">+</span> Sexe, <span class="at">data =</span> nat, <span class="at">refresh =</span> <span class="dv">0</span>, <span class="at">seed =</span> <span class="dv">2025</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 ## Test d'équivalence : le HDI est-il dans la ROPE ?</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>test_eq <span class="ot">&lt;-</span> <span class="fu">equivalence_test</span>(m_imc, <span class="at">range =</span> rope_vitesse, <span class="at">ci =</span> <span class="fl">0.95</span>, <span class="at">parameters =</span> <span class="st">"IMC"</span>)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>test_eq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Test for Practical Equivalence
+
+  ROPE: [-0.02 0.02]
+
+Parameter |       H0 | inside ROPE |               95% ETI
+----------------------------------------------------------
+IMC       | Accepted |    100.00 % | [-5.81e-03, 4.18e-03]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(test_eq)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Picking joint bandwidth of 0.000385</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/ex4-imc-vitesse-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Lecture.</strong> Les droites sont quasi horizontales : une fois le sexe pris en compte, l’IMC ne prédit pas la vitesse sur 100 m. Le HDI à 95 % du coefficient est entièrement contenu dans la ROPE : on peut <strong>affirmer que l’effet est négligeable</strong>. Un test classique non significatif dirait seulement « on n’a pas pu mettre d’effet en évidence », ce qui est compatible aussi bien avec une absence d’effet qu’avec un manque de données. C’est l’un des gros avantages pratiques de la ROPE.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="exercice-5-piège-découper-limc-en-classes-bas-moyen-haut" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-5-piège-découper-limc-en-classes-bas-moyen-haut">Exercice 5 — Piège : découper l’IMC en classes « bas / moyen / haut »</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-9-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-1" role="tab" aria-controls="tabset-9-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-2" role="tab" aria-controls="tabset-9-2" aria-selected="false" href="">Indice</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-3" role="tab" aria-controls="tabset-9-3" aria-selected="false" href="">Réponse</a></li></ul>
+<div class="tab-content">
+<div id="tabset-9-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-9-1-tab">
+<p>Une pratique très courante consiste à transformer une variable continue en catégories (« bas », « moyen », « haut »), puis à comparer les groupes. Voyons ce que cela donne avec l’IMC.</p>
+<ol type="1">
+<li>Découper l’IMC en 3 classes de même effectif (terciles). Représenter la vitesse par classe et estimer l’effet de la classe avec le modèle <code>Vitesse ~ classe_imc</code>. Quelle conclusion tire-t-on « naïvement » ?</li>
+<li>Que se cache-t-il dans ces classes ? Représenter la proportion d’hommes et de femmes dans chaque classe, puis les mêmes données <strong>sans découper</strong> l’IMC (nuage de points coloré par sexe).</li>
+<li>Refaire le modèle par classes en ajoutant le sexe, et comparer avec l’analyse en continu de l’exercice 4. Que devient l’effet ?</li>
+</ol>
+</div>
+<div id="tabset-9-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-2-tab">
+<ul>
+<li><code>cut_number(IMC, 3, labels = c("Bas", "Moyen", "Haut"))</code> découpe en classes de même effectif.</li>
+<li><code>geom_bar(position = "fill")</code> représente des proportions.</li>
+<li>Les paramètres du modèle par classes s’appellent <code>classe_imcMoyen</code> et <code>classe_imcHaut</code> : <code>parameters = "classe_imc"</code> les sélectionne tous les deux.</li>
+</ul>
+</div>
+<div id="tabset-9-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ## Découpage en terciles et comparaison "naïve"</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>nat <span class="ot">&lt;-</span> nat <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">classe_imc =</span> <span class="fu">cut_number</span>(IMC, <span class="dv">3</span>, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Bas"</span>, <span class="st">"Moyen"</span>, <span class="st">"Haut"</span>)))</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nat, <span class="fu">aes</span>(<span class="at">x =</span> classe_imc, <span class="at">y =</span> Vitesse)) <span class="sc">+</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/ex5-discretisation-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>m_classes <span class="ot">&lt;-</span> <span class="fu">stan_glm</span>(Vitesse <span class="sc">~</span> classe_imc, <span class="at">data =</span> nat, <span class="at">refresh =</span> <span class="dv">0</span>, <span class="at">seed =</span> <span class="dv">2025</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">hdi</span>(m_classes, <span class="at">ci =</span> <span class="fl">0.95</span>, <span class="at">parameters =</span> <span class="st">"classe_imc"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/ex5-discretisation-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 ## Qui se cache dans chaque classe ?</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nat, <span class="fu">aes</span>(<span class="at">x =</span> classe_imc, <span class="at">fill =</span> Sexe)) <span class="sc">+</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/ex5-discretisation-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nat, <span class="fu">aes</span>(<span class="at">x =</span> IMC, <span class="at">y =</span> Vitesse, <span class="at">color =</span> Sexe)) <span class="sc">+</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/ex5-discretisation-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 ## Même découpage, mais en tenant compte du sexe (à comparer avec m_imc, ex. 4)</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>m_classes_sexe <span class="ot">&lt;-</span> <span class="fu">stan_glm</span>(Vitesse <span class="sc">~</span> classe_imc <span class="sc">+</span> Sexe, <span class="at">data =</span> nat, <span class="at">refresh =</span> <span class="dv">0</span>, <span class="at">seed =</span> <span class="dv">2025</span>)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">hdi</span>(m_classes_sexe, <span class="at">ci =</span> <span class="fl">0.95</span>, <span class="at">parameters =</span> <span class="st">"classe_imc"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/ex5-discretisation-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Lecture.</strong></p>
+<ol type="1">
+<li>En découpant, on observe un « effet dose-réponse » spectaculaire : les classes « Moyen » et « Haut » sont environ 0,4 et 0,7 km/h plus rapides que « Bas ». On conclurait naïvement que l’IMC élevé rend plus rapide.</li>
+<li>Mais les classes d’IMC sont en réalité des classes de <strong>sexe</strong> : environ 7 % d’hommes dans « Bas », 56 % dans « Moyen » et 91 % dans « Haut ». Le nuage de points montre deux populations distinctes et, à l’intérieur de chaque sexe, aucune pente. Les boîtes à moustaches, elles, cachent entièrement cette structure.</li>
+<li>Une fois le sexe pris en compte, les écarts entre classes s’effondrent (au plus de l’ordre de 0,02 km/h, sans ordre cohérent), en accord avec l’analyse en continu de l’exercice 4.</li>
+</ol>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Pourquoi éviter de découper une variable continue ?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><strong>Perte d’information</strong> : on ignore tout ce qui varie à l’intérieur d’une classe. Une coupure à la médiane peut faire perdre l’équivalent d’environ un tiers des données (Altman &amp; Royston, 2006, <em>BMJ</em>, « The cost of dichotomising continuous variables »).</li>
+<li><strong>Coupures arbitraires</strong> : terciles, seuils de la littérature, médiane de l’échantillon ? Les conclusions peuvent changer, et la tentation est grande de choisir la coupure qui « marche ».</li>
+<li><strong>Sauts artificiels</strong> : deux nageurs à 22,8 et 22,9 sont dans des classes différentes, alors que 20,1 et 22,8 sont traités comme identiques.</li>
+<li><strong>Structure masquée</strong> : comme ici, des classes peuvent cacher une variable de confusion.</li>
+</ul>
+<p><strong>À faire à la place</strong> : garder l’IMC continu, le représenter par un nuage de points avec courbe de tendance (<code>geom_smooth()</code>), et, si la relation n’est pas une droite, laisser le modèle la courber (par exemple <code>poly(IMC, 2)</code>) plutôt que de la découper.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercice-6-un-piège-des-performances-qui-ne-sont-pas-indépendantes" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-6-un-piège-des-performances-qui-ne-sont-pas-indépendantes">Exercice 6 — Un piège : des performances qui ne sont pas indépendantes</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-10-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-1" role="tab" aria-controls="tabset-10-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-2" role="tab" aria-controls="tabset-10-2" aria-selected="false" href="">Indice</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-3" role="tab" aria-controls="tabset-10-3" aria-selected="false" href="">Réponse</a></li></ul>
+<div class="tab-content">
+<div id="tabset-10-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-10-1-tab">
+<p>Les lignes du jeu de données sont des <strong>performances</strong>, pas des nageurs : un même nageur peut apparaître plusieurs années de suite.</p>
+<ol type="1">
+<li>Combien de nageurs différents y a-t-il dans <code>nat</code>, pour combien de performances ?</li>
+<li>Pourquoi cela pose-t-il problème pour les modèles précédents ?</li>
+<li>Ajuster à nouveau <code>Vitesse ~ IMC + Sexe</code> en ajoutant un <strong>effet aléatoire par nageur</strong> et comparer l’incertitude sur le coefficient de l’IMC.</li>
+<li>Représenter sur un même graphique la loi a posteriori du coefficient de l’IMC dans le modèle simple et dans le modèle hiérarchique, avec la ROPE de l’exercice 4. Qu’est-ce qui change ?</li>
+</ol>
+</div>
+<div id="tabset-10-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-2-tab">
+<ul>
+<li>Pour un modèle avec effet aléatoire, utilisez <code>stan_lmer()</code> à la place de <code>stan_glm()</code> ; l’effet aléatoire par nageur s’écrit <code>(1 | Nom)</code> dans la formule.</li>
+<li>Pour comparer les deux modèles, empilez les sorties de <code>describe_posterior()</code> avec <code>bind_rows()</code>.</li>
+<li>Les tirages a posteriori d’un modèle s’obtiennent avec <code>as.data.frame(modele)</code> (une colonne par paramètre, ici <code>IMC</code>). Empilez ceux des deux modèles avec <code>bind_rows()</code> et tracez-les avec <code>geom_density()</code>.</li>
+</ul>
+</div>
+<div id="tabset-10-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 ##</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">nageurs =</span> <span class="fu">n_distinct</span>(nat<span class="sc">$</span>Nom), <span class="at">performances =</span> <span class="fu">nrow</span>(nat))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     nageurs performances 
+         118          284 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 ## Modèle avec effet aléatoire par nageur</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>m_mixte <span class="ot">&lt;-</span> <span class="fu">stan_lmer</span>(Vitesse <span class="sc">~</span> IMC <span class="sc">+</span> Sexe <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> Nom), <span class="at">data =</span> nat,</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">refresh =</span> <span class="dv">0</span>, <span class="at">seed =</span> <span class="dv">2025</span>)</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_rows</span>(</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">simple =</span> <span class="fu">describe_posterior</span>(m_imc,   <span class="at">ci =</span> <span class="fl">0.95</span>, <span class="at">test =</span> <span class="st">"rope"</span>,</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rope_range =</span> rope_vitesse, <span class="at">parameters =</span> <span class="st">"IMC"</span>),</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">mixte  =</span> <span class="fu">describe_posterior</span>(m_mixte, <span class="at">ci =</span> <span class="fl">0.95</span>, <span class="at">test =</span> <span class="st">"rope"</span>,</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>                              <span class="at">rope_range =</span> rope_vitesse, <span class="at">parameters =</span> <span class="st">"IMC"</span>),</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">.id =</span> <span class="st">"modele"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Summary of Posterior Distribution
+
+Parameter | modele |    Median |        95% CI |          ROPE | % in ROPE
+--------------------------------------------------------------------------
+IMC       | simple | -7.89e-04 | [-0.01, 0.00] | [-0.02, 0.02] |      100%
+IMC       |  mixte | -1.02e-03 | [-0.01, 0.00] | [-0.02, 0.02] |      100%
+
+Parameter |  Rhat | ESS (tail)
+------------------------------
+IMC       | 1.001 |       2630
+IMC       | 1.000 |       2952</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 ## Posterior du coefficient de l'IMC : modèle simple vs modèle hiérarchique</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bind_rows</span>(</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">simple =</span> <span class="fu">tibble</span>(<span class="at">effet =</span> <span class="fu">as.data.frame</span>(m_imc)<span class="sc">$</span>IMC),</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">mixte  =</span> <span class="fu">tibble</span>(<span class="at">effet =</span> <span class="fu">as.data.frame</span>(m_mixte)<span class="sc">$</span>IMC),</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">.id =</span> <span class="st">"modele"</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> effet, <span class="at">fill =</span> modele)) <span class="sc">+</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"rect"</span>, <span class="at">xmin =</span> rope_vitesse[<span class="dv">1</span>], <span class="at">xmax =</span> rope_vitesse[<span class="dv">2</span>],</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">ymin =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">ymax =</span> <span class="cn">Inf</span>, <span class="at">alpha =</span> <span class="fl">0.15</span>) <span class="sc">+</span>   <span class="co"># zone grisée = ROPE</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Effet d'un point d'IMC sur la vitesse (km/h)"</span>, <span class="at">y =</span> <span class="st">"Densité"</span>) <span class="sc">+</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/ex6-mixte-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Lecture.</strong> Les performances d’un même nageur se ressemblent : les 284 lignes valent moins que 284 nageurs indépendants. Le modèle simple traite ces lignes comme indépendantes et <strong>sous-estime donc l’incertitude</strong>. Le modèle avec effet aléatoire en tient compte, et l’intervalle devient en général plus large. Ce piège existe tout autant avec un test <span class="math inline">\(t\)</span> classique : l’approche bayésienne ne le corrige pas automatiquement, mais <code>rstanarm</code> rend la solution (le modèle hiérarchique) très accessible.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="à-retenir" class="level2">
+<h2 class="anchored" data-anchor-id="à-retenir">À retenir</h2>
+<ul>
+<li>On ne se demande plus « est-ce significatif ? » mais <strong>« quelles valeurs de l’effet sont plausibles, et est-ce que cela compte en pratique ? »</strong>.</li>
+<li><strong>HDI</strong> : où se situe l’effet. <strong>pd</strong> : dans quel sens. <strong>ROPE</strong> : est-il assez grand pour avoir de l’importance ?</li>
+<li>La ROPE se choisit selon le contexte sportif, <em>avant</em> de regarder les résultats.</li>
+<li><strong>Ne découpez pas une variable continue</strong> en classes (« bas / moyen / haut ») : on perd de l’information, les coupures sont arbitraires et la structure des données se cache (exercice 5).</li>
+<li>Les pièges (distances mélangées, mesures répétées) restent les mêmes : la méthode ne remplace pas la réflexion sur la structure des données.</li>
+</ul>
+</section>
+</section>
+<section id="iv-modélisation-hiérarchique-conjuguée-et-échantillonneur-de-gibbs" class="level1">
+<h1>IV) Modélisation hiérarchique conjuguée et échantillonneur de Gibbs</h1>
+<section id="modèle-et-rappels" class="level2">
+<h2 class="anchored" data-anchor-id="modèle-et-rappels">Modèle et rappels</h2>
+<p>Nous considérons les observations <span class="math inline">\(y_1, \dots, y_n\)</span> modélisées par :</p>
+<p><span class="math display">\[
+y_i \mid \mu, \sigma^2 \overset{\text{iid}}{\sim} \mathcal{N}(\mu, \sigma^2),
+\]</span></p>
+<p>et la hiérarchie de priors conjuguées suivante : <span class="math display">\[
+\mu \mid \sigma^2 \sim \mathcal{N}(\mu_0, \sigma^2 / \kappa_0),\qquad
+\sigma^2 \sim \text{Inv-Gamma}(\alpha_0, \beta_0),
+\]</span></p>
+<p>où la paramétrisation de l’inverse-gamma est :</p>
+<p><span class="math display">\[p(\sigma^2) \propto (\sigma^2)^{-\alpha_0-1} \exp\left(-\dfrac{\beta_0}{\sigma^2}\right).\]</span></p>
+<section id="formules-analytiques-du-postérieur" class="level3">
+<h3 class="anchored" data-anchor-id="formules-analytiques-du-postérieur">Formules analytiques du postérieur</h3>
+<p>Avec les notations :</p>
+<ul>
+<li><span class="math inline">\(n\)</span> = nombre d’observations,</li>
+<li><span class="math inline">\(\bar{y} = n^{-1} \sum_i y_i\)</span>,</li>
+<li><span class="math inline">\(S = \sum_i (y_i - \bar{y})^2\)</span>,</li>
+</ul>
+<p>les paramètres postérieurs conjugués sont :</p>
+<p><span class="math display">\[
+\kappa_n = \kappa_0 + n, \qquad
+\mu_n = \frac{\kappa_0 \mu_0 + n \bar{y}}{\kappa_0 + n}.
+\]</span></p>
+<p>Pour la variance (paramètres de l’Inverse-Gamma a posteriori) :</p>
+<p><span class="math display">\[
+\alpha_n = \alpha_0 + \frac{n}{2}, \qquad
+\beta_n = \beta_0 + \frac{1}{2} S + \frac{\kappa_0 n}{2(\kappa_0 + n)} (\bar{y} - \mu_0)^2.
+\]</span></p>
+<p>Les distributions a posteriori conjuguées sont alors :</p>
+<ul>
+<li><span class="math inline">\(\sigma^2 \mid y \sim \text{Inv-Gamma}(\alpha_n, \beta_n)\)</span>,</li>
+<li><span class="math inline">\(\mu \mid \sigma^2, y \sim \mathcal{N}(\mu_n, \sigma^2 / \kappa_n)\)</span>,</li>
+<li>Marginalement, <span class="math inline">\(\mu \mid y\)</span> suit une Student-<span class="math inline">\(t\)</span>.</li>
+</ul>
+</section>
+</section>
+<section id="exercice-1-simulation-de-données-et-calcul-analytique-des-postérieurs" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-1-simulation-de-données-et-calcul-analytique-des-postérieurs">Exercice 1 — Simulation de données et calcul analytique des postérieurs</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-11-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-1" role="tab" aria-controls="tabset-11-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-2" role="tab" aria-controls="tabset-11-2" aria-selected="false" href="">Indice</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-3" role="tab" aria-controls="tabset-11-3" aria-selected="false" href="">Réponse</a></li></ul>
+<div class="tab-content">
+<div id="tabset-11-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-11-1-tab">
+<p>Simulez un jeu de données <span class="math inline">\(n=30\)</span> avec <span class="math inline">\(\mu_{true}=1.5\)</span> et <span class="math inline">\(\sigma^2_{true}=2.0\)</span>. Choisissez les hyperparamètres <span class="math inline">\(\mu_0=0,\ \kappa_0=1,\ \alpha_0=2,\ \beta_0=1\)</span> et calculez <span class="math inline">\(\bar{y}, S\)</span> et les paramètres postérieurs <span class="math inline">\(\kappa_n,\mu_n,\alpha_n,\beta_n\)</span>. Affichez ces valeurs.</p>
+</div>
+<div id="tabset-11-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-2-tab">
+<p>Calculez d’abord la moyenne empirique <span class="math inline">\(\bar{y}\)</span> et <span class="math inline">\(S=\sum (y_i-\bar{y})^2\)</span>. Ensuite appliquez les formules du rappel.</p>
+</div>
+<div id="tabset-11-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>mu_true <span class="ot">&lt;-</span> <span class="fl">1.5</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>sigma2_true <span class="ot">&lt;-</span> <span class="fl">2.0</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> mu_true, <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma2_true))</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a><span class="co"># hyperparameters</span></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>mu0 <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>kappa0 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>alpha0 <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>beta0 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a><span class="co"># statistics</span></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>ybar <span class="ot">&lt;-</span> <span class="fu">mean</span>(y)</span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">sum</span>((y <span class="sc">-</span> ybar)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a><span class="co"># posteriors</span></span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>kappa_n <span class="ot">&lt;-</span> kappa0 <span class="sc">+</span> n</span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>mu_n <span class="ot">&lt;-</span> (kappa0 <span class="sc">*</span> mu0 <span class="sc">+</span> n <span class="sc">*</span> ybar) <span class="sc">/</span> kappa_n</span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>alpha_n <span class="ot">&lt;-</span> alpha0 <span class="sc">+</span> n<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a>beta_n <span class="ot">&lt;-</span> beta0 <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">*</span> S <span class="sc">+</span> (kappa0 <span class="sc">*</span> n) <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> kappa_n) <span class="sc">*</span> (ybar <span class="sc">-</span> mu0)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">ybar =</span> <span class="fu">round</span>(ybar,<span class="dv">4</span>), <span class="at">S =</span> <span class="fu">round</span>(S,<span class="dv">4</span>), <span class="at">kappa_n =</span> kappa_n, <span class="at">mu_n =</span> <span class="fu">round</span>(mu_n,<span class="dv">4</span>),</span>
+<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a>     <span class="at">alpha_n =</span> alpha_n, <span class="at">beta_n =</span> <span class="fu">round</span>(beta_n,<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$ybar
+[1] 1.7924
+
+$S
+[1] 55.2818
+
+$kappa_n
+[1] 31
+
+$mu_n
+[1] 1.7346
+
+$alpha_n
+[1] 17
+
+$beta_n
+[1] 30.1955</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercice-2-implémenter-une-mise-à-jour" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-2-implémenter-une-mise-à-jour">Exercice 2 — Implémenter une mise à jour</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-12-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-1" role="tab" aria-controls="tabset-12-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-12-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-2" role="tab" aria-controls="tabset-12-2" aria-selected="false" href="">Indice</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-12-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-3" role="tab" aria-controls="tabset-12-3" aria-selected="false" href="">Réponse</a></li></ul>
+<div class="tab-content">
+<div id="tabset-12-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-12-1-tab">
+<p>Implémentez en R une fonction qui effectue une <strong>mise à jour unique</strong> (un pas de Gibbs) :</p>
+</div>
+<div id="tabset-12-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-12-2-tab">
+<p>Utilisez rgamma() / 1/rgamma() pour tirer l’Inverse-Gamma, et rnorm() pour tirer la normale conditionnelle.</p>
+</div>
+<div id="tabset-12-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-12-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># inputs: mu_curr, sigma2_curr, y, hyperparametres</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="co"># outputs: mu_new, sigma2_new</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>gibbs_step <span class="ot">&lt;-</span> <span class="cf">function</span>(mu_curr, sigma2_curr, y, mu0, kappa0, alpha0, beta0) {</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(y)</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="co"># sigma2 | mu, y  ~ Inv-Gamma(alpha_post, beta_post)</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>alpha_post <span class="ot">&lt;-</span> alpha0 <span class="sc">+</span> n<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>S_mu <span class="ot">&lt;-</span> <span class="fu">sum</span>((y <span class="sc">-</span> mu_curr)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>beta_post <span class="ot">&lt;-</span> beta0 <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">*</span> S_mu</span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>sigma2_new <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> <span class="fu">rgamma</span>(<span class="dv">1</span>, <span class="at">shape =</span> alpha_post, <span class="at">rate =</span> beta_post)</span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a><span class="co"># mu | sigma2, y ~ Normal(mu_n, sigma2 / kappa_n)</span></span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>kappa_n <span class="ot">&lt;-</span> kappa0 <span class="sc">+</span> n</span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>mu_n <span class="ot">&lt;-</span> (kappa0 <span class="sc">*</span> mu0 <span class="sc">+</span> n <span class="sc">*</span> <span class="fu">mean</span>(y)) <span class="sc">/</span> kappa_n</span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>sd_mu <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(sigma2_new <span class="sc">/</span> kappa_n)</span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a>mu_new <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="at">mean =</span> mu_n, <span class="at">sd =</span> sd_mu)</span>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a><span class="fu">return</span>(<span class="fu">list</span>(<span class="at">mu =</span> mu_new, <span class="at">sigma2 =</span> sigma2_new))</span>
+<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a><span class="co"># quick test</span></span>
+<span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb47-27"><a href="#cb47-27" aria-hidden="true" tabindex="-1"></a>res_test <span class="ot">&lt;-</span> <span class="fu">gibbs_step</span>(<span class="at">mu_curr =</span> <span class="fu">mean</span>(y), <span class="at">sigma2_curr =</span> <span class="fu">var</span>(y), <span class="at">y =</span> y,</span>
+<span id="cb47-28"><a href="#cb47-28" aria-hidden="true" tabindex="-1"></a><span class="at">mu0 =</span> mu0, <span class="at">kappa0 =</span> kappa0, <span class="at">alpha0 =</span> alpha0, <span class="at">beta0 =</span> beta0)</span>
+<span id="cb47-29"><a href="#cb47-29" aria-hidden="true" tabindex="-1"></a>res_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$mu
+[1] 2.075588
+
+$sigma2
+[1] 2.037998</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="exercice-3-implémenter-la-boucle-gibbs-complète" class="level2">
+<h2 class="anchored" data-anchor-id="exercice-3-implémenter-la-boucle-gibbs-complète">Exercice 3 — Implémenter la boucle Gibbs complète</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-13-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-1" role="tab" aria-controls="tabset-13-1" aria-selected="true" href="">Question</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-13-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-2" role="tab" aria-controls="tabset-13-2" aria-selected="false" href="">Indice</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-13-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-3" role="tab" aria-controls="tabset-13-3" aria-selected="false" href="">Réponse</a></li></ul>
+<div class="tab-content">
+<div id="tabset-13-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-13-1-tab">
+<p>À partir de la fonction précédente, codez la boucle Gibbs complète qui produit niter itérations, applique un burn-in et retourne des échantillons conservés pour mu et sigma2. Affichez des diagnostics (traceplots, densités) et comparez sommairement aux valeurs analytiques (moyennes postérieures).</p>
+</div>
+<div id="tabset-13-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-13-2-tab">
+<p>Stockez les chaînes dans des vecteurs numériques et utilisez plot() / ggplot2 pour les diagnostics. Pensez à fixer la graine pour reproductibilité.</p>
+</div>
+<div id="tabset-13-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-13-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>niter <span class="ot">&lt;-</span> <span class="dv">6000</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>nburn <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>mu_chain <span class="ot">&lt;-</span> <span class="fu">numeric</span>(niter)</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>sigma2_chain <span class="ot">&lt;-</span> <span class="fu">numeric</span>(niter)</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a><span class="co"># initialisation</span></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>mu_chain[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">mean</span>(y)</span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>sigma2_chain[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">var</span>(y)</span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(t <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>niter) {</span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>  step <span class="ot">&lt;-</span> <span class="fu">gibbs_step</span>(mu_chain[t<span class="dv">-1</span>], sigma2_chain[t<span class="dv">-1</span>], y, mu0, kappa0, alpha0, beta0)</span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>  mu_chain[t] <span class="ot">&lt;-</span> step<span class="sc">$</span>mu</span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>  sigma2_chain[t] <span class="ot">&lt;-</span> step<span class="sc">$</span>sigma2</span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a><span class="co"># extract post-burn-in</span></span>
+<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a>mu_samps_gibbs <span class="ot">&lt;-</span> mu_chain[(nburn<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>niter]</span>
+<span id="cb49-23"><a href="#cb49-23" aria-hidden="true" tabindex="-1"></a>sigma2_samps_gibbs <span class="ot">&lt;-</span> sigma2_chain[(nburn<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>niter]</span>
+<span id="cb49-24"><a href="#cb49-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-25"><a href="#cb49-25" aria-hidden="true" tabindex="-1"></a><span class="co"># diagnostics</span></span>
+<span id="cb49-26"><a href="#cb49-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-27"><a href="#cb49-27" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mu_samps_gibbs, <span class="at">type=</span><span class="st">'l'</span>, <span class="at">main=</span><span class="st">'Traceplot mu (Gibbs)'</span>, <span class="at">ylab=</span><span class="st">'mu'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sigma2_samps_gibbs, <span class="at">type=</span><span class="st">'l'</span>, <span class="at">main=</span><span class="st">'Traceplot sigma2 (Gibbs)'</span>, <span class="at">ylab=</span><span class="st">'sigma2'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/unnamed-chunk-5-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="co"># create density dataframes</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>dens_mu <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">density</span>(mu_samps_gibbs)<span class="sc">$</span>x, <span class="at">y =</span> <span class="fu">density</span>(mu_samps_gibbs)<span class="sc">$</span>y)</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>dens_sigma <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">density</span>(sigma2_samps_gibbs)<span class="sc">$</span>x, <span class="at">y =</span> <span class="fu">density</span>(sigma2_samps_gibbs)<span class="sc">$</span>y)</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="co"># visualisation of the MCMC posteriors</span></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dens_mu, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Densité a posteriori de mu (Gibbs)"</span>, <span class="at">x =</span> <span class="st">"mu"</span>, <span class="at">y =</span> <span class="st">"Densité"</span>) <span class="sc">+</span></span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/unnamed-chunk-5-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dens_sigma, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Densité a posteriori de sigma2 (Gibbs)"</span>, <span class="at">x =</span> <span class="st">"sigma2"</span>, <span class="at">y =</span> <span class="st">"Densité"</span>) <span class="sc">+</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="TP_demystifier_files/figure-html/unnamed-chunk-5-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># summary statistics</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>mean_mu_gibbs <span class="ot">&lt;-</span> <span class="fu">mean</span>(mu_samps_gibbs)</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>mean_sigma2_gibbs <span class="ot">&lt;-</span> <span class="fu">mean</span>(sigma2_samps_gibbs)</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">mean_mu_gibbs =</span> mean_mu_gibbs,</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="at">mean_mu_analytical =</span> mu_n,</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a><span class="at">mean_sigma2_gibbs =</span> mean_sigma2_gibbs,</span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a><span class="at">mean_sigma2_analytical =</span> beta_n <span class="sc">/</span> (alpha_n <span class="sc">-</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$mean_mu_gibbs
+[1] 1.729404
+
+$mean_mu_analytical
+[1] 1.734625
+
+$mean_sigma2_gibbs
+[1] 1.855577
+
+$mean_sigma2_analytical
+[1] 1.887219</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
