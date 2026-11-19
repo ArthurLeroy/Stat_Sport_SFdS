@@ -81,7 +81,7 @@ trois_pos_prop_all$performance <- as.numeric(trois_pos_prop_all$performance)
 trois_pos_prop_all$Rank_qualif <- as.numeric(trois_pos_prop_all$Rank)
 trois_pos_prop_all$Indic_CV <- trois_pos_prop_all$disp_std/trois_pos_prop_all$performance
 
-# Scatter-plots des proportions des trois positions
+# Scatter-plots des proportions des trois positions (slide 47)
 ggpairs(trois_pos_prop_all[,c(10:12)]) + theme_bw()
 
 # Lien entre les rangs de qualification et la performance avec la dispersion
@@ -128,7 +128,7 @@ result_all <- rbind(result_all,result)
 
 result_all_score <- result_all
 
-# Boxplot des scores des trois positions et de l'accès à la finale
+# Boxplot des scores des trois positions et de l'accès à la finale (slide 44)
 ggplot(result_all_score, aes(x=score, y=position, fill=acces)) + geom_boxplot() + coord_flip() + theme_bw()
 ggplot(result_all_score, aes(x=score, y=acces, fill=position)) + geom_boxplot() + coord_flip() + theme_bw()
 
@@ -165,7 +165,7 @@ result_all <- rbind(result_all,result)
 
 result_all_prop <- result_all
 
-# Boxplot des proportions des trois positions et de l'accès à la finale
+# Boxplot des proportions des trois positions et de l'accès à la finale (slides 45 et 46)
 ggplot(result_all_prop, aes(x=proportion, y=position, fill=acces)) + geom_boxplot() + coord_flip() + theme_bw()
 ggplot(result_all_prop, aes(x=proportion, y=acces, fill=position)) + geom_boxplot() + coord_flip() + theme_bw()
 
@@ -203,11 +203,15 @@ for (i in 1:nrow(tir_para_R7_qualif_finale))
     {if (tir_para_R7_qualif_finale$Rank_global[i] == 2) {tir_para_R7_qualif_finale$Rank_finale_num[i] <- NA}
     }
 
+# Scatter_plots entre les rangs avec l'accès en finale (Slide 47)
 ggpairs(tir_para_R7_qualif_finale[,c('rang_genou','rang_couche','rang_debout','Rank_qualif')]) + theme_bw()
 
 
 #############################################################################################################################################################################
 ## Scatter-plots entre les rangs de la phase de qualification et les trois rangs des trois positions par rapport au maximum de 1200 points sur l'ensemble des compétitions ##
+##                                                                                                                                                                         ##
+## Slide 48                                                                                                                                                                ##
+##                                                                                                                                                                         ##
 #############################################################################################################################################################################
 
 test_couche_pearson <- cor.test(tir_para_R7_qualif_finale$rang_couche,tir_para_R7_qualif_finale$Rank_qualif,method = c("pearson"))
@@ -300,9 +304,9 @@ result_test <- data.frame(variable,method,rho,ddl,p_value,vtest)
 result_test_all <- rbind(result_test_all,result_test)# scat
 
 
-################################################################################
-# Scatter-plots entre les proportions des trois positions et l'accès en finale #
-################################################################################
+###########################################################################################
+# Scatter-plots entre les proportions des trois positions et l'accès en finale (slide 49) #
+###########################################################################################
 
 res_qualif <- matrix(0,nrow=nrow(tir_para_R7_qualif_finale))
 for (i in 1:nrow(tir_para_R7_qualif_finale))
@@ -314,18 +318,18 @@ tir_para_R7_qualif_finale$res_qualif_ter <- as.factor(res_qualif)
 ggpairs(tir_para_R7_qualif_finale[,c('couche_prop','genou_prop','debout_prop','res_qualif_ter')]) + theme_bw()
 
 
-#####################################################################################
-# Caractérisation de l'accès en finale à l'aide des proportions des trois positions #
-#####################################################################################
+#######################################################################################################
+# Caractérisation de l'accès en finale à l'aide des proportions des trois positions (slides 52 et 53) #
+#######################################################################################################
 
 file_train <- tir_para_R7_qualif_finale %>%select(res_qualif_ter,genou_prop,couche_prop,debout_prop)
 cat_finale <- catdes(file_train,num.var=1,prob=0.15)
 plot(cat_finale,barplot=TRUE)
 
 
-################################################################################################################################
-# Liens entre les indicateurs de performance, reproductibilité (dispersion) et coefficient de variation avec l'accès en finale #
-################################################################################################################################
+##########################################################################################################################################################
+# Liens entre les indicateurs de performance, reproductibilité (dispersion) et coefficient de variation avec l'accès en finale (slides 56, 57, 59 et 60) #
+##########################################################################################################################################################
 
 num <- 1:nrow(tir_para_R7_qualif_finale)
 ggplot(tir_para_R7_qualif_finale, aes(x=performance, fill=res_qualif_ter)) + geom_boxplot() + coord_flip() + theme_bw()
@@ -344,10 +348,10 @@ text(num,tir_para_R7_qualif_finale$Indic_CV,num,col=c("green","red")[tir_para_R7
 ## Classification sur les proportions ##
 ########################################
 
-# Représentation en 3D des trois positions
+# Représentation en 3D des trois positions (slide 61)
 scatter3D(tir_para_R7_qualif_finale$debout_prop, tir_para_R7_qualif_finale$genou_prop, tir_para_R7_qualif_finale$couche_prop, xlab = "Proportion debout", ylab = "Proportion genou", zlab = "Proportion couchée",col=c("blue"),pch = ".", bty = "f", cex = 5, colkey = FALSE)
 
-# Représentation en 3D des trois positions et de la target (Finale vs Non finale)
+# Représentation en 3D des trois positions et d'accès en finale (slide 61) 
 scatter3D(tir_para_R7_qualif_finale$debout_prop, tir_para_R7_qualif_finale$genou_prop,tir_para_R7_qualif_finale$couche_prop, type="n",pch = ".", bty = "f", cex = 5, colkey = FALSE)
 text3D(tir_para_R7_qualif_finale$debout_prop, tir_para_R7_qualif_finale$genou_prop,tir_para_R7_qualif_finale$couche_prop, xlab = "Proportion debout", ylab = "Proportion genou", zlab = "Proportion couchée",col=c("green","red")[tir_para_R7_qualif_finale$Rank_global],cex=1,labels=rownames(tir_para_R7_qualif_finale))
 
@@ -361,10 +365,10 @@ d.prop <- dist(tir_para_R7_qualif_finale[,12:15])
 cah.ward <- hclust(d.prop,method="ward.D2")
 cah.ward$height <- cah.ward$height^2/2
 
-# Dendrogramme
+# Dendrogramme (slide 64)
 plot(cah.ward)
 
-# Affichage de la décroissance de perte d'inertie inter-classes
+# Affichage de la décroissance de perte d'inertie inter-classes (slide 64)
 n <- 397
 cah.ward$height <- cah.ward$height/n
 SMR2_Cm <- cah.ward$height/(sum(d.prop^2)/((n-1)^2))
@@ -383,7 +387,7 @@ par(oma=c(0,0,0,0)+1,bg="white")
 plot (process$etape, process$SMR2_Cm, type = "n", xlab="Etapes",ylab="Proportion de variation Ward",main="")
 text (process$etape, process$SMR2_Cm, process$nb_cls,col='red',cex=1)
 
-#dendrogramme avec matérialisation en quatre groupes pour les trois positions seulement
+#dendrogramme avec matérialisation en quatre groupes pour les trois positions seulement (slide 65)
 rect.hclust(cah.ward,k=4)
 #découpage en 4 groupes avec les proportions des 3 positions seulement
 groupes.cah_ward <- cutree(cah.ward,k=4)
@@ -391,7 +395,7 @@ groupes.cah_ward <- cutree(cah.ward,k=4)
 # Fusion du tableau de données et de la variable de classe
 tir_para_R7_qualif_finale <- data.frame(tir_para_R7_qualif_finale,groupes.cah_ward)
 
-# Représentation en 3D des trois positions et des classes
+# Représentation en 3D des trois positions et des classes (slide 66)
 scatter3D(tir_para_R7_qualif_finale$debout_prop, tir_para_R7_qualif_finale$genou_prop,tir_para_R7_qualif_finale$couche_prop, type="n",pch = ".", bty = "f", cex = 5, colkey = FALSE)
 text3D(tir_para_R7_qualif_finale$debout_prop, tir_para_R7_qualif_finale$genou_prop,tir_para_R7_qualif_finale$couche_prop, xlab = "Proportion debout", ylab = "Proportion genou", zlab = "Proportion couchée",col=c("green","red","blue","cyan")[tir_para_R7_qualif_finale$groupes.cah_ward],cex=1,labels=rownames(tir_para_R7_qualif_finale))
 
@@ -400,7 +404,7 @@ tir_para_R7_qualif_finale$cluster <- as.character(tir_para_R7_qualif_finale$grou
 
 table(tir_para_R7_qualif_finale$cluster)
 
-# Construction de la table de données pour afficher les box-plots des classes pour les trois positions seulement
+# Construction de la table de données pour afficher les box-plots des classes pour les trois positions seulement (slide 67)
 res_finale <- tir_para_R7_qualif_finale %>% filter(cluster == "1")
 classe <- matrix("Classe 1",nrow=nrow(res_finale))
 position <- matrix("Couché",nrow=nrow(res_finale))
@@ -462,12 +466,12 @@ result_all <- rbind(result_all,result)
 
 ggplot(result_all, aes(x=proportion, y=classe, fill=position)) + geom_boxplot() + coord_flip()
 
-# Caractérisation des classes à l'aide du concept de la valeur-test #
+# Caractérisation des classes à l'aide du concept de la valeur-test (slides 68, 69, 70 et 71)
 file_train <- tir_para_R7_qualif_finale %>% select(cluster,res_qualif_ter,genou_prop,couche_prop,debout_prop,disp_std,Rank_qualif)
 cat_finale <- catdes(file_train,num.var=1)
 plot(cat_finale,barplot=TRUE)
 
-# Construction de la table de données pour afficher les box-plots des classes pour les trois positions de la reproductibilité (disp_std) 
+# Construction de la table de données pour afficher les box-plots des classes pour les trois positions et la reproductibilité (disp_std) 
 res_finale <- tir_para_R7_qualif_finale %>% filter(cluster == "1")
 classe <- matrix("Classe 1",nrow=nrow(res_finale))
 position <- matrix("Couché",nrow=nrow(res_finale))
@@ -546,9 +550,9 @@ result_all <- rbind(result_all,result)
 ggplot(result_all, aes(x=proportion, y=classe, fill=position)) + geom_boxplot() + coord_flip()
 
 
-#######################################################################################################
-## Test t sur échantillons appariés sur chaque accès pour comparer deux à deux les positions: scores ##
-#######################################################################################################
+#########################################################################################################################
+## Test t sur échantillons appariés sur chaque accès pour comparer deux à deux les positions: scores (slides 83 et 84) ##
+#########################################################################################################################
 
 finalistes <- tir_para_R7_qualif_finale %>% filter(Rank_global == 1) 
 non_finalistes <- tir_para_R7_qualif_finale %>% filter(Rank_global == 2) 
@@ -632,9 +636,9 @@ test_t_non_finalistes_genou_debout <- t.test(non_finalistes$genou, non_finaliste
 test_t_non_finalistes_genou_debout
 
 
-###############################################################################################################################
-## Test de Wilcoxon-Mann-Whitney sur échantillons appariés sur chaque accès pour comparer deux à deux les positions : scores ##
-###############################################################################################################################
+#################################################################################################################################################
+## Test de Wilcoxon-Mann-Whitney sur échantillons appariés sur chaque accès pour comparer deux à deux les positions : scores (slides 83 et 84) ##
+#################################################################################################################################################
 
 finalistes <- tir_para_R7_qualif_finale %>% filter(Rank_global == 1) 
 non_finalistes <- tir_para_R7_qualif_finale %>% filter(Rank_global == 2) 
@@ -654,9 +658,9 @@ test_wilcoxon_non_finalistes_genou_debout <- wilcox.test(non_finalistes$genou, n
 test_wilcoxon_non_finalistes_genou_debout
 
 
-##################################################################################################################################################
-## Test de Wilcoxon-Mann-Whitney sur échantillons non appariés sur chaque position pour comparer les deux accès : finale vs non finale - scores ##
-##################################################################################################################################################
+####################################################################################################################################################################
+## Test de Wilcoxon-Mann-Whitney sur échantillons non appariés sur chaque position pour comparer les deux accès : finale vs non finale - scores (slides 83 et 84) ##
+####################################################################################################################################################################
 
 finalistes_vs_non_finalistes_couche <- result_all_score %>% filter(position == "Couché")
 test_wilcoxon_finalistes_vs_non_finalistes_couche <- wilcox.test(score ~ acces, data = finalistes_vs_non_finalistes_couche)
@@ -671,9 +675,9 @@ test_wilcoxon_finalistes_vs_non_finalistes_debout <- wilcox.test(score ~ acces, 
 test_wilcoxon_finalistes_vs_non_finalistes_debout
 
 
-###########################################################################################################################
-## Test t sur échantillons non appariés sur chaque position pour comparer les deux accès : finale vs non finale - scores ##
-###########################################################################################################################
+#############################################################################################################################################
+## Test t sur échantillons non appariés sur chaque position pour comparer les deux accès : finale vs non finale - scores (slides 83 et 84) ##
+#############################################################################################################################################
 
 finalistes_vs_non_finalistes_couche <- result_all_score %>% filter(position == "Couché")
 test_t_finalistes_vs_non_finalistes_couche <- t.test(score ~ acces, data = finalistes_vs_non_finalistes_couche)
@@ -699,13 +703,15 @@ test_t_finalistes_vs_non_finalistes_debout
 ## Fichier complet avec les scores des trois positions et l'accès en finale ##
 file_train <- tir_para_R7_qualif_finale %>% select(res_qualif_ter,genou,couche,debout)
 
-# Utilisation de la fonction rpart dans base
+# Utilisation de la fonction rpart dans base (slides 94, 107, 109)
 model <- rpart(res_qualif_ter ~ ., data = file_train,method="class",control=rpart.control(minsplit = 10,cp=0.005,x=TRUE))
 summary(model)
 
-# Importance des variables
-variable_importance_pct <- round(100*model$variable.importance/sum(model$variable.importance),1)
+# Représentation de l'arbre de classification (slide 89)
 rpart.plot(model)
+
+# Importance des variables (slide 94)
+variable_importance_pct <- round(100*model$variable.importance/sum(model$variable.importance),1)
 
 # Qualité de l'arbre sur l'échantillon complet
 n_train <- nrow(file_train)
@@ -764,7 +770,7 @@ for (k in 1:nrow(lift))
 # Fusion des deux tables contenant les lifts et les prédictions
 result <- data.frame(pred,leaf)
 
-# Calcul des bornes de chacune des trois positions par feuille 
+# Calcul des bornes de chacune des trois positions par feuille (slide 114)
 stat <- result %>% group_by(leaf) %>% summarise(min_debout=min(debout),max_debout=max(debout),min_genou=min(genou),max_genou=max(genou),min_couche=min(couche),max_couche=max(couche),Finale=mean(Finale),n_s=n())
 stat <- data.frame(stat)
 stat <- stat %>% arrange(desc(Finale))
@@ -839,13 +845,13 @@ image(x,y,z,xlab="Intervalles de la position COUCHE",ylab="Feuilles",main="Struc
 axis(1, at = x,labels = rownames(z),las=1,cex.axis=1.2)
 axis(2, at = y,labels = colnames(z),las=2,cex.axis=1)
 
-# Caractérisation la cible à l'aide des feuilles de CART
+# Caractérisation la cible à l'aide des feuilles de CART (slide 115)
 result$leaf_cat <- as.character(result$leaf)
 par(oma=c(0,0,0,0)+1,bg="white")
 cat_finale <- catdes(result[,c('res_qualif_ter','leaf_cat')],num.var=1,prob=0.01)
 plot(cat_finale,barplot=TRUE)
 
-# Cartographie des lifts
+# Cartographie des lifts(slide 115)
 par(oma=c(10,0,10,0)+1,bg="white")
 z <- as.matrix(-lift[,4])
 rownames(z) <- lift$s
@@ -887,7 +893,7 @@ pct_bcl
 binf
 bsup
 
-# Qualité de l'arbre sur l'échantillon test
+# Qualité de l'arbre sur l'échantillon test (slide 113)
 n_test <- nrow(file_test_new)
 pred_test_new <- predict(model,newdata=file_test_new,type="class")
 pred_test_new <- data.frame(pred_test_new)
@@ -984,10 +990,10 @@ v_test
 ## Fichier complet avec les scores des trois positions et l'accès en finale ##
 file_train <- tir_para_R7_qualif_finale %>% select(res_qualif_ter,genou,couche,debout)
 
-# Utilisation de la fonction randomForest du package randomForest
+# Utilisation de la fonction randomForest du package randomForest (slide 124)
 model <- randomForest(res_qualif_ter ~ ., data = file_train, ntree = 500)
 
-# Importance des variables
+# Importance des variables (slide 124)
 model$importance
 variable_importance_order <- model$importance[order(model$importance[,1],decreasing = TRUE),]
 variable_importance_order
@@ -995,17 +1001,17 @@ variable_importance_pct <- round(100*variable_importance_order/sum(variable_impo
 variable_importance_pct
 varImpPlot(model,cex=2, pch=17)
 
-# Erreur OBB (Out Of Bag)
+# Erreur OBB (Out Of Bag) (slide 124)
 plot(model$err.rate[,1],type="l",xlab="nombre d'arbres",ylab="erreur OBB")
 
 
 ## Fichier complet avec les scores des trois positions, la reproductibilité et l'accès en finale ##
 file_train <- tir_para_R7_qualif_finale %>% select(res_qualif_ter,genou,couche,debout,disp_std)
 
-# Utilisation de la fonction randomForest du package randomForest
+# Utilisation de la fonction randomForest du package randomForest (slide 125)
 model <- randomForest(res_qualif_ter ~ ., data = file_train, ntree = 500)
 
-# Importance des variables
+# Importance des variables (slide 125)
 model$importance
 variable_importance_order <- model$importance[order(model$importance[,1],decreasing = TRUE),]
 variable_importance_order
@@ -1013,7 +1019,7 @@ variable_importance_pct <- round(100*variable_importance_order/sum(variable_impo
 variable_importance_pct
 varImpPlot(model,cex=2, pch=17)
 
-# Erreur OBB (Out Of Bag)
+# Erreur OBB (Out Of Bag) (slide 125)
 plot(model$err.rate[,1],type="l",xlab="nombre d'arbres",ylab="erreur OBB")
 
 
@@ -1025,7 +1031,7 @@ plot(model$err.rate[,1],type="l",xlab="nombre d'arbres",ylab="erreur OBB")
 file_train <- tir_para_R7_qualif_finale %>% select(res_qualif_ter,genou,couche,debout)
 file_train$acces_finale <- (file_train$res_qualif_ter == "Finale")*1
 
-# Visualiser avant tout !!!
+# Visualiser avant tout !!! (slides 131 et 132)
 ggpairs(file_train[,1:4])
 plot(res_qualif_ter ~ debout, data = file_train)
 plot(res_qualif_ter ~ genou, data = file_train)
@@ -1036,14 +1042,14 @@ plot(res_qualif_ter ~ couche, data = file_train)
 file_train <- tir_para_R7_qualif_finale %>% select(res_qualif_ter,genou,couche,debout,disp_std)
 file_train$acces_finale <- (file_train$res_qualif_ter == "Finale")*1
 
-# Visualiser avant tout !!!
+# Visualiser avant tout !!! (slides 139 et 140)
 ggpairs(file_train[,1:5])
 plot(res_qualif_ter ~ debout, data = file_train)
 plot(res_qualif_ter ~ genou, data = file_train)
 plot(res_qualif_ter ~ couche, data = file_train)
 plot(res_qualif_ter ~ disp_std, data = file_train)
 
-# Régression logistique simple avec la position couchée
+# Régression logistique simple avec la position couchée (slides 133 et 134)
 reg <- glm(acces_finale ~ couche, data = file_train, family = binomial(logit))
 beta_0 <- reg$coef[1]
 beta_1 <- reg$coef[2]
@@ -1054,7 +1060,7 @@ plot(file_train$couche,file_train$pred_couche, type="n", main="Accès en finale 
 text(file_train$couche,file_train$pred_couche,rownames(file_train),col=c("green","red")[file_train$res_qualif_ter],cex=1)
 abline(h=0,v=coupure_couche)
 
-# Régression logistique simple avec la position genou
+# Régression logistique simple avec la position genou (slides 133 et 134)
 reg <- glm(acces_finale ~ genou, data = file_train, family = binomial(logit))
 beta_0 <- reg$coef[1]
 beta_1 <- reg$coef[2]
@@ -1065,7 +1071,7 @@ plot(file_train$genou,file_train$pred_genou, type="n", main="Accès en finale pr
 text(file_train$genou,file_train$pred_genou,rownames(file_train),col=c("green","red")[file_train$res_qualif_ter],cex=1)
 abline(h=0,v=coupure_genou)
 
-# Régression logistique simple avec la position debout
+# Régression logistique simple avec la position debout (slides 133 et 134)
 reg <- glm(acces_finale ~ debout, data = file_train, family = binomial(logit))
 beta_0 <- reg$coef[1]
 beta_1 <- reg$coef[2]
@@ -1076,7 +1082,7 @@ plot(file_train$debout,file_train$pred_debout, type="n", main="Accès en finale 
 text(file_train$debout,file_train$pred_debout,col=c("green","red")[file_train$res_qualif_ter],cex=1)
 abline(h=0,v=coupure_debout)
 
-# Régression logistique simple avec la reproductibilité
+# Régression logistique simple avec la reproductibilité (slide 142)
 reg <- glm(acces_finale ~ disp_std, data = file_train, family = binomial(logit))
 beta_0 <- reg$coef[1]
 beta_1 <- reg$coef[2]
@@ -1087,15 +1093,42 @@ plot(file_train$disp_std,file_train$pred_disp_std, type="n", main="Accès en fin
 text(file_train$disp_std,file_train$pred_disp_std,col=c("green","red")[file_train$res_qualif_ter],cex=1)
 abline(h=0,v=coupure_disp_std)
 
-# Régression logistique multiple avec les trois positions
+# Régression logistique multiple avec les trois positions (slide 135)
 reg <- glm(acces_finale ~ genou+couche+debout, data = file_train, family = binomial(logit))
 summary(reg)
 file_train$pred_all <- predict(reg)
 
-# Régression logistique multiple avec les trois positions et la reproductibilité
+# Régression logistique multiple avec les trois positions et la reproductibilité (slide 142)
 reg <- glm(acces_finale ~ genou+couche+debout+disp_std, data = file_train, family = binomial(logit))
 summary(reg)
 file_train$pred_all <- predict(reg)
+
+
+## Importance des variables : calcul du R2 globale et des R2 marginaux (slide 141)
+
+# R2 global
+R2_glob <- (reg$null.deviance-reg$deviance)/reg$null.deviance
+R2_glob
+
+# R2 marginaux : couche
+reg_sans_couche <- glm(acces_finale ~ genou+debout+disp_std, data = file_train, family = binomial(logit))
+R2_couche <- (reg_sans_couche$deviance-reg$deviance)/(reg$null.deviance-reg$deviance)
+R2_couche
+
+# R2 marginaux : genou
+reg_sans_genou <- glm(acces_finale ~ couche+debout+disp_std, data = file_train, family = binomial(logit))
+R2_genou <- (reg_sans_genou$deviance-reg$deviance)/(reg$null.deviance-reg$deviance)
+R2_genou
+
+# R2 marginaux : debout
+reg_sans_debout <- glm(acces_finale ~ couche+genou+disp_std, data = file_train, family = binomial(logit))
+R2_debout <- (reg_sans_debout$deviance-reg$deviance)/(reg$null.deviance-reg$deviance)
+R2_debout
+
+# R2 marginaux : disp_std (reproductibilité)
+reg_sans_disp_std <- glm(acces_finale ~ couche+genou+debout, data = file_train, family = binomial(logit))
+R2_disp_std <- (reg_sans_disp_std$deviance-reg$deviance)/(reg$null.deviance-reg$deviance)
+R2_disp_std
 
 
 ## Qualité du modèle logit sur l'échantillon total ##
@@ -1118,7 +1151,7 @@ binf
 bsup
 
 
-## Qualité du modèle logit binaire sur les échantillons d'apprentissage et test ##
+## Qualité du modèle logit binaire sur les échantillons d'apprentissage et test (slide 138) ##
 
 file_train <- tir_para_R7_qualif_finale %>% select(res_qualif_ter,genou,couche,debout,disp_max_std_norm_0_1)
 file_train$acces_finale <- (file_train$res_qualif_ter == "Finale")*1
@@ -1181,13 +1214,14 @@ v_test
 ## Régression logistique booléenne PLS ##
 #########################################
 
+# Les quatre composantes PLS (slides 155 et 156)
 X_finale <- file_train[,2:5]
 y_finale <- file_train$acces_finale
 modpls <- plsRglm(y_finale,X_finale,4,modele="pls-glm-logistic",pvals.expli=TRUE)
 modpls
 modpls$wwetoile
 
-# Choix de la première composante
+# Choix de la première composante (slide 157)
 modpls <- plsRglm(y_finale,X_finale,2,modele="pls-glm-logistic",pvals.expli=TRUE)
 modpls
 w_etoile <- modpls$wwetoile
@@ -1208,7 +1242,7 @@ res_3_pos <- data.frame(file_train,prob)
 
 table(res_3_pos$res_qualif_ter,res_3_pos$pred_acces_finale)
 
-# Calcul des VIP adaptés (importance des variables)
+# Calcul des VIP adaptés (importance des variables) (slide 162)
 p <- 4
 vip <- round(sqrt((p*modpls$wwetoile^2%*%as.matrix(modpls$R2))/modpls$R2[1]),4)
 num <- 1:4
@@ -1223,7 +1257,7 @@ text(w_etoile[,1], w_etoile[,2], rownames(w_etoile),col='blue',cex=1.2)
 abline(h=0)
 abline(v=0)
 
-## Validation croisée sur les coefficients du modèle logistique dichotomique PLS #
+## Validation croisée sur les coefficients du modèle logistique dichotomique PLS (slide 159) #
 Trois_pos.bootYX <- bootplsglm(modpls,sim="balanced",R=1000,typeboot="plsmodel",statistic=coefs.plsRglm,verbose=FALSE)
 boxplots.bootpls(Trois_pos.bootYX)
 
@@ -1234,7 +1268,7 @@ boxplots.bootpls(Trois_pos.bootYX)
 X_finale <- file_train_new[,2:5]
 y_finale <- file_train_new$acces_finale
 
-# Choix de deux composantes PLS
+# Choix de deux composantes PLS (slide 161)
 modpls <- plsRglm(y_finale,X_finale,2,modele="pls-glm-logistic",pvals.expli=TRUE)
 modpls
 w_etoile <- modpls$wwetoile
@@ -1264,7 +1298,7 @@ pct_bcl
 binf
 bsup
 
-## Calcul de probabilité estimées pour finale vs non finale sur l'échantillon test ##
+## Calcul de probabilité estimées pour finale vs non finale sur l'échantillon test (slide 160) ##
 prob <- matrix(0,nrow=nrow(file_test_new),ncol=2)
 score <- matrix(0,nrow=nrow(file_test_new),ncol=1)
 for (i in 1:nrow(file_test_new))
